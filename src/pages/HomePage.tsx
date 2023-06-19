@@ -1,8 +1,19 @@
 import React from "react";
-import Home from "../components/PagesComponents/Home";
+import Intro from "../components/PagesComponents/Home/Intro/Intro";
+import MainContent from "../components/PagesComponents/Home/MainContent/MainContent";
+
+import { motion, AnimatePresence } from "framer-motion";
 
 const HomePage = () => {
-  return <Home />;
+  const [showIntro, setShowIntro] = React.useState(true);
+  return (
+    <>
+      <AnimatePresence>
+        {showIntro && <Intro setShowIntro={setShowIntro} />}
+      </AnimatePresence>
+      <AnimatePresence>{!showIntro && <MainContent />}</AnimatePresence>
+    </>
+  );
 };
 
 export default HomePage;

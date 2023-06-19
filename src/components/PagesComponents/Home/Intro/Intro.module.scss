@@ -1,0 +1,10 @@
+@use "../../../../styles/mixins" as m;
+.intro {
+  background-color: orange;
+  margin: auto;
+  z-index: 10;
+  &__logo {
+    @include m.absolute-center();
+    z-index: -1;
+  }
+}
