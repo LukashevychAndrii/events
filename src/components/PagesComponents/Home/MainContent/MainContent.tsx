@@ -24,6 +24,7 @@ const MainContent = () => {
       >
         <Heading />
       </motion.section>
+      <section style={{ minHeight: "100vh" }}>qwe</section>
     </>
   );
 };

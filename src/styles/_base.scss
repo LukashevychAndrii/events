@@ -10,12 +10,12 @@ html {
   line-height: 1.6;
   font-size: 62.5%;
 }
-// body {
-//   scrollbar-width: none; /* Firefox */
-//   -ms-overflow-style: none; /* Internet Explorer 10+ */
-// }
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
 
-// /* Hide the scrollbar for WebKit based browsers */
-// body::-webkit-scrollbar {
-//   display: none;
-// }
+/* Hide the scrollbar for WebKit based browsers */
+body::-webkit-scrollbar {
+  display: none;
+}

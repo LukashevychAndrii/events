@@ -1,0 +1,11 @@
+.nav {
+  position: fixed;
+  right: 0;
+  font-size: var(--font-default);
+  display: flex;
+  z-index: 100;
+  & > ul {
+    list-style: none;
+    display: flex;
+  }
+}
