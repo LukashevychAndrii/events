@@ -7,15 +7,10 @@ import Navigation from "../components/Navigation/Navigation";
 
 const HomePage = () => {
   const [showIntro, setShowIntro] = React.useState(true);
-  const pVariants = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: { opacity: 1, transition: { delay: 4, duration: 1.5 } },
-  };
+
   return (
     <>
-      <motion.div variants={pVariants} initial="hidden" animate="visible">
+      <motion.div>
         <Navigation />
       </motion.div>
       <AnimatePresence>
