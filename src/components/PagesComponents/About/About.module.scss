@@ -1,0 +1,73 @@
+@use "../../../styles/mixins" as m;
+
+.about {
+  font-size: var(--font-default);
+  max-width: 144rem;
+  margin: auto;
+  &__heading {
+    position: absolute;
+    height: max-content;
+    width: max-content;
+
+    &__wrapper {
+      position: relative;
+      min-height: 100vh;
+    }
+    &__h3,
+    &__h4,
+    &__h5,
+    &__h6 {
+      margin-bottom: -12rem;
+      margin-top: -12rem;
+    }
+    &__h4,
+    &__h5 {
+      display: flex;
+      justify-content: end;
+    }
+  }
+  &__content {
+    &__main {
+      display: flex;
+      gap: 12rem;
+      padding-top: 10rem;
+      &__text {
+        font-size: 3.5rem;
+      }
+    }
+    &__img {
+      &__wrapper {
+        z-index: -1;
+      }
+    }
+    &__services {
+      padding: 0 10rem;
+      & > ol {
+        display: grid;
+        list-style: disc;
+        grid-template-columns: 1fr 1fr;
+        font-size: 4rem;
+      }
+    }
+    &__people {
+      padding: 0 10rem;
+      word-wrap: break-word;
+      & > ul {
+        font-size: 4rem;
+        grid-template-columns: repeat(auto-fit);
+        & > li {
+          display: inline-flex;
+          align-items: center;
+          gap: 2rem;
+          & > span {
+            width: 3rem;
+            height: 0.25rem;
+            background-color: black;
+            display: block;
+            margin-right: 2rem;
+          }
+        }
+      }
+    }
+  }
+}

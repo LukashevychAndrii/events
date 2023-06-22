@@ -6,7 +6,7 @@ import {
   useTransform,
   useAnimationControls,
 } from "framer-motion";
-import Heading from "../../Heading/Heading";
+import Heading from "../../Layout/Heading/Heading";
 
 import logo from "../../../../img/logo.png";
 import { Link } from "react-router-dom";
