@@ -1,11 +1,29 @@
 .nav {
   position: fixed;
-  right: 0;
+  right: 1.4rem;
+  top: 1rem;
   font-size: var(--font-default);
   display: flex;
   z-index: 100;
+  align-items: center;
+  gap: 0.7rem;
   & > ul {
     list-style: none;
     display: flex;
+    gap: 1.8rem;
+    &:last-of-type {
+      writing-mode: tb-rl;
+      position: absolute;
+      top: 5.5rem;
+      right: 0.75rem;
+    }
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      color: black;
+      text-decoration: none;
+    }
   }
 }

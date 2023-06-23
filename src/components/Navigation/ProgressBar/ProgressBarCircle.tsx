@@ -5,13 +5,13 @@ const ProgressBarCircle = ({
   colour: string;
   pct: number;
 }) => {
-  const r = 13;
+  const r = 10.5;
   const circ = 2 * Math.PI * r;
   const strokePct = ((100 - pct) * circ) / 100;
   return (
     <circle
       r={r}
-      cx={-20}
+      cx={-25}
       cy={20}
       fill="transparent"
       stroke={strokePct !== circ ? colour : ""} // remove colour as 0% sets full circumference

@@ -10,9 +10,6 @@ const HomePage = () => {
 
   return (
     <>
-      <motion.div>
-        <Navigation />
-      </motion.div>
       <AnimatePresence>
         {showIntro && <Intro setShowIntro={setShowIntro} />}
       </AnimatePresence>
