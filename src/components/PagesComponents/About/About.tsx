@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./About.module.scss";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 const variants = {
   initial: {
@@ -42,12 +42,31 @@ const People = ({ text }: { text: string }) => {
 
 const About = () => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1800], [-650, 250]);
-  const yh6 = useTransform(scrollY, [0, 1000], [300, -600]);
-  const yh3 = useTransform(scrollY, [0, 1000], [300, -450]);
-  const yh4 = useTransform(scrollY, [0, 1000], [300, -300]);
-  const yh5 = useTransform(scrollY, [0, 1000], [300, -150]);
-
+  const y = useSpring(useTransform(scrollY, [0, 1800], [-650, 250]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const yh6 = useSpring(useTransform(scrollY, [0, 1000], [300, -600]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const yh3 = useSpring(useTransform(scrollY, [0, 1000], [300, -450]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const yh4 = useSpring(useTransform(scrollY, [0, 1000], [300, -300]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const yh5 = useSpring(useTransform(scrollY, [0, 1000], [300, -150]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
   const headingVariants = {
     initial: {
       opacity: 0,

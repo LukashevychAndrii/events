@@ -19,3 +19,22 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
+
+body {
+  overscroll-behavior-y: none;
+  user-select: none;
+  background-color: whitesmoke;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.scroll-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  will-change: transform;
+}

@@ -5,6 +5,8 @@ import {
   motion,
   useTransform,
   useAnimationControls,
+  useMotionValue,
+  useSpring,
 } from "framer-motion";
 import Heading from "../../Layout/Heading/Heading";
 
@@ -13,11 +15,26 @@ import { Link } from "react-router-dom";
 
 const MainContent = () => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 2000], [400, -600]);
-  const y2 = useTransform(scrollY, [0, 2500], [800, -300]);
-  const y3 = useTransform(scrollY, [0, 3500], [800, -300]);
-  const y4 = useTransform(scrollY, [0, 6000], [1600, -1000]);
-
+  const y = useSpring(useTransform(scrollY, [0, 2000], [400, -600]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const y2 = useSpring(useTransform(scrollY, [0, 2500], [800, -300]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const y3 = useSpring(useTransform(scrollY, [0, 3500], [800, -300]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const y4 = useSpring(useTransform(scrollY, [0, 6000], [1600, -1000]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
   const AnimatedLink = motion(Link);
 
   const variantsFadeIn = {
