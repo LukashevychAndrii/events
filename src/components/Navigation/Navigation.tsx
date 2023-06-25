@@ -2,13 +2,11 @@ import React from "react";
 import styles from "./Navigation.module.scss";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { NavLink } from "react-router-dom";
-import { useAnimationControls } from "framer-motion";
-import useScrollPercentage from "../../hooks/useScrollPercentage";
+import { useAnimationControls, useScroll, useSpring } from "framer-motion";
 import { motion } from "framer-motion";
 
 const Navigation = () => {
   const navControls = useAnimationControls();
-  const completion = useScrollPercentage();
   const [showNav, setShowNav] = React.useState(true);
 
   React.useEffect(() => {
@@ -25,13 +23,57 @@ const Navigation = () => {
     }
   }, [showNav, navControls]);
 
+  const [hover, setHover] = React.useState(false);
+  const { scrollYProgress } = useScroll();
+  const scrollY = useSpring(scrollYProgress, {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
   React.useEffect(() => {
-    if (completion > 1) {
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+  const [scrollYPersentage, setScrollYPersentage] = React.useState(0);
+
+  React.useLayoutEffect(() => {
+    const scrollChangeHandler = (y: number) => {
+      const scrollYPersentage = +y.toString().split(".")[1]?.slice(0, 2);
+      if (scrollYPersentage) {
+        setScrollYPersentage(scrollYPersentage);
+      }
+    };
+
+    scrollY.on("change", scrollChangeHandler);
+
+    return () => {
+      scrollY.destroy();
+    };
+  }, [scrollY]);
+
+  React.useEffect(() => {
+    if (scrollYPersentage > 1 && !hover) {
       setShowNav(false);
     } else {
       setShowNav(true);
     }
-  }, [completion]);
+  }, [scrollYPersentage, hover]);
+
+  const handleScrollEnd = () => {
+    const container = document.body;
+    const isScrolledToEnd =
+      container.scrollHeight - container.scrollTop === container.clientHeight;
+    if (isScrolledToEnd) {
+      setHover(false);
+    }
+  };
+  React.useEffect(() => {
+    window.addEventListener("scroll", handleScrollEnd);
+    return () => {
+      window.removeEventListener("scroll", handleScrollEnd);
+    };
+  }, []);
 
   return (
     <motion.nav className={styles["nav"]}>
@@ -48,12 +90,12 @@ const Navigation = () => {
         </li>
       </motion.ul>
       <div
-        onPointerEnter={() => {
-          setShowNav(true);
+        onMouseEnter={() => {
+          setHover(true);
         }}
         style={{ cursor: "pointer" }}
       >
-        <ProgressBar />
+        <ProgressBar scrollYPersentage={scrollYPersentage} hide={!showNav} />
       </div>
       <motion.ul animate={navControls}>
         <li>
