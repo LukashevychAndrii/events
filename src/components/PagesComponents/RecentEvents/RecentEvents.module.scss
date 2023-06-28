@@ -1,0 +1,73 @@
+@use "../../../styles/mixins" as m;
+.recent {
+  &__heading {
+    @include m.absolute-center();
+    top: 6%;
+    margin: auto;
+    width: max-content;
+    text-align: center;
+    &--1 {
+      margin-bottom: -10rem;
+    }
+    &__wrapper {
+      height: 100vh;
+    }
+  }
+  &__gallery {
+    margin-top: -51.5vh;
+    &__bg {
+      z-index: -1;
+      position: fixed;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    &__img {
+      width: 33.333333vw;
+      height: 125%;
+      overflow: hidden;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+      top: 50%;
+      backface-visibility: hidden;
+
+      // @include m.absolute-center();
+
+      &__wrapper,
+      &__text {
+        background-color: #fff;
+        width: 33.333333vw;
+        height: calc(16.22vw * 68.5 / 33.333333);
+        position: relative;
+        overflow: hidden;
+      }
+      &__wrapper {
+        position: relative;
+      }
+      &__text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
+    &__container--1,
+    &__container--2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

@@ -99,8 +99,8 @@ const Navigation = () => {
       </div>
       <motion.ul animate={navControls}>
         <li>
-          <NavLink to="" className={`${styles["nav__link"]} subtitle`}>
-            lorem
+          <NavLink to="/recent" className={`${styles["nav__link"]} subtitle`}>
+            Recent
           </NavLink>
         </li>
         <li>
