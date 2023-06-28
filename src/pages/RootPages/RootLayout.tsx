@@ -18,8 +18,8 @@ const RootLayout = () => {
     <>
       <Logo />
       <Navigation />
-      <AnimatePresence mode="wait">
-        <SmoothScroll>
+      <SmoothScroll>
+        <AnimatePresence mode="wait">
           <motion.main
             key={location.pathname}
             initial={{ opacity: 0, filter: "blur(50px)" }}
@@ -29,8 +29,8 @@ const RootLayout = () => {
           >
             <AnimatedOutlet />
           </motion.main>
-        </SmoothScroll>
-      </AnimatePresence>
+        </AnimatePresence>
+      </SmoothScroll>
     </>
   );
 };
