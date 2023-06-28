@@ -5,12 +5,10 @@ import {
   motion,
   useTransform,
   useAnimationControls,
-  useMotionValue,
   useSpring,
 } from "framer-motion";
-import Heading from "../../Layout/Heading/Heading";
+import Heading from "./Heading/Heading";
 
-import logo from "../../../../img/logo.png";
 import { Link } from "react-router-dom";
 
 const MainContent = () => {
@@ -95,14 +93,6 @@ const MainContent = () => {
 
   return (
     <>
-      <motion.img
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 1.5 }}
-        className="logo"
-        src={logo}
-        alt="logo"
-      />
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -119,7 +109,6 @@ const MainContent = () => {
           onMouseEnter={() => handleMouseEnterControls(0)}
           onMouseLeave={() => handleMouseLeaveControls(0)}
         >
-          {/* <div className={styles["test"]}></div> */}
           <img src="https://picsum.photos/500/750" alt="" />
           <motion.div
             style={{ y }}
