@@ -1,0 +1,9 @@
+@use "../../styles/mixins" as m;
+
+.logo {
+  width: 17.5rem;
+  @include m.absolute-center();
+  position: fixed;
+  top: 5.5%;
+  z-index: 1000;
+}

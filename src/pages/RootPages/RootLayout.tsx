@@ -4,6 +4,7 @@ import { useLocation, useOutlet } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navigation from "../../components/Navigation/Navigation";
 import SmoothScroll from "../../components/SmoothScroll/SmoothScroll";
+import Logo from "../../components/Navigation/Logo";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ const RootLayout = () => {
   };
   return (
     <>
+      <Logo />
       <Navigation />
       <AnimatePresence mode="wait">
         <SmoothScroll>
