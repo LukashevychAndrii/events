@@ -36,8 +36,13 @@
       }
     }
     &__img {
+      height: 120%;
+      width: 100%;
       &__wrapper {
         z-index: -1;
+        height: 750px;
+        min-width: 500px;
+        overflow: hidden;
       }
     }
     &__services {

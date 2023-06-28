@@ -78,6 +78,19 @@ const About = () => {
     },
   };
 
+  const refIMG = React.useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: refIMG,
+    offset: ["start end", "end start"],
+  });
+
+  const springY = useSpring(scrollYProgress, {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  let yIMG = useTransform(springY, [0, 1], ["-10%", "10%"]);
+
   return (
     <motion.section className={styles["about"]}>
       <div className={styles["about__heading__wrapper"]}>
@@ -115,12 +128,13 @@ const About = () => {
         </motion.div>
       </div>
       <div className={styles["about__content"]}>
-        <div className={styles["about__content__main"]}>
+        <div ref={refIMG} className={styles["about__content__main"]}>
           <motion.div
             style={{ y }}
             className={styles["about__content__img__wrapper"]}
           >
             <motion.img
+              style={{ y: yIMG }}
               transition={{ duration: 1 }}
               className={styles["about__content__img"]}
               src="https://picsum.photos/500/750"
