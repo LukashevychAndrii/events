@@ -8,3 +8,24 @@
 .underline {
   border-bottom: 0.3rem solid black;
 }
+
+// horizontal scroll
+
+.scroll-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  will-change: transform;
+
+  .ghost {
+    width: 100vw;
+  }
+}
+
+.container {
+  // position: relative;
+  height: 100vh;
+  width: max-content;
+  display: flex;
+  align-items: center;
+}

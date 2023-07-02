@@ -4,6 +4,7 @@ import RootLayout from "./pages/RootPages/RootLayout";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import RecentEventsPage from "./pages/RecentEventsPage";
+import AlbumPage from "./pages/AlbumPage";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
       { path: "recent", element: <RecentEventsPage /> },
+      { path: "album/:albumName", element: <AlbumPage /> },
     ],
   },
 ]);

@@ -9,6 +9,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const variantsIMG: Variants = {
   initial: {
@@ -71,6 +72,8 @@ const Container1: React.FC<props> = ({ getHoveredImage }) => {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isHovered2, setIsHovered2] = React.useState(false);
 
+  const AnimatedLink = motion(Link);
+
   return (
     <div ref={ref} className={styles["recent__gallery__container--1"]}>
       <motion.div
@@ -89,7 +92,8 @@ const Container1: React.FC<props> = ({ getHoveredImage }) => {
         ></motion.div>
         <AnimatePresence>
           {isHovered && (
-            <motion.div
+            <AnimatedLink
+              to={`/album/testname`}
               variants={variantsIMG}
               initial="initial"
               animate="animated"
@@ -118,7 +122,7 @@ const Container1: React.FC<props> = ({ getHoveredImage }) => {
               >
                 Lorem, ipsum.
               </motion.h2>
-            </motion.div>
+            </AnimatedLink>
           )}
         </AnimatePresence>
       </motion.div>
@@ -140,7 +144,8 @@ const Container1: React.FC<props> = ({ getHoveredImage }) => {
         ></motion.div>
         <AnimatePresence>
           {isHovered2 && (
-            <motion.div
+            <AnimatedLink
+              to={`/album/testname`}
               variants={variantsIMG}
               initial="initial"
               animate="animated"
@@ -169,7 +174,7 @@ const Container1: React.FC<props> = ({ getHoveredImage }) => {
               >
                 Lorem, ipsum.
               </motion.h2>
-            </motion.div>
+            </AnimatedLink>
           )}
         </AnimatePresence>
       </motion.div>
@@ -188,8 +193,9 @@ const Container2: React.FC<props> = ({ getHoveredImage }) => {
     stiffness: 55,
   });
   let y = useTransform(temporaryY, [0, 1], ["-40%", "-60%"]);
-
   const [isHovered, setIsHovered] = React.useState(false);
+
+  const AnimatedLink = motion(Link);
 
   return (
     <div ref={ref} className={styles["recent__gallery__container--2"]}>
@@ -211,7 +217,8 @@ const Container2: React.FC<props> = ({ getHoveredImage }) => {
           ></motion.div>
           <AnimatePresence>
             {isHovered && (
-              <motion.div
+              <AnimatedLink
+                to={`/album/testtext2`}
                 variants={variantsIMG}
                 initial="initial"
                 animate="animated"
@@ -240,7 +247,7 @@ const Container2: React.FC<props> = ({ getHoveredImage }) => {
                 >
                   Lorem, ipsum.
                 </motion.h2>
-              </motion.div>
+              </AnimatedLink>
             )}
           </AnimatePresence>
         </motion.div>

@@ -1,0 +1,53 @@
+@use "../../../styles/mixins" as m;
+
+.album {
+  display: flex;
+  height: 100vh;
+  overflow-y: hidden;
+  position: relative;
+
+  &__heading {
+    @include m.absolute-center();
+    left: 52.5%;
+    top: 55%;
+
+    text-align: center;
+    float: right;
+    &--2 {
+      margin-top: -10rem;
+    }
+    &__wrapper {
+      position: fixed;
+      width: 95vw;
+      height: 100vh;
+    }
+  }
+  &__content {
+    display: flex;
+    &__img {
+      height: 100vh;
+      width: 120%;
+      &--2 {
+        height: 75%;
+        width: 120%;
+      }
+      &__wrapper {
+        background-color: orange;
+        overflow: hidden;
+        width: 700px;
+        &--2 {
+          width: 500px;
+          // background-color: red;
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+        }
+      }
+    }
+    &__container {
+      width: 55vw;
+      background-color: rosybrown;
+    }
+  }
+}
