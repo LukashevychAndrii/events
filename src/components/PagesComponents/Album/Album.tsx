@@ -259,13 +259,27 @@ const Album = () => {
               <Container1 />
               <Container2 />
 
-              <div
-                style={{
-                  width: "100vw",
-                  height: "100vh",
-                  background: "orange",
-                }}
-              ></div>
+              <div className={styles["album__content__people__wrapper"]}>
+                <div className={styles["album__content__people"]}>
+                  <div>
+                    <h3 className="subtitle">Lorem</h3>
+                    <h4>Lorem, ipsum.</h4>
+                  </div>
+                  <div>
+                    <h3 className="subtitle">Lorem</h3>
+                    <h4>Lorem, ipsum.</h4>
+                  </div>
+                  <div>
+                    <h3 className="subtitle">Lorem</h3>
+                    <h4>Lorem, ipsum.</h4>
+                  </div>
+                  <div>
+                    <h3 className="subtitle">Lorem</h3>
+                    <h4>Lorem, ipsum.</h4>
+                  </div>
+                </div>
+              </div>
+              <div style={{ width: "34.15vw" }}></div>
             </motion.div>
           </motion.section>
         </motion.section>
