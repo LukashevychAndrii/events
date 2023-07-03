@@ -1,0 +1,158 @@
+@use "../../styles/mixins" as m;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  &__wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10.5rem;
+  }
+  &__right {
+    width: 35rem;
+  }
+  &__links {
+    text-align: center;
+  }
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    &__logo {
+      width: 7.5rem;
+    }
+    &__heading {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    &__text {
+      font-size: 3.5rem;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+  &__element,
+  &__password__wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    & > input {
+      border: none;
+      background-color: inherit;
+      font-size: 1.6rem;
+      font-weight: 600;
+      padding: 0.5rem;
+      &:focus {
+        outline: none;
+      }
+    }
+    & > label {
+      width: 100%;
+      height: 100%;
+      &::before {
+        content: "";
+        width: 100%;
+        height: 2px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: rgba($color: #000000, $alpha: 0.3);
+      }
+      &::after {
+        content: "";
+        width: 100%;
+        height: 2px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #000;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.8s;
+      }
+    }
+    & > input:focus + label::after {
+      transform: scaleX(1);
+    }
+  }
+  &__error {
+    color: red;
+    font-size: 1.3rem;
+    opacity: 0;
+    transition: opacity 0.4s;
+    height: 20px;
+    margin-bottom: 1.25rem;
+    &__visible {
+      opacity: 1;
+    }
+  }
+  &__link {
+    color: #000;
+    margin-left: 1rem;
+  }
+
+  &__eye,
+  &__eye-slash {
+    position: absolute;
+    top: 50%;
+    width: 2rem;
+    right: 1.5%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    cursor: pointer;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  &__btn {
+    background-color: #000;
+    color: #fff;
+    font-size: 2rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    margin-top: 4rem;
+    display: flex;
+    align-items: center;
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+  &__left {
+    position: relative;
+  }
+  &__img {
+    border-bottom-right-radius: 4.5rem;
+    border-top-left-radius: 4.5rem;
+    &__logo {
+      z-index: 10;
+      position: absolute;
+      top: 2.5%;
+      left: 1.5%;
+      width: 15rem;
+      filter: brightness(0) invert(1);
+    }
+    &__text {
+      position: absolute;
+      bottom: 0;
+      color: #fff;
+      font-size: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      padding: 3.5rem 4rem;
+      &::before {
+        content: "“";
+        display: block;
+        position: absolute;
+        top: 0;
+      }
+    }
+  }
+}

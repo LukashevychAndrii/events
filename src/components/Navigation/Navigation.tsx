@@ -4,6 +4,7 @@ import ProgressBar from "./ProgressBar/ProgressBar";
 import { NavLink } from "react-router-dom";
 import { useAnimationControls, useScroll, useSpring } from "framer-motion";
 import { motion } from "framer-motion";
+import User from "./User/User";
 
 const Navigation = () => {
   const navControls = useAnimationControls();
@@ -77,6 +78,7 @@ const Navigation = () => {
 
   return (
     <motion.nav className={styles["nav"]}>
+      <User />
       <motion.ul animate={navControls}>
         <li>
           <NavLink className={`${styles["nav__link"]} subtitle`} to="calendar">

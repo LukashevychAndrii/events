@@ -1,0 +1,18 @@
+.user {
+  position: fixed;
+  left: 1.4rem;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  gap: 1rem;
+  & > svg {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  & > span {
+    color: #000;
+  }
+}
