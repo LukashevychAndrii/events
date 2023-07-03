@@ -8,11 +8,10 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { app } from "../../firebase";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 interface initialStateI {
   name: string;
-  password: string;
   photo: string;
   email: string;
   token: string;
@@ -20,7 +19,6 @@ interface initialStateI {
 }
 const initialState: initialStateI = {
   name: "",
-  password: "",
   photo: "",
   email: "",
   token: "",
@@ -34,7 +32,6 @@ const userSlice = createSlice({
     setUser(state, action: { payload: initialStateI }) {
       state.email = action.payload.email;
       state.name = action.payload.name;
-      state.password = action.payload.password;
       state.photo = action.payload.photo;
       state.token = action.payload.token;
       state.ID = action.payload.ID;
@@ -43,7 +40,6 @@ const userSlice = createSlice({
       console.log("remove");
       state.email = "";
       state.name = "";
-      state.password = "";
       state.photo = "";
       state.token = "";
       state.ID = "";
@@ -78,7 +74,6 @@ export const userCreate = createAsyncThunk<
               email: email,
               ID: user.uid,
               name: userName,
-              password: password,
               photo: "",
               token: user.refreshToken,
             })
@@ -120,7 +115,6 @@ export const userSignIn = createAsyncThunk<
               email: user.email,
               ID: user.uid,
               name: user.displayName,
-              password: password,
               photo: user.photoURL ? user.photoURL : "",
               token: user.refreshToken,
             })
@@ -152,7 +146,6 @@ export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
               email: user.email,
               ID: user.uid,
               name: user.displayName,
-              password: "",
               photo: user.photoURL ? user.photoURL : "",
               token: user.refreshToken,
             })
