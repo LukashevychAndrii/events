@@ -1,0 +1,93 @@
+@use "../../styles/mixins" as m;
+
+.acc-details {
+  background-color: var(--color-gray-200);
+  padding: 2rem 2.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  font-size: var(--font-default);
+  @include m.box-shadow-2();
+  &__wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__element {
+    display: grid;
+    grid-template-columns: 1fr 1fr min-content min-content;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  &__edit-icon {
+    cursor: pointer;
+    opacity: 0.4;
+    width: 1.9rem;
+    height: 1.9rem;
+    transition: opacity 0.4s;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    &:hover {
+      opacity: 1;
+    }
+    &__blank {
+      width: 1.9rem;
+      height: 1.9rem;
+    }
+  }
+  &__edit {
+    &__form {
+      position: relative;
+    }
+    &__input {
+      font-size: inherit;
+      font-family: inherit;
+      background-color: inherit;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      background-color: var(--color-gray-300);
+      width: 30rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  &__name {
+    padding: 0.5rem;
+    padding-top: 0.8rem;
+    width: 30rem;
+    display: flex;
+    align-items: center;
+    height: 2.8rem;
+  }
+  &__photo {
+    & > svg {
+    }
+    &__img {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+  }
+  &__sign-out-btn {
+    border: none;
+    font-size: var(--font-default);
+    padding: 0.5rem 1rem;
+    align-self: center;
+    border-radius: 0.3rem;
+    @include m.box-shadow-1();
+    cursor: pointer;
+    transition: all 0.4s;
+    backface-visibility: hidden;
+    &:hover {
+      transform: scale(1.05) translateY(-0.2rem);
+      @include m.box-shadow-2();
+    }
+  }
+}

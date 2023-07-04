@@ -1,14 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  EmailAuthProvider,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   signInWithEmailAndPassword,
   signOut,
+  updateEmail,
+  updatePassword,
   updateProfile,
 } from "firebase/auth";
 import { app } from "../../firebase";
 import { NavigateFunction } from "react-router-dom";
+import { get, getDatabase, ref, remove, set } from "firebase/database";
 
 interface initialStateI {
   name: string;
@@ -44,6 +49,21 @@ const userSlice = createSlice({
       state.token = "";
       state.ID = "";
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(userUpdateName.fulfilled, (state, action) => {
+      state.name = action.payload.name;
+    });
+    builder.addCase(userUpdateEmail.fulfilled, (state, action) => {
+      state.email = action.payload.email;
+    });
+    builder.addCase(userUpdatePhoto.fulfilled, (state, action) => {
+      console.log(action.payload.photo);
+      state.photo = action.payload.photo;
+    });
+    builder.addCase(userRemovePhoto.fulfilled, (state) => {
+      state.photo = "";
+    });
   },
 });
 
@@ -135,23 +155,23 @@ export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
   "user/userAutoLogIn",
   async (_, { dispatch }) => {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/auth.user
-        if (user.email && user.displayName) {
-          console.log(user);
-          dispatch(
-            setUser({
-              email: user.email,
-              ID: user.uid,
-              name: user.displayName,
-              photo: user.photoURL ? user.photoURL : "",
-              token: user.refreshToken,
-            })
-          );
-        }
-        // ...
+        const db = getDatabase();
+        const dbRef = ref(db, `users/${user.uid}/photo`);
+        await get(dbRef).then((snapshot) => {
+          if (user.email && user.displayName) {
+            dispatch(
+              setUser({
+                email: user.email,
+                ID: user.uid,
+                name: user.displayName,
+                photo: snapshot.val() ? snapshot.val() : "",
+                token: user.refreshToken,
+              })
+            );
+          }
+        });
       } else {
         // User is signed out
         // ...
@@ -181,3 +201,91 @@ export const userSignOut = createAsyncThunk<
 
   return undefined;
 });
+
+export const userUpdateName = createAsyncThunk<
+  { name: string },
+  { name: string },
+  {}
+>("user/userChangeName", async ({ name }, { dispatch }) => {
+  const auth = getAuth();
+  if (auth.currentUser) {
+    await updateProfile(auth.currentUser, { displayName: name });
+  }
+
+  return { name: name };
+});
+
+export const userUpdateEmail = createAsyncThunk<
+  { email: string },
+  { email: string },
+  {}
+>("user/userUpdateEmail", async ({ email }, { dispatch }) => {
+  const auth = getAuth();
+  if (auth.currentUser) {
+    updateEmail(auth.currentUser, email);
+  }
+
+  return { email: email };
+});
+
+export const userUpdatePassword = createAsyncThunk<
+  undefined,
+  { passwordCurrent: string; passwordNew: string },
+  {}
+>(
+  "user/userUpdatePassword",
+  async ({ passwordCurrent, passwordNew }, { dispatch }) => {
+    const auth = getAuth();
+    if (auth.currentUser) {
+      if (auth.currentUser.email) {
+        console.log(passwordCurrent);
+        const credentials = EmailAuthProvider.credential(
+          auth.currentUser.email,
+          passwordCurrent
+        );
+
+        await reauthenticateWithCredential(auth.currentUser, credentials)
+          .then((s) => {
+            if (auth.currentUser) {
+              updatePassword(auth.currentUser, passwordNew);
+              console.log("success");
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    }
+
+    return undefined;
+  }
+);
+
+export const userUpdatePhoto = createAsyncThunk<
+  { photo: string },
+  { photo: string },
+  {}
+>("user/userUpdatePhoto", async ({ photo }, { dispatch }) => {
+  const auth = getAuth();
+  const db = getDatabase();
+  if (auth.currentUser?.uid) {
+    const dbRef = ref(db, `/users/${auth.currentUser.uid}`);
+    await set(dbRef, { photo }).catch((e) => {
+      console.log(e);
+    });
+  }
+  return { photo: photo };
+});
+
+export const userRemovePhoto = createAsyncThunk<undefined, undefined, {}>(
+  "user/userRemovePhoto",
+  async (_, { dispatch }) => {
+    const auth = getAuth();
+    const db = getDatabase();
+    if (auth.currentUser?.uid) {
+      const dbRef = ref(db, `/users/${auth.currentUser.uid}/photo`);
+      remove(dbRef);
+    }
+    return undefined;
+  }
+);

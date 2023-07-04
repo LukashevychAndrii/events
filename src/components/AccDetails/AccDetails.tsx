@@ -1,15 +1,25 @@
 import React from "react";
-import { useAppDispatch } from "../../utils/redux";
-import { userSignOut } from "../../store/slices/user-slice";
-import { useNavigate } from "react-router-dom";
+import styles from "./AccDetails.module.scss";
+
+import Name from "./Name/Name";
+import Email from "./Email/Email";
+import Password from "./Password/Password";
+import SignOutBtn from "./SignOutBtn/SignOutBtn";
+import Photo from "./Photo/Photo";
+import NewPhoto from "./Photo/NewPhoto";
 
 const AccDetails = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const handleSignOutCLick = () => {
-    dispatch(userSignOut({ navigate: navigate }));
-  };
-  return <button onClick={handleSignOutCLick}>Sign out</button>;
+  return (
+    <div className={styles["acc-details__wrapper"]}>
+      <div className={styles["acc-details"]}>
+        <Name />
+        <Email />
+        <Password />
+        <Photo />
+        <SignOutBtn />
+      </div>
+    </div>
+  );
 };
 
 export default AccDetails;
