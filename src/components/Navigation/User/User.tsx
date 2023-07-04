@@ -7,13 +7,20 @@ import { useAppSelector } from "../../../utils/redux";
 
 const User = () => {
   const userDATA = useAppSelector((state) => state.user);
-  console.log(userDATA);
   return (
     <Link
       to={userDATA.ID ? "/acc-details" : "/auth/sign-in"}
       className={styles["user"]}
     >
-      <DefaultAvatar />
+      {userDATA.photo ? (
+        <img
+          className={styles["user__photo"]}
+          src={userDATA.photo}
+          alt="user"
+        />
+      ) : (
+        <DefaultAvatar className={styles["user__photo"]} />
+      )}
       <span className="subtitle">
         {userDATA.name ? userDATA.name : "Log in"}
       </span>

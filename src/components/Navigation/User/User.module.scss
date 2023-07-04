@@ -9,10 +9,14 @@
   text-decoration: none;
   gap: 1rem;
   & > svg {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 5.5rem;
+    height: 5.5rem;
   }
   & > span {
     color: #000;
+  }
+  &__photo {
+    width: 5.5rem;
+    height: 5.5rem;
   }
 }
