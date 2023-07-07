@@ -10,6 +10,8 @@ import SignUpPage from "./pages/SignUpPage";
 import { useAppDispatch } from "./utils/redux";
 import { userAutoSignIn } from "./store/slices/user-slice";
 import AccDetailsPage from "./pages/AccDetailsPage";
+import ChatPage from "./pages/ChatPage";
+import RootLayoutChat from "./pages/RootPages/RootLayoutChat";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,11 @@ const router = createBrowserRouter([
       },
       { path: "acc-details", element: <AccDetailsPage /> },
     ],
+  },
+  {
+    path: "/chats",
+    element: <RootLayoutChat />,
+    children: [{ path: ":chatID", element: <ChatPage /> }],
   },
 ]);
 

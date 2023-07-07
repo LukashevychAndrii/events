@@ -106,8 +106,8 @@ const Navigation = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="" className={`${styles["nav__link"]} subtitle`}>
-            lorem
+          <NavLink to="/chats" className={`${styles["nav__link"]} subtitle`}>
+            Chats
           </NavLink>
         </li>
       </motion.ul>
