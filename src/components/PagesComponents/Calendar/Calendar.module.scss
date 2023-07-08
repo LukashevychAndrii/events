@@ -1,0 +1,62 @@
+@use "../../../styles/mixins" as m;
+.calendar {
+  width: 90%;
+  margin: auto;
+  margin-top: 15rem;
+  display: flex;
+  justify-content: center;
+  gap: 10rem;
+  &__events {
+    list-style: none;
+    width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    &__event {
+      height: 31rem;
+      padding: 1.5rem;
+      height: 31rem;
+      &__img {
+        width: 15rem;
+        height: 15rem;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: all 0.45s;
+        &__wrapper {
+          margin: 1rem;
+
+          width: 15rem;
+          height: 15rem;
+          position: relative;
+          cursor: pointer;
+          border-radius: 50%;
+
+          overflow: hidden;
+          float: left;
+          shape-outside: circle(50% at 50% 50%);
+        }
+        &__text {
+          @include m.absolute-center();
+          position: absolute;
+          color: white;
+          line-height: 2rem;
+          transition: all 0.45s;
+        }
+      }
+      &__time {
+        text-align: center;
+      }
+    }
+    &__empty {
+      width: 40rem;
+      text-align: center;
+      font-size: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}

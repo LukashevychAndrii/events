@@ -146,7 +146,6 @@ export const userSignIn = createAsyncThunk<
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(error);
       });
     return undefined;
   }

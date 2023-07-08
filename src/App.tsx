@@ -12,6 +12,7 @@ import { userAutoSignIn } from "./store/slices/user-slice";
 import AccDetailsPage from "./pages/AccDetailsPage";
 import ChatPage from "./pages/ChatPage";
 import RootLayoutChat from "./pages/RootPages/RootLayoutChat";
+import CalendarPage from "./pages/CalendarPage";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
         ],
       },
       { path: "acc-details", element: <AccDetailsPage /> },
+      {
+        path: "calendar",
+        element: <CalendarPage />,
+      },
     ],
   },
   {
