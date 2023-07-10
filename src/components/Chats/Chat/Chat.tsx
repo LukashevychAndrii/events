@@ -10,6 +10,9 @@ import BtnJoin from "./ChatComponents/BtnJoin/BtnJoin";
 import Input from "./ChatComponents/Input/Input";
 import Heading from "./ChatComponents/Heading/Heading";
 import Message from "./ChatComponents/Message/Message";
+import UserDetails from "./ChatComponents/UserDetails/UserDetails";
+
+import { userDetailsT } from "./ChatComponents/UserDetails/UserDetails";
 
 const Chat = () => {
   const { chatID } = useParams();
@@ -29,15 +32,29 @@ const Chat = () => {
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatDATA]);
 
+  const [userDATA, setUserDATA] = React.useState<userDetailsT>();
+
+  const [showUserDetails, setShowUserDetails] = React.useState(false);
+
+  function getUserDATA(userDATA: userDetailsT) {
+    setUserDATA(userDATA);
+    setShowUserDetails(true);
+  }
+
   return (
     <div className={styles["chat"]}>
       <Heading />
+      <UserDetails
+        userDATA={userDATA}
+        setShowUserDetails={setShowUserDetails}
+        showUserDetails={showUserDetails}
+      />
       <div className={styles["chat__message-box"]}>
         <SimpleBar className={styles["chat__message-box__list__wrapper"]}>
           <ul className={styles["chat__message-box__list"]}>
             {chatDATA?.messages &&
               Object.values(chatDATA.messages).map((el, index) => (
-                <Message key={index} msg={el} />
+                <Message getUserDATA={getUserDATA} key={index} msg={el} />
               ))}
           </ul>
           <span ref={chatRef}></span>

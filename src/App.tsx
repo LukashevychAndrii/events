@@ -13,6 +13,7 @@ import AccDetailsPage from "./pages/AccDetailsPage";
 import ChatPage from "./pages/ChatPage";
 import RootLayoutChat from "./pages/RootPages/RootLayoutChat";
 import CalendarPage from "./pages/CalendarPage";
+import SelectChat from "./components/Chats/Chat/ChatComponents/SelectChat/SelectChat";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/chats",
     element: <RootLayoutChat />,
-    children: [{ path: ":chatID", element: <ChatPage /> }],
+    children: [
+      { index: true, element: <SelectChat /> },
+      { path: ":chatID", element: <ChatPage /> },
+    ],
   },
 ]);
 

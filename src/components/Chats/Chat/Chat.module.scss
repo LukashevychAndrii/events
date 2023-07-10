@@ -1,4 +1,5 @@
 @use "../../../styles/mixins" as m;
+
 .chat {
   background-color: var(--color-gray-200);
   width: 100%;
@@ -43,12 +44,16 @@
       display: grid;
       grid-template-columns: max-content max-content;
       gap: 1rem;
+      align-items: center;
       &--current-user {
         justify-content: end;
       }
       &--announcement {
         display: flex;
         justify-content: center;
+        &__name {
+          cursor: pointer;
+        }
       }
       &__text {
         background-color: white;
@@ -177,8 +182,111 @@
   &__btn-clear-chat {
     padding: 1.5rem 2rem;
     transition: background-color 0.4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    &__icon {
+      max-width: 2.5rem;
+      max-height: 2.5rem;
+    }
     &:hover {
       background-color: var(--color-gray-200);
     }
   }
+  &__btn-leave {
+    color: red;
+    & > svg {
+      fill: red;
+    }
+  }
+  //---------USER DETAILS-----------------
+  &__user-details {
+    @include m.absolute-center();
+    background-color: var(--color-gray-400);
+    border-radius: 0.5rem;
+    padding: 1rem 1.3rem;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: max-content;
+    &__wrapper {
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-gray-300);
+    }
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &__btn-close {
+        cursor: pointer;
+        font-size: 2rem;
+        opacity: 0.4;
+        transition: opacity 0.4s;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    &__user-info {
+      display: flex;
+      gap: 2.5rem;
+      &__img {
+        width: 6.5rem;
+        height: 6.5rem;
+      }
+      &__text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        & > * {
+          user-select: text;
+        }
+      }
+    }
+  }
+  //---------ADD USER-------------------
+
+  // &__add-user {
+  //   @include m.absolute-center();
+  //   background-color: var(--color-gray-400);
+  //   border-radius: 0.5rem;
+  //   padding: 1rem 1.3rem;
+  //   z-index: 300;
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 0.75rem;
+  // & form {
+  //   position: relative;
+  // }
+  // & input {
+  //   font-size: var(--font-default);
+  //   padding: 0.5rem;
+  //   border-radius: 0.4rem;
+  //   border: none;
+  //   background-color: var(--color-gray-100);
+  //   &:focus {
+  //     outline: none;
+  //   }
+  // }
+  // & label {
+  //   &::before {
+  //     content: "";
+  //     width: 100%;
+  //     height: 0.2rem;
+  //     background-color: var(--color-gray-900);
+  //     position: absolute;
+  //     top: 100%;
+  //     left: 0;
+  //     transform: scaleX(0);
+  //     transition: transform 0.4s;
+  //     transform-origin: left;
+  //   }
+  // }
+  // & input:focus ~ label::before {
+  //   transform: scaleX(1);
+  // }
+  // }
 }

@@ -5,6 +5,8 @@ import { chatClearMessages } from "../../../../../../store/slices/chat-slice";
 import { useParams } from "react-router-dom";
 import { messageI } from "../../../../../../store/slices/chat-slice";
 
+import { ReactComponent as ClearIcon } from "../../../../../../img/SVG/delete.svg";
+
 const BtnClearChat = () => {
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
@@ -27,7 +29,8 @@ const BtnClearChat = () => {
       onClick={handleClearClick}
       className={`${styles["chat__btn-clear-chat"]} subtitle`}
     >
-      CLEAR
+      <div>CLEAR</div>
+      <ClearIcon className={styles["chat__btn-clear-chat__icon"]} />
     </div>
   );
 };

@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../../../../../utils/redux";
 import { chatLeaveGroup } from "../../../../../../store/slices/chat-slice";
 import { useParams } from "react-router-dom";
 
+import { ReactComponent as LeaveIcon } from "../../../../../../img/SVG/leave.svg";
+
 const BtnLeave = () => {
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
@@ -30,7 +32,8 @@ const BtnLeave = () => {
       onClick={handleBtnLeaveClick}
       className={`${styles["chat__btn-leave"]} subtitle`}
     >
-      LEAVE
+      <div>Leave</div>
+      <LeaveIcon className={styles["chat__btn-clear-chat__icon"]} />
     </div>
   );
 };

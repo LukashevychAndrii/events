@@ -1,11 +1,12 @@
 import React from "react";
 import styles from "./Chats.module.scss";
 import { ReactComponent as DefaultAvatar } from "../../img/SVG/default-avatar.svg";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../utils/redux";
 import { chatFetchChatsPartial } from "../../store/slices/chat-slice";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import TopBar from "./Chat/ChatComponents/TopBar/TopBar";
 interface props {
   outlet: JSX.Element;
 }
@@ -20,8 +21,13 @@ const Chats: React.FC<props> = ({ outlet }) => {
 
   const sidebarRef = React.useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = React.useState(false);
-  const [sidebarWidth, setSidebarWidth] = React.useState(268);
+  const [sidebarWidth, setSidebarWidth] = React.useState(300);
 
+  React.useEffect(() => {
+    if (sidebarWidth <= 250) {
+      setSidebarWidth(80);
+    }
+  }, [sidebarWidth]);
   const startResizing = React.useCallback(
     (mouseDownEvent: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       setIsResizing(true);
@@ -60,9 +66,11 @@ const Chats: React.FC<props> = ({ outlet }) => {
         ref={sidebarRef}
         className={styles["app-sidebar"]}
         style={{ width: sidebarWidth }}
-        onMouseDown={(e) => e.preventDefault()}
+        // onMouseDown={(e) => e.preventDefault()}
       >
-        <SimpleBar style={{ maxHeight: "100%", width: "100%" }}>
+        <TopBar />
+
+        <SimpleBar style={{ height: "100%", width: "100%" }}>
           <div className={styles["app-sidebar__content"]}>
             <ul className={styles["app-sidebar__content__chats-list"]}>
               {Object.values(chatsList).map((el, index) => (

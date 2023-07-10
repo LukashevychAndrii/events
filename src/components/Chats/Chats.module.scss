@@ -11,19 +11,163 @@
 .app-sidebar {
   flex-grow: 0;
   flex-shrink: 0;
-  min-width: 150px;
+  min-width: 8rem;
   max-width: 50vw;
   display: flex;
   border-right: var(--color-gray-100) 1px solid;
-  flex-direction: row;
+  flex-direction: column;
   background: var(--color-gray-200);
   z-index: 2;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
   position: relative;
 
+  &__bar-top {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    &__add-user {
+      &__icon {
+        min-width: 3rem;
+        min-height: 3rem;
+        cursor: pointer;
+        transition: opacity 0.4s;
+        fill: var(--color-gray-900);
+        opacity: 0.4;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    &__chat-find {
+      position: relative;
+      width: 100%;
+      & > input {
+        width: 100%;
+        border: none;
+        background-color: var(--color-gray-100);
+        padding: 0.5rem;
+        font-size: var(--font-default);
+        border-radius: 0.4rem;
+        &:focus {
+          outline: none;
+        }
+      }
+      & > label {
+        &::before {
+          content: "";
+          width: 100%;
+          height: 0.2rem;
+          background-color: var(--color-gray-900);
+          position: absolute;
+          top: 100%;
+          left: 0;
+          transform: scaleX(0);
+          transition: transform 0.4s;
+          transform-origin: left;
+        }
+      }
+      & > input:focus ~ label::before {
+        transform: scaleX(1);
+      }
+    }
+    &__btn-burger {
+      min-width: 3rem;
+      min-height: 3rem;
+      position: relative;
+      opacity: 0.4;
+      transition: opacity 0.4s;
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+      }
+      & > span {
+        @include m.absolute-center();
+        display: block;
+        width: 100%;
+        height: 0.275rem;
+        background-color: var(--color-gray-900);
+        &::before {
+          content: "";
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: -300%;
+          background-color: inherit;
+        }
+        &::after {
+          content: "";
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 300%;
+          background-color: inherit;
+        }
+      }
+    }
+  }
   &__content {
     flex: 1;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    &__current-user {
+      position: absolute;
+      top: 0;
+      z-index: 300;
+      background-color: var(--color-gray-400);
+      padding: 1rem 1.5rem;
+      border-top-left-radius: 1rem;
+      user-select: text;
+      &__img {
+        width: 8rem;
+        height: 8rem;
+      }
+    }
+    &__add-user {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-top-left-radius: 1rem;
+      background-color: var(--color-gray-400);
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 300;
+      & form {
+        position: relative;
+      }
+      & input {
+        font-size: var(--font-default);
+        padding: 0.5rem;
+        border-radius: 0.4rem;
+        border: none;
+        background-color: var(--color-gray-100);
+        &:focus {
+          outline: none;
+        }
+      }
+      & label {
+        &::before {
+          content: "";
+          width: 100%;
+          height: 0.2rem;
+          background-color: var(--color-gray-900);
+          position: absolute;
+          top: 100%;
+          left: 0;
+          transform: scaleX(0);
+          transition: transform 0.4s;
+          transform-origin: left;
+        }
+      }
+      & input:focus ~ label::before {
+        transform: scaleX(1);
+      }
+    }
+
     &__chats-list {
       list-style: none;
       border-top-left-radius: 1rem;
@@ -96,4 +240,18 @@
   box-shadow: 8px 2px 32px -2px rgba(0, 0, 0, 0.25);
   border-radius: 0px 10px 10px 0px;
   z-index: 1;
+}
+
+.select-chat {
+  padding: 0.4rem 1rem;
+  background-color: var(--color-gray-300);
+  border-radius: 10rem;
+  &__wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-gray-200);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

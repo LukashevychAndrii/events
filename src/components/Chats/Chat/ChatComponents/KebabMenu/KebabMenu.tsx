@@ -10,6 +10,7 @@ const variantsShowMenu: Variants = {
     opacity: 1,
     x: 0,
     y: 0,
+    pointerEvents: "all",
   },
   hidden: {
     opacity: 0,
@@ -27,6 +28,7 @@ const KebabMenu = () => {
     if (outside) {
       setShowMenu(false);
     }
+    console.log(outside);
   }, [outside]);
   return (
     <div
@@ -40,6 +42,7 @@ const KebabMenu = () => {
       <AnimatePresence>
         {showMenu && (
           <motion.div
+            transition={{ duration: 0.4 }}
             variants={variantsShowMenu}
             initial="hidden"
             animate="visible"
