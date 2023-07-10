@@ -14,6 +14,7 @@ import {
 import { app } from "../../firebase";
 import { NavigateFunction } from "react-router-dom";
 import { get, getDatabase, ref, remove, set } from "firebase/database";
+import { RootState } from "..";
 
 interface initialStateI {
   name: string;
@@ -88,18 +89,30 @@ export const userCreate = createAsyncThunk<
       .then(async (userCredential) => {
         const user = userCredential.user;
         console.log(user);
-        await updateProfile(user, { displayName: userName }).then(() => {
-          dispatch(
-            setUser({
-              email: email,
-              ID: user.uid,
-              name: userName,
+        await updateProfile(user, { displayName: userName })
+          .then(() => {
+            dispatch(
+              setUser({
+                email: email,
+                ID: user.uid,
+                name: userName,
+                photo: "",
+                token: user.refreshToken,
+              })
+            );
+            navigate("/");
+            return user;
+          })
+          .then(async (snapshot) => {
+            const db = getDatabase();
+            const userData = {
+              name: snapshot.displayName,
+              email: snapshot.email,
               photo: "",
-              token: user.refreshToken,
-            })
-          );
-          navigate("/");
-        });
+            };
+            const dbRef = ref(db, `users/${snapshot.uid}`);
+            await set(dbRef, userData);
+          });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -206,10 +219,17 @@ export const userUpdateName = createAsyncThunk<
   { name: string },
   { name: string },
   {}
->("user/userChangeName", async ({ name }, { dispatch }) => {
+>("user/userChangeName", async ({ name }, { dispatch, getState }) => {
   const auth = getAuth();
   if (auth.currentUser) {
-    await updateProfile(auth.currentUser, { displayName: name });
+    await updateProfile(auth.currentUser, { displayName: name }).then(
+      async () => {
+        const db = getDatabase();
+        const state = getState() as RootState;
+        const dbRef = ref(db, `users/${state.user.ID}/name`);
+        set(dbRef, name);
+      }
+    );
   }
 
   return { name: name };
@@ -219,10 +239,15 @@ export const userUpdateEmail = createAsyncThunk<
   { email: string },
   { email: string },
   {}
->("user/userUpdateEmail", async ({ email }, { dispatch }) => {
+>("user/userUpdateEmail", async ({ email }, { dispatch, getState }) => {
   const auth = getAuth();
   if (auth.currentUser) {
-    updateEmail(auth.currentUser, email);
+    updateEmail(auth.currentUser, email).then(async () => {
+      const db = getDatabase();
+      const state = getState() as RootState;
+      const dbRef = ref(db, `users/${state.user.ID}/email`);
+      set(dbRef, email);
+    });
   }
 
   return { email: email };
@@ -265,14 +290,21 @@ export const userUpdatePhoto = createAsyncThunk<
   { photo: string },
   { photo: string },
   {}
->("user/userUpdatePhoto", async ({ photo }, { dispatch }) => {
+>("user/userUpdatePhoto", async ({ photo }, { dispatch, getState }) => {
   const auth = getAuth();
   const db = getDatabase();
   if (auth.currentUser?.uid) {
-    const dbRef = ref(db, `/users/${auth.currentUser.uid}`);
-    await set(dbRef, { photo }).catch((e) => {
-      console.log(e);
-    });
+    const dbRef = ref(db, `/users/${auth.currentUser.uid}/photo`);
+    await set(dbRef, photo)
+      .catch((e) => {
+        console.log(e);
+      })
+      .then(async () => {
+        const db = getDatabase();
+        const state = getState() as RootState;
+        const dbRef = ref(db, `users/${state.user.ID}/photo`);
+        set(dbRef, photo);
+      });
   }
   return { photo: photo };
 });
