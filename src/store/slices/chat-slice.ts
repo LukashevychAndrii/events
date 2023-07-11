@@ -11,7 +11,15 @@ import {
 } from "firebase/database";
 import { RootState } from "..";
 
-export interface memberI {
+interface memberI {
+  [chatID: string]: {
+    memberNAME: string;
+    memberPHOTO: string;
+    memberID: string;
+  };
+}
+
+export interface memberDATAI {
   memberNAME: string;
   memberPHOTO: string;
   memberID: string;
@@ -31,31 +39,41 @@ export interface currentChatI {
   lastMessage: string;
   photo: string;
   date: string;
-  members: memberI[];
+  members: memberI;
   messages: messageI[];
-  image: string;
+  type: "public" | "private";
 }
 
-export type chatsListPartialT = Pick<
-  currentChatI,
-  "name" | "lastMessage" | "photo" | "image"
->;
+// export type chatsListPartialT = Pick<
+//   currentChatI,
+//   "name" | "lastMessage" | "photo"
+// >;
+
+export interface chatsListPartialT
+  extends Pick<currentChatI, "name" | "lastMessage" | "photo" | "type"> {}
+// export type chatsListPartialT = {
+//   [chatID: string]: Pick<
+//     currentChatI,
+//     "name" | "lastMessage" | "photo" | "image"
+//   >;
+// };
 
 export interface initialStateI {
-  chatsList: chatsListPartialT[];
+  chatsList: { [chatID: string]: chatsListPartialT };
   currentChat: currentChatI | null;
 }
 
 const initialState: initialStateI = {
-  chatsList: [],
+  chatsList: {},
   currentChat: null,
 };
 
+//FIX
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    chatSetMembers(state, action: { payload: memberI[] }) {
+    chatSetMembers(state, action: { payload: any }) {
       if (state.currentChat) {
         state.currentChat.members = action.payload;
       }
@@ -64,6 +82,10 @@ const chatSlice = createSlice({
       if (state.currentChat) {
         state.currentChat.messages = action.payload;
       }
+    },
+    chatSetUserChat(state, action) {
+      console.log(action.payload);
+      state.chatsList = { ...state.chatsList, ...action.payload };
     },
   },
   extraReducers(builder) {
@@ -79,57 +101,86 @@ const chatSlice = createSlice({
 });
 
 export default chatSlice.reducer;
-export const { chatSetMembers, chatSetMessages } = chatSlice.actions;
+export const { chatSetMembers, chatSetMessages, chatSetUserChat } =
+  chatSlice.actions;
 
-export const chatFetchChatsPartial = createAsyncThunk<
-  { chats: chatsListPartialT[] },
-  undefined,
-  {}
->("chat/chatFetchChatsPartial", async (_, { dispatch }) => {
-  const db = getDatabase();
-  const dbRef = ref(db, `chats/chatsPartialInfo`);
-  let chats: chatsListPartialT[] = [];
-  await get(dbRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      chats = snapshot.val();
-    }
-  });
+export const chatFetchChatsPartial = createAsyncThunk<any, undefined, {}>(
+  "chat/chatFetchChatsPartial",
+  async (_, { dispatch }) => {
+    const db = getDatabase();
+    const dbRef = ref(db, `chats/chatsPartialInfo`);
+    let chats: chatsListPartialT[] = [];
+    await get(dbRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        chats = snapshot.val();
+      }
+    });
 
-  return { chats };
-});
+    return { chats };
+  }
+);
 
 export const chatFetchChat = createAsyncThunk<
   { chatDATA: currentChatI | null },
-  { chatID: string },
+  { chatID: string; chatType: "public" | "private" },
   {}
->("chat/chatFetchChat", async ({ chatID }, { dispatch }) => {
-  const db = getDatabase();
-  const dbRef = ref(db, `chats/chatsFullInfo/${chatID}`);
-  let chatDATA: currentChatI | null = null;
-  await get(dbRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      chatDATA = snapshot.val();
-    }
-  });
+>(
+  "chat/chatFetchChat",
+  async ({ chatID, chatType }, { dispatch, getState }) => {
+    const db = getDatabase();
+    const state = getState() as RootState;
+    let chatDATA: currentChatI | null = null;
 
-  return { chatDATA: chatDATA };
-});
+    if (chatType === "public") {
+      const dbRef = ref(db, `chats/chatsFullInfo/${chatID}`);
+      await get(dbRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          chatDATA = snapshot.val();
+        }
+      });
+    } else if (chatType === "private") {
+      const dbRef = ref(db, `users/${state.user.ID}/chats/${chatID}`);
+      await get(dbRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          chatDATA = snapshot.val();
+        }
+      });
+    }
+
+    return { chatDATA: chatDATA };
+  }
+);
 
 export const chatSendMessage = createAsyncThunk<
   undefined,
-  { chatID: string; messageDATA: messageI },
+  { chatID: string; messageDATA: messageI; chatType: "public" | "private" },
   {}
->("chat/chatSendMessage", async ({ chatID, messageDATA }, { dispatch }) => {
-  const db = getDatabase();
-  const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
-  await push(dbRef, messageDATA);
+>(
+  "chat/chatSendMessage",
+  async ({ chatID, messageDATA, chatType }, { dispatch, getState }) => {
+    const db = getDatabase();
+    const state = getState() as RootState;
+    if (chatType === "public") {
+      const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
+      await push(dbRef, messageDATA);
+    } else if (chatType === "private") {
+      const dbRef = ref(db, `users/${state.user.ID}/chats/${chatID}/messages`);
+      await push(dbRef, messageDATA).then(async () => {
+        const dbRef = ref(
+          db,
+          `users/${chatID}/chats/${state.user.ID}/messages`
+        );
+        await push(dbRef, messageDATA);
+      });
+    }
 
-  return undefined;
-});
-
+    return undefined;
+  }
+);
+//FIX
 export const chatJoinGroup = createAsyncThunk<
   undefined,
-  { chatID: string; newMemberDATA: memberI },
+  { chatID: string; newMemberDATA: any },
   {}
 >("chat/chatJoinGroup", async ({ chatID, newMemberDATA }, { dispatch }) => {
   const db = getDatabase();
@@ -137,7 +188,7 @@ export const chatJoinGroup = createAsyncThunk<
   await update(dbRef, { [newMemberDATA.memberID]: newMemberDATA }).then(
     async () => {
       const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
-      const announcement: messageI = {
+      const announcement: any = {
         messageType: "announcement",
         text: `joined the group`,
         time: "",
@@ -203,9 +254,9 @@ export const chatFetchMessages = createAsyncThunk<
   const db = getDatabase();
   const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
   onValue(dbRef, (snapshot) => {
-    console.log(snapshot.val());
+    // console.log(snapshot.val());
     if (snapshot.exists()) {
-      console.log(snapshot.val());
+      // console.log(snapshot.val());
       const messages: messageI[] = Object.values(snapshot.val());
       dispatch(chatSetMessages(messages));
     } else {
@@ -229,6 +280,75 @@ export const chatClearMessages = createAsyncThunk<
 
   return undefined;
 });
+
+interface currentUserChatI extends Omit<currentChatI, "members"> {
+  members: string[];
+}
+
+export interface userDATA
+  extends Pick<messageI, "userID" | "userPHOTO" | "userNAME"> {}
+
+export const chatAddUserChat = createAsyncThunk<
+  undefined,
+  { userDATA: userDATA },
+  {}
+>("chat/chatAddUserChat", async ({ userDATA }, { dispatch, getState }) => {
+  const db = getDatabase();
+  const state = getState() as RootState;
+  const dbRef = ref(db, `users/${state.user.ID}/chats/${userDATA.userID}`);
+
+  const chatDATA: currentUserChatI = {
+    date: "",
+    lastMessage: "",
+    members: [userDATA.userID, state.user.ID],
+    messages: [],
+    name: userDATA.userNAME,
+    photo: userDATA.userPHOTO,
+    type: "private",
+  };
+
+  await set(dbRef, chatDATA).then(async () => {
+    const dbRef = ref(db, `users/${userDATA.userID}/chats/${state.user.ID}`);
+    const chatDATA: currentUserChatI = {
+      date: "",
+      lastMessage: "",
+      members: [userDATA.userID, state.user.ID],
+      messages: [],
+      name: state.user.name,
+      photo: state.user.photo,
+      type: "private",
+    };
+    await set(dbRef, chatDATA);
+  });
+  return undefined;
+});
+
+export const chatFetchUserChats = createAsyncThunk<undefined, undefined, {}>(
+  "chat/chatFetchUserChats",
+  async (_, { dispatch, getState }) => {
+    const db = getDatabase();
+    const state = getState() as RootState;
+    console.log("chat");
+    if (state.user.ID) {
+      const dbRef = ref(db, `users/${state.user.ID}/chats`);
+      onValue(dbRef, (snapshot) => {
+        if (snapshot.exists()) {
+          // console.log(Object.values(state.chat.chatsList));
+          // const allChats = [
+          //   ...Object.values(state.chat.chatsList),
+          //   ...Object.values(snapshot.val()),
+          // ];
+          console.log("qe");
+          dispatch(chatSetUserChat(snapshot.val()));
+        } else {
+          console.log("no data");
+        }
+      });
+    }
+
+    return undefined;
+  }
+);
 
 // const events = [
 //   {

@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 const Input = () => {
   const [enteredMsg, setEnteredMsg] = React.useState<string>("");
   const userDATA = useAppSelector((state) => state.user);
+  const chatLIST = useAppSelector((state) => state.chat.chatsList);
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
 
@@ -25,7 +26,13 @@ const Input = () => {
         userNAME: userDATA.name,
         userPHOTO: userDATA.photo,
       };
-      dispatch(chatSendMessage({ chatID, messageDATA }));
+      dispatch(
+        chatSendMessage({
+          chatID,
+          messageDATA,
+          chatType: chatLIST[chatID].type,
+        })
+      );
     } else {
       //error
     }
@@ -33,6 +40,7 @@ const Input = () => {
   return (
     <form onSubmit={handleSubmit}>
       <input
+        autoFocus
         className={styles["chat__input"]}
         type="text"
         name="chat-msg"

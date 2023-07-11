@@ -126,6 +126,8 @@
       }
     }
     &__add-user {
+      border: 1px var(--color-gray-900) solid;
+
       position: absolute;
       top: 0;
       left: 0;
@@ -134,10 +136,38 @@
       padding: 1rem 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
       z-index: 300;
+      &__buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        &__button {
+          border: none;
+          font-size: var(--font-default);
+          padding: 0.3rem 0.5rem;
+          transition: all 0.4s;
+          cursor: pointer;
+          @include m.box-shadow-1();
+          &:hover {
+            @include m.box-shadow-3();
+            transform: translateY(-0.2rem) scale(1.05);
+          }
+        }
+      }
+      &__data {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        &__img {
+          width: 4rem;
+          height: 4rem;
+        }
+      }
       & form {
         position: relative;
+        width: max-content;
       }
       & input {
         font-size: var(--font-default);

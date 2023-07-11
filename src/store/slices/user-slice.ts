@@ -15,6 +15,7 @@ import { app } from "../../firebase";
 import { NavigateFunction } from "react-router-dom";
 import { get, getDatabase, ref, remove, set } from "firebase/database";
 import { RootState } from "..";
+import { memberDATAI } from "./chat-slice";
 
 interface initialStateI {
   name: string;
@@ -110,7 +111,7 @@ export const userCreate = createAsyncThunk<
               email: snapshot.email,
               photo: "",
             };
-            const dbRef = ref(db, `users/${snapshot.uid}`);
+            const dbRef = ref(db, `users/${snapshot.uid}/userDATA`);
             await set(dbRef, userData);
           });
       })
@@ -167,11 +168,12 @@ export const userSignIn = createAsyncThunk<
 export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
   "user/userAutoLogIn",
   async (_, { dispatch }) => {
+    console.log("user");
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const db = getDatabase();
-        const dbRef = ref(db, `users/${user.uid}/photo`);
+        const dbRef = ref(db, `users/${user.uid}/userDATA/photo`);
         await get(dbRef).then((snapshot) => {
           if (user.email && user.displayName) {
             dispatch(
@@ -226,7 +228,7 @@ export const userUpdateName = createAsyncThunk<
       async () => {
         const db = getDatabase();
         const state = getState() as RootState;
-        const dbRef = ref(db, `users/${state.user.ID}/name`);
+        const dbRef = ref(db, `users/${state.user.ID}/userDATA/name`);
         set(dbRef, name);
       }
     );
@@ -245,7 +247,7 @@ export const userUpdateEmail = createAsyncThunk<
     updateEmail(auth.currentUser, email).then(async () => {
       const db = getDatabase();
       const state = getState() as RootState;
-      const dbRef = ref(db, `users/${state.user.ID}/email`);
+      const dbRef = ref(db, `users/${state.user.ID}/userDATA/email`);
       set(dbRef, email);
     });
   }
@@ -294,16 +296,24 @@ export const userUpdatePhoto = createAsyncThunk<
   const auth = getAuth();
   const db = getDatabase();
   if (auth.currentUser?.uid) {
-    const dbRef = ref(db, `/users/${auth.currentUser.uid}/photo`);
+    const dbRef = ref(db, `/users/${auth.currentUser.uid}/userDATA/photo`);
     await set(dbRef, photo)
       .catch((e) => {
         console.log(e);
       })
       .then(async () => {
-        const db = getDatabase();
-        const state = getState() as RootState;
-        const dbRef = ref(db, `users/${state.user.ID}/photo`);
-        set(dbRef, photo);
+        const dbRef = ref(db, `/users/${auth.currentUser?.uid}/chats`);
+        await get(dbRef).then(async (snapshot) => {
+          if (snapshot.exists()) {
+            for (const i of Object.keys(snapshot.val())) {
+              const dbRef = ref(
+                db,
+                `/users/${i}/chats/${auth.currentUser?.uid}/photo`
+              );
+              set(dbRef, photo);
+            }
+          }
+        });
       });
   }
   return { photo: photo };
@@ -315,9 +325,25 @@ export const userRemovePhoto = createAsyncThunk<undefined, undefined, {}>(
     const auth = getAuth();
     const db = getDatabase();
     if (auth.currentUser?.uid) {
-      const dbRef = ref(db, `/users/${auth.currentUser.uid}/photo`);
+      const dbRef = ref(db, `/users/${auth.currentUser.uid}/userDATA/photo`);
       remove(dbRef);
     }
     return undefined;
   }
 );
+
+export type foundUserData = Pick<initialStateI, "name" | "email" | "photo">;
+
+export const userFindUser = createAsyncThunk<
+  memberDATAI | null,
+  { ID: string },
+  {}
+>("user/userFindUser", async ({ ID }, { dispatch }) => {
+  const db = getDatabase();
+  const dbRef = ref(db, `/users/${ID}/userDATA`);
+  let userDATA: foundUserData | null = null;
+  await get(dbRef).then((snapshot) => {
+    userDATA = snapshot.val();
+  });
+  return userDATA;
+});

@@ -4,6 +4,9 @@ import BtnLeave from "./components/BtnLeave";
 import BtnClearChat from "./components/BtnClearChat";
 import useClickOutside from "../../../../../hooks/useClickOutside";
 import { AnimatePresence, Variants, motion } from "framer-motion";
+import GroupInfo from "./components/GroupInfo";
+import { useAppSelector } from "../../../../../utils/redux";
+import GroupInfoBox from "./components/GoupInfoBox";
 
 const variantsShowMenu: Variants = {
   visible: {
@@ -20,16 +23,30 @@ const variantsShowMenu: Variants = {
   },
 };
 
-const KebabMenu = () => {
+interface props {
+  setShowGroupInfo: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const KebabMenu: React.FC<props> = ({ setShowGroupInfo }) => {
   const [showMenu, setShowMenu] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
   const outside = useClickOutside({ ref });
+
+  const [chatTYPE, setChatTYPE] = React.useState<"public" | "private">();
+
+  const currentCHAT = useAppSelector((state) => state.chat.currentChat);
+  React.useEffect(() => {
+    if (currentCHAT) {
+      setChatTYPE(currentCHAT.type);
+    }
+  }, [currentCHAT]);
+
   React.useEffect(() => {
     if (outside) {
       setShowMenu(false);
     }
-    console.log(outside);
   }, [outside]);
+
   return (
     <div
       ref={ref}
@@ -49,6 +66,9 @@ const KebabMenu = () => {
             exit="hidden"
             className={styles["chat__kebab-menu__choices"]}
           >
+            {chatTYPE === "public" && (
+              <GroupInfo setShowGroupInfo={setShowGroupInfo} />
+            )}
             <BtnClearChat />
             <BtnLeave />
           </motion.div>

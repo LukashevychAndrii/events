@@ -13,17 +13,24 @@ import Message from "./ChatComponents/Message/Message";
 import UserDetails from "./ChatComponents/UserDetails/UserDetails";
 
 import { userDetailsT } from "./ChatComponents/UserDetails/UserDetails";
+import GroupInfoBox from "./ChatComponents/KebabMenu/components/GoupInfoBox";
 
 const Chat = () => {
   const { chatID } = useParams();
   const dispatch = useAppDispatch();
-  React.useEffect(() => {
-    if (chatID) {
-      dispatch(chatFetchChat({ chatID: chatID }));
-    }
-  }, [dispatch, chatID]);
-
   const chatDATA = useAppSelector((state) => state.chat.currentChat);
+  const chatLIST = useAppSelector((state) => state.chat.chatsList);
+  React.useEffect(() => {
+    console.log(chatDATA);
+  }, [chatDATA]);
+  React.useEffect(() => {
+    if (chatID && Object.keys(chatLIST).length && chatLIST[chatID]) {
+      dispatch(
+        chatFetchChat({ chatID: chatID, chatType: chatLIST[chatID].type })
+      );
+    }
+  }, [dispatch, chatID, chatLIST]);
+
   const userID = useAppSelector((state) => state.user.ID);
 
   const chatRef = React.useRef<HTMLSpanElement>(null);
@@ -41,13 +48,19 @@ const Chat = () => {
     setShowUserDetails(true);
   }
 
+  const [showGroupInfo, setShowGroupInfo] = React.useState(false);
+
   return (
     <div className={styles["chat"]}>
-      <Heading />
+      <Heading setShowGroupInfo={setShowGroupInfo} />
       <UserDetails
         userDATA={userDATA}
         setShowUserDetails={setShowUserDetails}
         showUserDetails={showUserDetails}
+      />
+      <GroupInfoBox
+        setShowGroupInfo={setShowGroupInfo}
+        showGroupInfo={showGroupInfo}
       />
       <div className={styles["chat__message-box"]}>
         <SimpleBar className={styles["chat__message-box__list__wrapper"]}>
@@ -60,9 +73,10 @@ const Chat = () => {
           <span ref={chatRef}></span>
         </SimpleBar>
       </div>
-
-      {chatDATA?.members &&
-      Object.values(chatDATA.members).find((el) => el.memberID === userID) ? (
+      {chatDATA?.type === "private" ? (
+        <Input />
+      ) : chatDATA?.members &&
+        Object.values(chatDATA.members).find((el) => el.memberID === userID) ? (
         <Input />
       ) : (
         <BtnJoin />

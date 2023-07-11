@@ -1,7 +1,10 @@
 import React from "react";
 import styles from "../../Chat.module.scss";
 import { useAppDispatch, useAppSelector } from "../../../../../utils/redux";
-import { chatJoinGroup, memberI } from "../../../../../store/slices/chat-slice";
+import {
+  chatJoinGroup,
+  memberDATAI,
+} from "../../../../../store/slices/chat-slice";
 import { useNavigate, useParams } from "react-router-dom";
 
 const BtnJoin = () => {
@@ -14,7 +17,7 @@ const BtnJoin = () => {
       navigate("/auth/sign-in");
     }
     if (chatID) {
-      const memberDATA: memberI = {
+      const memberDATA: memberDATAI = {
         memberID: userDATA.ID,
         memberPHOTO: userDATA.photo,
         memberNAME: userDATA.name,

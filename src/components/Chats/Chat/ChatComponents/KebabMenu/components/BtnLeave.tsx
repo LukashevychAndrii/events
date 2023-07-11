@@ -18,7 +18,7 @@ const BtnLeave = () => {
     if (chatID) {
       if (
         currentChatMembers &&
-        currentChatMembers.find((el) => el.memberID === userID)
+        Object.values(currentChatMembers).find((el) => el.memberID === userID)
       ) {
         dispatch(chatLeaveGroup({ chatID: chatID, userID: userID }));
       } else {

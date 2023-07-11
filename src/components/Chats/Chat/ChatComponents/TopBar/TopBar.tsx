@@ -4,7 +4,7 @@ import FindChat from "./components/FindChat";
 import CurrentUserDetails from "./components/CurrentUserDetails";
 import BtnBurger from "./components/BtnBurger";
 import AddUserIcon from "./components/AddUserIcon";
-import AddUser from "../AddUser/AddUser";
+import AddUser from "./components/AddUser";
 
 const TopBar = () => {
   const [showCurrentUserD, setShowCurrentUserD] =

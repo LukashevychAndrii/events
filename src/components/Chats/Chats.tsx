@@ -3,7 +3,10 @@ import styles from "./Chats.module.scss";
 import { ReactComponent as DefaultAvatar } from "../../img/SVG/default-avatar.svg";
 import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../utils/redux";
-import { chatFetchChatsPartial } from "../../store/slices/chat-slice";
+import {
+  chatFetchChatsPartial,
+  chatFetchUserChats,
+} from "../../store/slices/chat-slice";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import TopBar from "./Chat/ChatComponents/TopBar/TopBar";
@@ -11,13 +14,23 @@ interface props {
   outlet: JSX.Element;
 }
 
+let FIRST_RENDER = true;
+
 const Chats: React.FC<props> = ({ outlet }) => {
   const dispatch = useAppDispatch();
+  const userID = useAppSelector((state) => state.user.ID);
+  const chatsList = useAppSelector((state) => state.chat.chatsList);
+
   React.useEffect(() => {
     dispatch(chatFetchChatsPartial());
-  }, [dispatch]);
-
-  const chatsList = useAppSelector((state) => state.chat.chatsList);
+  }, [dispatch, userID]);
+  React.useEffect(() => {
+    if (userID && Object.keys(chatsList).length > 0 && FIRST_RENDER) {
+      FIRST_RENDER = false;
+      dispatch(chatFetchUserChats());
+    }
+    console.log(Object.keys(chatsList).length);
+  }, [userID, chatsList, dispatch]);
 
   const sidebarRef = React.useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = React.useState(false);
