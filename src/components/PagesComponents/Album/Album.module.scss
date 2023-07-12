@@ -15,6 +15,7 @@
     float: right;
     &--2 {
       margin-top: -10rem;
+      white-space: nowrap;
     }
     &__wrapper {
       position: fixed;
@@ -47,6 +48,7 @@
     }
     &__container {
       width: 55vw;
+
       background-color: rosybrown;
     }
     &__people {
@@ -64,7 +66,7 @@
         }
       }
       &__wrapper {
-        width: 100vw;
+        min-width: 100vw;
         height: 100vh;
         position: relative;
       }

@@ -1,131 +1,3 @@
-// import React from "react";
-// import styles from "./Album.module.scss";
-// import { useParams } from "react-router-dom";
-// import {
-//   MotionValue,
-//   motion,
-//   useMotionValue,
-//   useMotionValueEvent,
-//   useScroll,
-//   useSpring,
-//   useTransform,
-// } from "framer-motion";
-// import LocomotiveScroll from "locomotive-scroll";
-// import ResizeObserver from "resize-observer-polyfill";
-
-// const Album = () => {
-//   const { albumName } = useParams();
-
-//   const refAlbum = React.useRef<HTMLElement>(null);
-//   const scrollXstate = useMotionValue(0);
-
-//   React.useEffect(() => {
-//     const handleWheel = (e: WheelEvent) => {
-//       if (e.deltaY > 0) {
-//         scrollXstate.set(scrollXstate.get() + 42);
-//       } else {
-//         if (scrollXstate.get() > 0) {
-//           scrollXstate.set(scrollXstate.get() - 42);
-//         }
-//       }
-//     };
-//     document.addEventListener("wheel", (e) => {
-//       handleWheel(e);
-//     });
-//     return () => {
-//       document.removeEventListener("wheel", handleWheel);
-//     };
-//   });
-
-//   const y1 = useSpring(useTransform(scrollXstate, [0, 2000], [0, -2450]), {
-//     damping: 15,
-//     mass: 0.27,
-//     stiffness: 55,
-//   });
-//   const y2 = useSpring(useTransform(scrollXstate, [0, 2000], [0, -2200]), {
-//     damping: 15,
-//     mass: 0.27,
-//     stiffness: 55,
-//   });
-
-//   const [startScroll, setStartScroll] = React.useState(false);
-
-//   useMotionValueEvent(scrollXstate, "change", (latest) => {
-//     // console.log("Page scroll: ", latest);
-//     if (latest > 550) {
-//       setStartScroll(true);
-//     } else {
-//       setStartScroll(false);
-//     }
-//   });
-
-//   React.useEffect(() => {
-//     let scroll: LocomotiveScroll = new LocomotiveScroll({});
-//     if (refAlbum.current) {
-//       scroll = new LocomotiveScroll({
-//         el: refAlbum.current,
-//         smooth: true,
-//         direction: "horizontal",
-//       });
-//       if (startScroll) {
-//         scroll.start();
-//       } else {
-//         scroll.stop();
-//       }
-//     }
-//     return () => {
-//       if (scroll) {
-//         scroll.destroy();
-//       }
-//     };
-//   }, [startScroll]);
-
-//   return (
-//     <motion.section
-//       ref={refAlbum}
-//       data-scroll-container
-//       className={styles["album"]}
-//     >
-//       <div className={styles["album__heading__wrapper"]}>
-//         <motion.div className={styles["album__heading"]}>
-//           <motion.h2 style={{ y: y1 }} className="heading-1">
-//             It's
-//           </motion.h2>
-//           <motion.h2
-//             style={{ y: y2 }}
-//             className={`${styles["album__heading--2"]} heading-2`}
-//           >
-//             {albumName}
-//           </motion.h2>
-//           <motion.h2 className="subtitle">loremlorem</motion.h2>
-//         </motion.div>
-//       </div>
-//       <div className={styles["album__content"]}>
-//         <Container1 x={scrollXstate} />
-//         <div style={{ minWidth: "100vw", height: "100vh" }}></div>
-//       </div>
-//     </motion.section>
-//   );
-// };
-
-// interface props {
-//   x: MotionValue<number>;
-// }
-
-// const Container1: React.FC<props> = ({ x }) => {
-//   return (
-//     <div className={styles["album__content__img__wrapper"]}>
-//       <motion.img
-//         className={styles["album__content__img"]}
-//         src="https://picsum.photos/500/750"
-//         alt=""
-//       />
-//     </div>
-//   );
-// };
-
-// export default Album;
-
 import React, { useRef, useState, useLayoutEffect, useCallback } from "react";
 import styles from "./Album.module.scss";
 import {
@@ -137,6 +9,9 @@ import {
   useTransform,
 } from "framer-motion";
 import { useParams } from "react-router-dom";
+import Container1 from "./components/Container1/Container1";
+import Container2 from "./components/Container2/Container2";
+import People from "./components/People/People";
 
 const Album = () => {
   const { albumName } = useParams();
@@ -147,7 +22,7 @@ const Album = () => {
     mass: 0.27,
     stiffness: 55,
   });
-  let y = useTransform(springY, [0, 840], [0, 640]);
+  let y = useTransform(springY, [0, 840], [0, 739]);
 
   const [startScroll, setStartScroll] = React.useState(false);
 
@@ -182,12 +57,17 @@ const Album = () => {
     console.log(latest);
   });
 
-  const y1 = useSpring(useTransform(scrollY, [0, 920], [0, -850]), {
+  const y1 = useSpring(useTransform(scrollY, [0, 920], [0, -900]), {
     damping: 15,
     mass: 0.27,
     stiffness: 55,
   });
-  const y2 = useSpring(useTransform(scrollY, [0, 850], [0, -700]), {
+  const y2 = useSpring(useTransform(scrollY, [0, 850], [0, -750]), {
+    damping: 15,
+    mass: 0.27,
+    stiffness: 55,
+  });
+  const y3 = useSpring(useTransform(scrollY, [0, 950], [0, -800]), {
     damping: 15,
     mass: 0.27,
     stiffness: 55,
@@ -242,7 +122,9 @@ const Album = () => {
             >
               {albumName}
             </motion.h2>
-            <motion.h2 className="subtitle">loremlorem</motion.h2>
+            <motion.h2 style={{ y: y3 }} className="subtitle">
+              loremlorem
+            </motion.h2>
           </motion.div>
         </div>
 
@@ -254,32 +136,13 @@ const Album = () => {
           <motion.section style={{ x: y }} className={styles["album"]}>
             <div style={{ width: "95vw", backfaceVisibility: "hidden" }}></div>
             <motion.div className={styles["album__content"]}>
-              <Container1 />
-              <Container2 />
-              <Container1 />
-              <Container2 />
+              <Container1 photo="https://images.unsplash.com/photo-1501694159270-7b55f5eb85fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" />
+              <Container2 photo="https://images.unsplash.com/photo-1603910234616-3b5f4a6be2b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" />
+              <Container1 photo="https://images.unsplash.com/photo-1619229725920-ac8b63b0631a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" />
+              <Container2 photo="https://images.unsplash.com/photo-1565035010268-a3816f98589a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" />
 
-              <div className={styles["album__content__people__wrapper"]}>
-                <div className={styles["album__content__people"]}>
-                  <div>
-                    <h3 className="subtitle">Lorem</h3>
-                    <h4>Lorem, ipsum.</h4>
-                  </div>
-                  <div>
-                    <h3 className="subtitle">Lorem</h3>
-                    <h4>Lorem, ipsum.</h4>
-                  </div>
-                  <div>
-                    <h3 className="subtitle">Lorem</h3>
-                    <h4>Lorem, ipsum.</h4>
-                  </div>
-                  <div>
-                    <h3 className="subtitle">Lorem</h3>
-                    <h4>Lorem, ipsum.</h4>
-                  </div>
-                </div>
-              </div>
-              <div style={{ width: "34.15vw" }}></div>
+              <People />
+              <div style={{ width: "39.45vw" }}></div>
             </motion.div>
           </motion.section>
         </motion.section>
@@ -291,55 +154,3 @@ const Album = () => {
 };
 
 export default Album;
-
-const Container1 = () => {
-  const refContainer1 = React.useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll();
-  const springY = useSpring(scrollYProgress, {
-    damping: 15,
-    mass: 0.27,
-    stiffness: 55,
-  });
-  let yIMG = useTransform(springY, [0, 1], ["0%", "-20%"]);
-
-  return (
-    <div ref={refContainer1} className={styles["album__content__container"]}>
-      <motion.div className={styles["album__content__img__wrapper"]}>
-        <motion.img
-          style={{ x: yIMG }}
-          className={styles["album__content__img"]}
-          src="https://picsum.photos/500/750"
-          alt=""
-        />
-      </motion.div>
-    </div>
-  );
-};
-
-const Container2 = () => {
-  const refContainer = React.useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({});
-  const springY = useSpring(scrollYProgress, {
-    damping: 15,
-    mass: 0.27,
-    stiffness: 55,
-  });
-  let yIMG = useTransform(springY, [0, 1], ["0%", "-20%"]);
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log("Page scroll: ", latest);
-  });
-  return (
-    <div ref={refContainer} className={styles["album__content__container"]}>
-      <motion.div className={styles["album__content__img__wrapper--2"]}>
-        <motion.img
-          style={{ x: yIMG }}
-          className={styles["album__content__img--2"]}
-          src="https://picsum.photos/500/750"
-          alt=""
-        />
-      </motion.div>
-    </div>
-  );
-};
