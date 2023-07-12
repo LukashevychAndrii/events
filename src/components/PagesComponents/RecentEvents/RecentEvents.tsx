@@ -1,6 +1,9 @@
 import React from "react";
 import styles from "./RecentEvents.module.scss";
 
+import Container1 from "./components/Container1/Container1";
+import Container2 from "./components/Container2/Container2";
+
 import {
   AnimatePresence,
   Variants,
@@ -9,9 +12,10 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../utils/redux";
+import { recentEventsFetch } from "../../../store/slices/recentEvents-slice";
 
-const variantsIMG: Variants = {
+export const variantsIMG: Variants = {
   initial: {
     opacity: 0,
     transition: { duration: 1 },
@@ -26,7 +30,7 @@ const variantsIMG: Variants = {
   },
 };
 
-const variantsIMG_TEXT1: Variants = {
+export const variantsIMG_TEXT1: Variants = {
   initial: {
     y: 30,
     opacity: 0,
@@ -39,7 +43,7 @@ const variantsIMG_TEXT1: Variants = {
   },
 };
 
-const variantsIMG_TEXT2: Variants = {
+export const variantsIMG_TEXT2: Variants = {
   initial: {
     y: 30,
     opacity: 0,
@@ -50,211 +54,6 @@ const variantsIMG_TEXT2: Variants = {
     opacity: 1,
     transition: { duration: 0.35, delay: 0.4 },
   },
-};
-
-interface props {
-  getHoveredImage: (img: string) => void;
-}
-
-const Container1: React.FC<props> = ({ getHoveredImage }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const temporaryY = useSpring(scrollYProgress, {
-    damping: 15,
-    mass: 0.27,
-    stiffness: 55,
-  });
-  let y = useTransform(temporaryY, [0, 1], ["-40%", "-60%"]);
-
-  const [isHovered, setIsHovered] = React.useState(false);
-  const [isHovered2, setIsHovered2] = React.useState(false);
-
-  const AnimatedLink = motion(Link);
-
-  return (
-    <div ref={ref} className={styles["recent__gallery__container--1"]}>
-      <motion.div
-        onPointerEnter={() => {
-          setIsHovered(true);
-          getHoveredImage("https://picsum.photos/700/700");
-        }}
-        className={styles["recent__gallery__img__wrapper"]}
-      >
-        <motion.div
-          style={{
-            y,
-            backgroundImage: `url(https://picsum.photos/700/700)`,
-          }}
-          className={styles["recent__gallery__img"]}
-        ></motion.div>
-        <AnimatePresence>
-          {isHovered && (
-            <AnimatedLink
-              to={`/album/testname`}
-              variants={variantsIMG}
-              initial="initial"
-              animate="animated"
-              exit="exit"
-              className={styles["recent__gallery__img__text"]}
-              onPointerLeave={() => {
-                getHoveredImage("");
-                setIsHovered(false);
-              }}
-            >
-              <motion.h3
-                variants={variantsIMG_TEXT1}
-                initial="initial"
-                animate="visible"
-                exit="initial"
-                className="subtitle"
-              >
-                Lorem
-              </motion.h3>
-              <motion.h2
-                variants={variantsIMG_TEXT2}
-                initial="initial"
-                animate="visible"
-                exit="initial"
-                className="underline"
-              >
-                Lorem, ipsum.
-              </motion.h2>
-            </AnimatedLink>
-          )}
-        </AnimatePresence>
-      </motion.div>
-
-      <span></span>
-      <motion.div
-        onPointerEnter={() => {
-          setIsHovered2(true);
-          getHoveredImage("https://picsum.photos/700/700");
-        }}
-        className={styles["recent__gallery__img__wrapper"]}
-      >
-        <motion.div
-          style={{
-            y,
-            backgroundImage: `url(https://picsum.photos/700/700)`,
-          }}
-          className={styles["recent__gallery__img"]}
-        ></motion.div>
-        <AnimatePresence>
-          {isHovered2 && (
-            <AnimatedLink
-              to={`/album/testname`}
-              variants={variantsIMG}
-              initial="initial"
-              animate="animated"
-              exit="exit"
-              className={styles["recent__gallery__img__text"]}
-              onPointerLeave={() => {
-                getHoveredImage("");
-                setIsHovered2(false);
-              }}
-            >
-              <motion.h3
-                variants={variantsIMG_TEXT1}
-                initial="initial"
-                animate="visible"
-                exit="initial"
-                className="subtitle"
-              >
-                Lorem
-              </motion.h3>
-              <motion.h2
-                variants={variantsIMG_TEXT2}
-                initial="initial"
-                animate="visible"
-                exit="initial"
-                className="underline"
-              >
-                Lorem, ipsum.
-              </motion.h2>
-            </AnimatedLink>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </div>
-  );
-};
-const Container2: React.FC<props> = ({ getHoveredImage }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const temporaryY = useSpring(scrollYProgress, {
-    damping: 15,
-    mass: 0.27,
-    stiffness: 55,
-  });
-  let y = useTransform(temporaryY, [0, 1], ["-40%", "-60%"]);
-  const [isHovered, setIsHovered] = React.useState(false);
-
-  const AnimatedLink = motion(Link);
-
-  return (
-    <div ref={ref} className={styles["recent__gallery__container--2"]}>
-      <span></span>
-      <div className={styles["recent__gallery__img__wrapper"]}>
-        <motion.div
-          onPointerEnter={() => {
-            setIsHovered(true);
-            getHoveredImage("https://picsum.photos/700/700");
-          }}
-          className={styles["recent__gallery__img__wrapper"]}
-        >
-          <motion.div
-            style={{
-              y,
-              backgroundImage: `url(https://picsum.photos/700/700)`,
-            }}
-            className={styles["recent__gallery__img"]}
-          ></motion.div>
-          <AnimatePresence>
-            {isHovered && (
-              <AnimatedLink
-                to={`/album/testtext2`}
-                variants={variantsIMG}
-                initial="initial"
-                animate="animated"
-                exit="exit"
-                className={styles["recent__gallery__img__text"]}
-                onPointerLeave={() => {
-                  getHoveredImage("");
-                  setIsHovered(false);
-                }}
-              >
-                <motion.h3
-                  variants={variantsIMG_TEXT1}
-                  initial="initial"
-                  animate="visible"
-                  exit="initial"
-                  className="subtitle"
-                >
-                  Lorem
-                </motion.h3>
-                <motion.h2
-                  variants={variantsIMG_TEXT2}
-                  initial="initial"
-                  animate="visible"
-                  exit="initial"
-                  className="underline"
-                >
-                  Lorem, ipsum.
-                </motion.h2>
-              </AnimatedLink>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
-      <span></span>
-    </div>
-  );
 };
 
 const variantsBG: Variants = {
@@ -280,6 +79,13 @@ const variantsBG: Variants = {
 
 const RecentEvents = () => {
   const [hoveredImage, setHoveredImage] = React.useState<string>();
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    dispatch(recentEventsFetch());
+  }, [dispatch]);
+
+  const eventsDATA = useAppSelector((state) => state.recentEvents.eventsDATA);
 
   const getHoveredImage = (img: string): void => {
     setHoveredImage(img);
@@ -299,11 +105,38 @@ const RecentEvents = () => {
     mass: 0.27,
     stiffness: 55,
   });
-  const y2 = useSpring(useTransform(scrollY, [0, 2000], [0, -400]), {
+  const y2 = useSpring(useTransform(scrollY, [0, 2000], [0, -500]), {
     damping: 15,
     mass: 0.27,
     stiffness: 55,
   });
+
+  const renderContainers = () => {
+    const content: JSX.Element[] = [];
+    for (let i = 0; i < 8; i++) {
+      content.push(
+        <Container1
+          key={i}
+          getHoveredImage={getHoveredImage}
+          event1DATA={eventsDATA[i]}
+          event2DATA={eventsDATA[i + 1]}
+        />
+      );
+      if (i >= 6) {
+        break;
+      }
+      content.push(
+        <Container2
+          key={i + 1}
+          getHoveredImage={getHoveredImage}
+          event1DATA={eventsDATA[i + 2]}
+        />
+      );
+      i++;
+      i++;
+    }
+    return content;
+  };
 
   return (
     <section ref={ref} className={styles["recent"]}>
@@ -339,16 +172,7 @@ const RecentEvents = () => {
         )}
       </AnimatePresence>
       <div className={styles["recent__gallery"]}>
-        <Container1 getHoveredImage={getHoveredImage} />
-        <Container2 getHoveredImage={getHoveredImage} />
-        <Container1 getHoveredImage={getHoveredImage} />
-        <Container2 getHoveredImage={getHoveredImage} />
-        <Container1 getHoveredImage={getHoveredImage} />
-        <Container2 getHoveredImage={getHoveredImage} />
-        <Container1 getHoveredImage={getHoveredImage} />
-        <Container2 getHoveredImage={getHoveredImage} />
-        <Container1 getHoveredImage={getHoveredImage} />
-        <Container2 getHoveredImage={getHoveredImage} />
+        {eventsDATA.length > 0 && renderContainers()}
       </div>
     </section>
   );

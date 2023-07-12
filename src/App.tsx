@@ -51,8 +51,9 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useAppDispatch();
   React.useEffect(() => {
+    console.log("HUILA");
     dispatch(userAutoSignIn());
-  }, [dispatch]);
+  }, []);
   return <RouterProvider router={router}></RouterProvider>;
 }
 
