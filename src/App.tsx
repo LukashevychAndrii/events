@@ -14,6 +14,7 @@ import RootLayoutChat from "./pages/RootPages/RootLayoutChat";
 import CalendarPage from "./pages/CalendarPage";
 import SelectChat from "./components/Chats/Chat/ChatComponents/SelectChat/SelectChat";
 import HomeIntroPage from "./pages/HomeIntroPage";
+import HomeMainPage from "./pages/HomeMainPage";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <HomeIntroPage /> },
-      { path: "main", element: <></> },
+      { path: "main", element: <HomeMainPage /> },
       { path: "about", element: <AboutPage /> },
       { path: "recent", element: <RecentEventsPage /> },
       { path: "album/:albumName", element: <AlbumPage /> },
