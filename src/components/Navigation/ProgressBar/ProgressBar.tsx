@@ -5,14 +5,19 @@ import ProgressBarStaticCircle from "./ProgressBarStaticCircle";
 interface props {
   scrollYPersentage: number;
   hide: boolean;
+  white?: boolean;
 }
 
-const ProgressBar: React.FC<props> = ({ scrollYPersentage, hide }) => {
+const ProgressBar: React.FC<props> = ({ scrollYPersentage, hide, white }) => {
   return (
     <svg width={40} height={40}>
       <g transform={`rotate(-90 ${"0 0"})`}>
-        <ProgressBarCircle colour="black" pct={scrollYPersentage} hide={hide} />
-        <ProgressBarStaticCircle colour="black" />
+        <ProgressBarCircle
+          colour={`${white ? "white" : "black"}`}
+          pct={scrollYPersentage}
+          hide={hide}
+        />
+        <ProgressBarStaticCircle colour={`${white ? "white" : "black"}`} />
       </g>
     </svg>
   );

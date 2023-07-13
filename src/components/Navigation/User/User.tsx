@@ -5,12 +5,16 @@ import { ReactComponent as DefaultAvatar } from "../../../img/SVG/default-avatar
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../../utils/redux";
 
-const User = () => {
+interface props {
+  white?: boolean;
+}
+
+const User: React.FC<props> = ({ white }) => {
   const userDATA = useAppSelector((state) => state.user);
   return (
     <Link
       to={userDATA.ID ? "/acc-details" : "/auth/sign-in"}
-      className={styles["user"]}
+      className={`${white ? styles["user__white"] : styles["user"]}`}
     >
       {userDATA.photo ? (
         <img

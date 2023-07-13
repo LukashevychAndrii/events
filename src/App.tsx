@@ -1,7 +1,6 @@
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/RootPages/RootLayout";
-import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import RecentEventsPage from "./pages/RecentEventsPage";
 import AlbumPage from "./pages/AlbumPage";
@@ -14,13 +13,15 @@ import ChatPage from "./pages/ChatPage";
 import RootLayoutChat from "./pages/RootPages/RootLayoutChat";
 import CalendarPage from "./pages/CalendarPage";
 import SelectChat from "./components/Chats/Chat/ChatComponents/SelectChat/SelectChat";
+import HomeIntroPage from "./pages/HomeIntroPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomeIntroPage /> },
+      { path: "main", element: <></> },
       { path: "about", element: <AboutPage /> },
       { path: "recent", element: <RecentEventsPage /> },
       { path: "album/:albumName", element: <AlbumPage /> },
@@ -50,10 +51,11 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useAppDispatch();
+
   React.useEffect(() => {
-    console.log("HUILA");
     dispatch(userAutoSignIn());
-  }, []);
+  }, [dispatch]);
+
   return <RouterProvider router={router}></RouterProvider>;
 }
 

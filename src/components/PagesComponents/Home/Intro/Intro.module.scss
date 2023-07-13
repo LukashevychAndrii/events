@@ -1,10 +1,128 @@
 @use "../../../../styles/mixins" as m;
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200&family=Source+Code+Pro&display=swap");
 .intro {
-  background-color: orange;
+  background-color: #000;
   margin: auto;
-  z-index: 10;
+
   &__logo {
     @include m.absolute-center();
     z-index: -1;
+  }
+
+  //---------TYPEWRITER-----------
+
+  &__typewriter {
+    font-family: "Source Code Pro", monospace;
+    text-transform: uppercase;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20rem;
+    width: max-content;
+    position: relative;
+    line-height: 16rem;
+    color: #fff;
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    &::before {
+      background-color: #000;
+      animation: typewriter 2s 1.25s steps(6) forwards;
+    }
+    &::after {
+      width: 0.35rem;
+      background-color: #fff;
+      transition: all 0.1s;
+      animation: typewriter 2s 1.25s steps(6) forwards,
+        blink 0.5s steps(6) infinite;
+    }
+  }
+  //------------LEFT-----------
+
+  &__carousel {
+    &__photo {
+      width: 50vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  }
+
+  // ------------RIGHT--------------
+  &__text {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    &__img {
+      width: 40rem;
+      filter: brightness(0) invert(1);
+      position: absolute;
+      top: 63.5%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &__location {
+      color: #fff;
+      position: absolute;
+      top: 78.5%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &__link {
+      position: absolute;
+      top: 89%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &__chevron-down {
+      fill: #fff;
+      width: 6.5rem;
+      height: 6.5rem;
+      animation: bounce1 1s infinite;
+      opacity: 0.6;
+      transition: opacity 0.4s;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@keyframes typewriter {
+  to {
+    left: 100%;
+  }
+}
+@keyframes blink {
+  to {
+    background-color: transparent;
+  }
+}
+
+@keyframes bounce1 {
+  from,
+  to {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.1, 0.9);
+  }
+  75% {
+    transform: scale(0.95, 1.05);
   }
 }

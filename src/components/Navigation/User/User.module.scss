@@ -1,4 +1,5 @@
-.user {
+.user,
+.user__white {
   position: fixed;
   left: 1.4rem;
   top: 2rem;
@@ -18,5 +19,13 @@
   &__photo {
     width: 5.5rem;
     height: 5.5rem;
+  }
+}
+.user__white {
+  & > svg {
+    fill: #fff;
+  }
+  & > span {
+    color: #fff;
   }
 }

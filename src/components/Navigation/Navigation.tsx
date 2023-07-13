@@ -1,12 +1,36 @@
 import React from "react";
 import styles from "./Navigation.module.scss";
 import ProgressBar from "./ProgressBar/ProgressBar";
-import { NavLink } from "react-router-dom";
-import { useAnimationControls, useScroll, useSpring } from "framer-motion";
+import { useLocation } from "react-router-dom";
+import {
+  Variants,
+  useAnimationControls,
+  useScroll,
+  useSpring,
+} from "framer-motion";
 import { motion } from "framer-motion";
 import User from "./User/User";
+import Logo from "./Logo/Logo";
+import Links1 from "./Links/Links1";
+import Links2 from "./Links/Links2";
 
-const Navigation = () => {
+interface props {
+  white?: boolean;
+}
+
+const variants: Variants = {
+  hidden: {
+    opacity: 0,
+    pointerEvents: "none",
+  },
+  visible: {
+    opacity: 1,
+    pointerEvents: "all",
+  },
+};
+
+const Navigation: React.FC<props> = ({ white }) => {
+  console.log(white);
   const navControls = useAnimationControls();
   const [showNav, setShowNav] = React.useState(true);
 
@@ -75,42 +99,43 @@ const Navigation = () => {
       window.removeEventListener("scroll", handleScrollEnd);
     };
   }, []);
+  const location = useLocation();
+
+  const [animationKey, setAnimationKey] = React.useState(0);
+
+  const triggerAnimation = () => {
+    setAnimationKey((prevKey) => prevKey + 1);
+  };
+
+  React.useEffect(() => {
+    triggerAnimation();
+  }, [location]);
 
   return (
-    <motion.nav className={styles["nav"]}>
-      <User />
-      <motion.ul animate={navControls}>
-        <li>
-          <NavLink className={`${styles["nav__link"]} subtitle`} to="calendar">
-            Calendar
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className={`${styles["nav__link"]} subtitle`} to="about">
-            About
-          </NavLink>
-        </li>
-      </motion.ul>
+    <motion.nav
+      key={animationKey}
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      transition={{ duration: 1, delay: white ? 8.5 : 0 }}
+      className={styles["nav"]}
+    >
+      <User white={white} />
+      <Logo white={white} />
+      <Links1 showNav={showNav} white={white} />
       <div
         onMouseEnter={() => {
           setHover(true);
         }}
         style={{ cursor: "pointer" }}
       >
-        <ProgressBar scrollYPersentage={scrollYPersentage} hide={!showNav} />
+        <ProgressBar
+          white={white}
+          scrollYPersentage={scrollYPersentage}
+          hide={!showNav}
+        />
       </div>
-      <motion.ul animate={navControls}>
-        <li>
-          <NavLink to="/recent" className={`${styles["nav__link"]} subtitle`}>
-            Recent
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/chats" className={`${styles["nav__link"]} subtitle`}>
-            Chats
-          </NavLink>
-        </li>
-      </motion.ul>
+      <Links2 showNav={showNav} white={white} />
     </motion.nav>
   );
 };

@@ -3,55 +3,46 @@ import styles from "./Intro.module.scss";
 import { motion, useAnimation } from "framer-motion";
 
 import logo from "../../../../img/logo.png";
-import Navigation from "../../../Navigation/Navigation";
+import TypeWriter from "./components/TypeWriter";
+import LeftContent from "./components/left/LeftContent";
+import RightContent from "./components/right/RightContent";
 
-interface props {
-  setShowIntro: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Intro: React.FC<props> = ({ setShowIntro }) => {
+const Intro = () => {
   const controls = useAnimation();
   React.useEffect(() => {
     const sequence = async () => {
-      await controls.start({ height: "100vh" });
+      await controls.start({
+        transition: { delay: 0.75, duration: 1.5 },
+        height: "100vh",
+      });
       await controls.start({
         width: "100%",
-        transition: { duration: 1.5 },
+        transition: { duration: 1.5, ease: [0.85, -0.03, 0, 1.09] },
       });
     };
 
     sequence();
   }, [controls]);
 
-  const [logoVisible, setLogoVisible] = React.useState(true);
-
   return (
-    <>
-      <motion.div
-        className={styles["intro"]}
-        initial={{ height: 0, width: ".4rem" }}
-        animate={controls}
-        transition={{ duration: 1.5 }}
-        exit={{ opacity: 0, filter: "blur(50px)" }}
-      >
-        {logoVisible && (
-          <motion.img
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5 }}
-            className={styles["intro__logo"]}
-            src={logo}
-            alt="logo"
-            onAnimationComplete={() =>
-              setTimeout(() => {
-                setLogoVisible(false);
-              }, 500)
-            }
-          />
-        )}
-        <button onClick={() => setShowIntro(false)}>close</button>
-      </motion.div>
-    </>
+    <motion.div
+      className={styles["intro"]}
+      initial={{ height: 0, width: ".4rem" }}
+      animate={controls}
+      exit={{ opacity: 0, filter: "blur(50px)" }}
+    >
+      <motion.img
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.25 }}
+        className={styles["intro__logo"]}
+        src={logo}
+        alt="logo"
+      />
+      <TypeWriter />
+      <LeftContent />
+      <RightContent />
+    </motion.div>
   );
 };
 

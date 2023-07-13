@@ -1,10 +1,9 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
-import { useLocation, useOutlet, useParams } from "react-router-dom";
+import { useLocation, useOutlet } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navigation from "../../components/Navigation/Navigation";
 import SmoothScroll from "../../components/SmoothScroll/SmoothScroll";
-import Logo from "../../components/Navigation/Logo";
 import AlbumPage from "../AlbumPage";
 
 const RootLayout = () => {
@@ -20,10 +19,13 @@ const RootLayout = () => {
 
   return (
     <>
-      <Logo />
-      <Navigation />
+      {pathname.length > 1 ? <Navigation /> : <Navigation white={true} />}
 
-      {pathname.includes("album") ? (
+      {pathname.length === 1 ? (
+        <main>
+          <AnimatedOutlet />
+        </main>
+      ) : pathname.includes("album") ? (
         <AlbumPage />
       ) : (
         <SmoothScroll>

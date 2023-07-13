@@ -1,4 +1,4 @@
-@use "../../styles/mixins" as m;
+@use "../../../styles/mixins" as m;
 
 .logo {
   width: 17.5rem;
@@ -6,4 +6,7 @@
   position: fixed;
   top: 5.5%;
   z-index: 1000;
+  &__white {
+    filter: brightness(0) invert(1);
+  }
 }
