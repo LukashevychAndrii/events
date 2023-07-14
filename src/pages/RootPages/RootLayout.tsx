@@ -6,6 +6,7 @@ import Navigation from "../../components/Navigation/Navigation";
 import SmoothScroll from "../../components/SmoothScroll/SmoothScroll";
 import AlbumPage from "../AlbumPage";
 import PendingBar from "../../components/PendingBar/PendingBar";
+import AlertBox from "../../components/AlertBox/AlertBox";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const RootLayout = () => {
 
   return (
     <>
+      <AlertBox />
       <PendingBar />
       {pathname.length > 1 ? (
         <Navigation />

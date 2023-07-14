@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { get, getDatabase, ref } from "firebase/database";
 import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
+import { addAlert } from "./alert-slice";
 
 export interface eventDATAI {
   date: string;
@@ -40,7 +41,13 @@ export const recentEventsFetch = createAsyncThunk<undefined, undefined, {}>(
         dispatch(setEventsDATA(Object.values(snapshot.val())));
       }
     } catch (error) {
-      // Handle the error here if needed
+      dispatch(
+        addAlert({
+          alertText: "Fetching events failed!",
+          alertTitle: "Fetching Error!",
+          alertType: "error",
+        })
+      );
     } finally {
       dispatch(pendingUpdateQueueDown());
     }

@@ -11,6 +11,7 @@ import {
 } from "firebase/database";
 import { RootState } from "..";
 import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
+import { addAlert } from "./alert-slice";
 
 interface memberI {
   [chatID: string]: {
@@ -107,8 +108,14 @@ export const chatFetchChatsPartial = createAsyncThunk<any, undefined, {}>(
 
       return { chats };
     } catch (error) {
-      // ! Handle the error here if needed
-      console.log(error);
+      dispatch(
+        addAlert({
+          alertText: "Fetching chats failed!",
+          alertTitle: "Fetching Error!",
+          alertType: "error",
+        })
+      );
+
       return null;
     } finally {
       dispatch(pendingUpdateQueueDown());
@@ -145,8 +152,13 @@ export const chatFetchChat = createAsyncThunk<
 
       return { chatDATA: chatDATA };
     } catch (error) {
-      // ! Handle the error here if needed
-      console.log(error);
+      dispatch(
+        addAlert({
+          alertText: "Fetching chat failed!",
+          alertTitle: "Fetching Error!",
+          alertType: "error",
+        })
+      );
       return { chatDATA: null };
     } finally {
       dispatch(pendingUpdateQueueDown());
@@ -184,8 +196,13 @@ export const chatSendMessage = createAsyncThunk<
         ]);
       }
     } catch (error) {
-      // ! Handle the error here if needed
-      console.log(error);
+      dispatch(
+        addAlert({
+          alertText: "Sending message failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
     } finally {
       dispatch(pendingUpdateQueueDown());
     }
@@ -218,8 +235,13 @@ export const chatJoinGroup = createAsyncThunk<
       }),
     ]);
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Joining chat failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -253,8 +275,13 @@ export const chatLeaveGroup = createAsyncThunk<
       }),
     ]);
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Leaving chats failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -280,8 +307,13 @@ export const chatFetchMembers = createAsyncThunk<
       }
     });
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Fetching members failed!",
+        alertTitle: "Fetching Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -307,8 +339,13 @@ export const chatFetchMessages = createAsyncThunk<
       }
     });
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Fetching messages failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -329,8 +366,13 @@ export const chatClearMessages = createAsyncThunk<
       push(dbRef, message);
     });
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Clearing messages failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -387,8 +429,13 @@ export const chatAddUserChat = createAsyncThunk<
 
     await set(otherUserChatRef, otherUserChat);
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Adding user failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -416,8 +463,13 @@ export const chatFetchUserChats = createAsyncThunk<undefined, undefined, {}>(
         });
       }
     } catch (error) {
-      // ! Handle the error here if needed
-      console.log(error);
+      dispatch(
+        addAlert({
+          alertText: "Fetching users failed!",
+          alertTitle: "Fetching Error!",
+          alertType: "error",
+        })
+      );
     } finally {
       dispatch(pendingUpdateQueueDown());
     }

@@ -17,6 +17,8 @@ import { get, getDatabase, ref, remove, set } from "firebase/database";
 import { RootState } from "..";
 import { memberDATAI } from "./chat-slice";
 import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
+import { addAlert } from "./alert-slice";
+import getErrorDetails from "../../utils/getErrorDetails";
 
 interface initialStateI {
   name: string;
@@ -118,9 +120,7 @@ export const userCreate = createAsyncThunk<
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(error);
-        // ..
+        dispatch(addAlert(getErrorDetails(errorCode)));
       });
     return undefined;
   }
@@ -160,7 +160,7 @@ export const userSignIn = createAsyncThunk<
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
+        dispatch(addAlert(getErrorDetails(errorCode)));
       });
     return undefined;
   }
@@ -188,8 +188,14 @@ export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
               })
             );
           }
-        } catch (error) {
-          // ! Handle the error here if needed
+        } catch (error: any) {
+          dispatch(
+            addAlert({
+              alertText: "Auto sign in failed!",
+              alertTitle: "Error!",
+              alertType: "error",
+            })
+          );
         } finally {
           dispatch(pendingUpdateQueueDown());
         }
@@ -212,7 +218,13 @@ export const userSignOut = createAsyncThunk<
     dispatch(removeUser());
     navigate("/");
   } catch (error) {
-    // ! Handle the error here if needed
+    dispatch(
+      addAlert({
+        alertText: "Sign out failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -235,7 +247,13 @@ export const userUpdateName = createAsyncThunk<
       await set(dbRef, name);
     }
   } catch (error) {
-    // ! Handle the error here if needed
+    dispatch(
+      addAlert({
+        alertText: "Updating name failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -259,7 +277,13 @@ export const userUpdateEmail = createAsyncThunk<
       await set(dbRef, email);
     }
   } catch (error) {
-    // ! Handle the error here if needed
+    dispatch(
+      addAlert({
+        alertText: "Updating email failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -285,21 +309,25 @@ export const userUpdatePassword = createAsyncThunk<
             passwordCurrent
           );
 
-          await reauthenticateWithCredential(auth.currentUser, credentials)
-            .then(() => {
-              if (auth.currentUser) {
-                updatePassword(auth.currentUser, passwordNew);
-                console.log("success");
-              }
-            })
-            .catch((error) => {
-              // Handle the error here if needed
-              console.log(error);
-            });
+          await reauthenticateWithCredential(
+            auth.currentUser,
+            credentials
+          ).then(() => {
+            if (auth.currentUser) {
+              updatePassword(auth.currentUser, passwordNew);
+              console.log("success");
+            }
+          });
         }
       }
     } catch (error) {
-      // ! Handle the error here if needed
+      dispatch(
+        addAlert({
+          alertText: "Updating password failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
     } finally {
       dispatch(pendingUpdateQueueDown());
     }
@@ -335,8 +363,13 @@ export const userUpdatePhoto = createAsyncThunk<
       }
     }
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Updating photo failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -356,8 +389,13 @@ export const userRemovePhoto = createAsyncThunk<undefined, undefined, {}>(
         await remove(dbRef);
       }
     } catch (error) {
-      // ! Handle the error here if needed
-      console.log(error);
+      dispatch(
+        addAlert({
+          alertText: "Removing photo failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
     } finally {
       dispatch(pendingUpdateQueueDown());
     }
@@ -383,7 +421,13 @@ export const userFindUser = createAsyncThunk<
       userDATA = snapshot.val();
     });
   } catch (error) {
-    // ! Handle the error here if needed
+    dispatch(
+      addAlert({
+        alertText: "Founding user failed!",
+        alertTitle: "Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }

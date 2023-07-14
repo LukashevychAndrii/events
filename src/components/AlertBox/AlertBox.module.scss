@@ -1,0 +1,77 @@
+@use "../../styles/mixins" as m;
+.alert {
+  position: fixed;
+  top: 17.5%;
+  right: 17.5%;
+  display: flex;
+  align-items: center;
+  gap: 2.125rem;
+  padding-right: 2.125rem;
+  border-radius: 0.75rem;
+  @include m.box-shadow-2();
+  user-select: text;
+  overflow: hidden;
+  z-index: 1;
+  &__icon {
+    width: 3.75rem;
+    height: 3.75rem;
+    &__wrapper {
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top-left-radius: 0.75rem;
+      border-bottom-left-radius: 0.75rem;
+      &__error {
+        background-color: #a94442;
+      }
+      &__success {
+        background-color: #4dbf4f;
+      }
+    }
+    &__error {
+      fill: red;
+    }
+    &__success {
+      fill: green;
+    }
+  }
+  &__content {
+    &__title {
+      font-size: calc(var(--font-default) + 0.35rem);
+      padding-bottom: 0.5rem;
+    }
+    &__text {
+      font-size: var(--font-default);
+    }
+  }
+  &__close-btn {
+    position: absolute;
+    top: 0.1rem;
+    right: 0.6rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    opacity: 0.4;
+    transition: opacity 0.4s;
+    cursor: pointer;
+    user-select: none;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  &__queue {
+    font-size: 1.25rem;
+    position: absolute;
+    top: 0.4rem;
+    right: 3rem;
+    user-select: none;
+  }
+  &__expire-bar {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    transform-origin: left;
+    background-color: #000;
+  }
+}

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { get, getDatabase, ref, set } from "firebase/database";
 import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
+import { addAlert } from "./alert-slice";
 
 export interface eventI {
   name: string;
@@ -45,8 +46,13 @@ export const calendarFetchEvents = createAsyncThunk<
       dispatch(setEvents([]));
     }
   } catch (error) {
-    // ! Handle the error here if needed
-    console.log(error);
+    dispatch(
+      addAlert({
+        alertText: "Fetching calendar week failed!",
+        alertTitle: "Fetching Error!",
+        alertType: "error",
+      })
+    );
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
