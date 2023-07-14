@@ -29,7 +29,6 @@ const Intro = () => {
       className={styles["intro"]}
       initial={{ height: 0, width: ".4rem" }}
       animate={controls}
-      exit={{ opacity: 0, filter: "blur(50px)" }}
     >
       <motion.img
         initial={{ opacity: 0 }}
