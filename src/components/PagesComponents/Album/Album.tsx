@@ -16,6 +16,13 @@ import People from "./components/People/People";
 const Album = () => {
   const { albumName } = useParams();
 
+  const [name, setName] = React.useState("");
+  React.useEffect(() => {
+    if (albumName) {
+      setName(albumName);
+    }
+  }, [albumName]);
+
   const { scrollY } = useScroll();
   const springY = useSpring(scrollY, {
     damping: 15,
@@ -111,8 +118,19 @@ const Album = () => {
   return (
     <>
       <div className="scroll-container">
-        <div className={styles["album__heading__wrapper"]}>
-          <motion.div className={styles["album__heading"]}>
+        <motion.div
+          transition={{ duration: 1 }}
+          initial={{ opacity: 0, filter: "blur(50px)" }}
+          animate={{ opacity: 1, filter: "blur(0)" }}
+          exit={{
+            opacity: 0,
+            filter: "blur(50px)",
+            y: 150,
+            transition: { duration: 1.5 },
+          }}
+          className={styles["album__heading__wrapper"]}
+        >
+          <div className={styles["album__heading"]}>
             <motion.h2 style={{ y: y1 }} className="heading-1">
               It's
             </motion.h2>
@@ -120,13 +138,13 @@ const Album = () => {
               style={{ y: y2 }}
               className={`${styles["album__heading--2"]} heading-2`}
             >
-              {albumName}
+              {name}
             </motion.h2>
             <motion.h2 style={{ y: y3 }} className="subtitle">
               loremlorem
             </motion.h2>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
         <motion.section
           ref={scrollRef}
