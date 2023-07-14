@@ -32,19 +32,19 @@ const RootLayout = () => {
         {pathname.includes("album") ? (
           <AlbumPage key="album" />
         ) : (
-          <motion.div
-            key="main"
-            initial={{ opacity: 0, filter: "blur(50px)" }}
-            animate={{ opacity: 1, filter: "blur(0)" }}
-            exit={{
-              opacity: 0,
-              filter: "blur(50px)",
-              y: 150,
-              transition: { duration: 1.5 },
-            }}
-            transition={{ duration: 1 }}
-          >
-            <SmoothScroll>
+          <SmoothScroll>
+            <motion.div
+              key="main"
+              initial={{ opacity: 0, filter: "blur(50px)" }}
+              animate={{ opacity: 1, filter: "blur(0)" }}
+              exit={{
+                opacity: 0,
+                filter: "blur(50px)",
+                y: 150,
+                transition: { duration: 1.5 },
+              }}
+              transition={{ duration: 1 }}
+            >
               <AnimatePresence mode="wait">
                 <motion.main
                   style={{ minHeight: "100vh" }}
@@ -62,8 +62,8 @@ const RootLayout = () => {
                   <AnimatedOutlet />
                 </motion.main>
               </AnimatePresence>
-            </SmoothScroll>
-          </motion.div>
+            </motion.div>
+          </SmoothScroll>
         )}
       </AnimatePresence>
     </>
