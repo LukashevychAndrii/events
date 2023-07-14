@@ -14,8 +14,13 @@ import {
   vatiantsMoveBot,
   vatiantsMoveTop,
 } from "../../MainContent";
+import { eventDATAI } from "../../../../../../store/slices/recentEvents-slice";
 
-const Container4 = () => {
+interface props {
+  eventDATA: eventDATAI;
+}
+
+const Container4: React.FC<props> = ({ eventDATA }) => {
   const { scrollY } = useScroll();
   const y = useSpring(useTransform(scrollY, [0, 6000], [1350, -1000]), {
     damping: 15,
@@ -71,7 +76,7 @@ const Container4 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
         >
-          Lorem 18/05/2022
+          {eventDATA?.date}
         </motion.h5>
 
         <AnimatedLink
@@ -82,9 +87,9 @@ const Container4 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           className={`${styles["content__container--4__left-info__title"]} underline`}
           viewport={{ once: true }}
-          to=""
+          to={`/album/${eventDATA?.name}`}
         >
-          Lorem, ipsum.
+          {eventDATA?.name}
         </AnimatedLink>
 
         <motion.p
@@ -103,15 +108,13 @@ const Container4 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
         >
-          qweasd
+          Lorem, ipsum dolor.
         </motion.span>
       </motion.div>
       <div className={styles["content__img__wrapper--4"]}>
-        <motion.img
+        <motion.div
           className={styles["content__img"]}
-          style={{ y: yIMG }}
-          src="https://picsum.photos/500/750"
-          alt="event"
+          style={{ y: yIMG, backgroundImage: `url(${eventDATA?.photo})` }}
         />
       </div>
     </motion.div>

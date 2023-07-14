@@ -26,6 +26,8 @@
           white-space: nowrap;
           text-decoration: none;
           line-height: 10rem;
+          color: #000;
+          width: max-content;
         }
         &__description {
           font-size: 2rem;
@@ -61,6 +63,10 @@
   &__img {
     width: 100%;
     height: 120%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
     &__wrapper {
       &--1 {
         width: 500px;

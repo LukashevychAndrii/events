@@ -14,8 +14,13 @@ import {
   vatiantsMoveBot,
   vatiantsMoveTop,
 } from "../../MainContent";
+import { eventDATAI } from "../../../../../../store/slices/recentEvents-slice";
 
-const Container3 = () => {
+interface props {
+  eventDATA: eventDATAI;
+}
+
+const Container3: React.FC<props> = ({ eventDATA }) => {
   const { scrollY } = useScroll();
   const y = useSpring(useTransform(scrollY, [0, 3500], [800, -300]), {
     damping: 15,
@@ -61,11 +66,9 @@ const Container3 = () => {
       onMouseLeave={handleMouseLeaveControls}
     >
       <div className={styles["content__img__wrapper--3"]}>
-        <motion.img
-          style={{ y: yIMG }}
+        <motion.div
+          style={{ y: yIMG, backgroundImage: `url(${eventDATA?.photo})` }}
           className={styles["content__img"]}
-          src="https://picsum.photos/960/640"
-          alt="event"
         />
       </div>
       <motion.div
@@ -80,7 +83,7 @@ const Container3 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
         >
-          Lorem 18/05/2022
+          {eventDATA?.date}
         </motion.h5>
 
         <AnimatedLink
@@ -91,9 +94,9 @@ const Container3 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           className={`${styles["content__container--3__right-info__title"]} underline`}
           viewport={{ once: true }}
-          to=""
+          to={`/album/${eventDATA?.name}`}
         >
-          Lorem, ipsum.
+          {eventDATA?.name}
         </AnimatedLink>
 
         <motion.p
@@ -112,7 +115,7 @@ const Container3 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
         >
-          qweasd
+          Lorem, ipsum dolor.
         </motion.span>
       </motion.div>
     </motion.div>

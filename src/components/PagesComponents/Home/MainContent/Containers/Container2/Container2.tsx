@@ -14,8 +14,13 @@ import {
   vatiantsMoveTop,
 } from "../../MainContent";
 import { Link } from "react-router-dom";
+import { eventDATAI } from "../../../../../../store/slices/recentEvents-slice";
 
-const Container2 = () => {
+interface props {
+  eventDATA: eventDATAI;
+}
+
+const Container2: React.FC<props> = ({ eventDATA }) => {
   const { scrollY } = useScroll();
   const y = useSpring(useTransform(scrollY, [0, 2500], [800, -300]), {
     damping: 15,
@@ -49,7 +54,7 @@ const Container2 = () => {
     mass: 0.27,
     stiffness: 55,
   });
-  let yIMG = useTransform(springY, [0, 1], ["-10%", "10%"]);
+  let yIMG = useTransform(springY, [0, 1], ["-50%", "50%"]);
 
   return (
     <motion.div
@@ -71,7 +76,7 @@ const Container2 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
         >
-          Lorem 18/05/2022
+          {eventDATA?.date}
         </motion.h5>
 
         <AnimatedLink
@@ -82,9 +87,9 @@ const Container2 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           className={`${styles["content__container--2__left-info__title"]} underline`}
           viewport={{ once: true }}
-          to=""
+          to={`/album/${eventDATA?.name}`}
         >
-          Lorem, ipsum.
+          {eventDATA?.name}
         </AnimatedLink>
 
         <motion.p
@@ -103,15 +108,13 @@ const Container2 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
         >
-          qweasd
+          Lorem, ipsum dolor.
         </motion.span>
       </motion.div>
       <div className={styles["content__img__wrapper--2"]}>
-        <motion.img
-          style={{ y: yIMG }}
+        <motion.div
+          style={{ y: yIMG, backgroundImage: `url(${eventDATA?.photo})` }}
           className={styles["content__img"]}
-          src="https://picsum.photos/960/640"
-          alt="event"
         />
       </div>
     </motion.div>

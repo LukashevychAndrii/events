@@ -13,8 +13,13 @@ import {
   vatiantsMoveBot,
   vatiantsMoveTop,
 } from "../../MainContent";
+import { eventDATAI } from "../../../../../../store/slices/recentEvents-slice";
 
-const Container1 = () => {
+interface props {
+  eventDATA: eventDATAI;
+}
+
+const Container1: React.FC<props> = ({ eventDATA }) => {
   const { scrollY } = useScroll();
   const y = useSpring(useTransform(scrollY, [0, 2000], [400, -600]), {
     damping: 15,
@@ -48,7 +53,7 @@ const Container1 = () => {
     mass: 0.27,
     stiffness: 55,
   });
-  let yIMG = useTransform(springY, [0, 1], ["-10%", "10%"]);
+  let yIMG = useTransform(springY, [0, 1], ["-20%", "20%"]);
 
   return (
     <motion.div
@@ -60,11 +65,9 @@ const Container1 = () => {
       onMouseLeave={handleMouseLeaveControls}
     >
       <div className={styles["content__img__wrapper--1"]}>
-        <motion.img
-          style={{ y: yIMG }}
+        <motion.div
+          style={{ y: yIMG, backgroundImage: `url(${eventDATA?.photo})` }}
           className={styles["content__img"]}
-          src="https://picsum.photos/500/750"
-          alt="event"
         />
       </div>
       <motion.div
@@ -79,7 +82,7 @@ const Container1 = () => {
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.15 }}
         >
-          Lorem 18/05/2022
+          {eventDATA?.date}
         </motion.h5>
 
         <AnimatedLink
@@ -90,9 +93,9 @@ const Container1 = () => {
           transition={{ duration: 1, delay: 0.15 }}
           viewport={{ once: true }}
           className={`${styles["content__container--1__right-info__title"]} underline`}
-          to=""
+          to={`/album/${eventDATA?.name}`}
         >
-          Lorem, ipsum.
+          {eventDATA?.name}
         </AnimatedLink>
 
         <motion.p
@@ -111,7 +114,7 @@ const Container1 = () => {
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.15 }}
         >
-          qweasd
+          Lorem ipsum dolor sit.
         </motion.span>
       </motion.div>
     </motion.div>

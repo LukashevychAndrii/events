@@ -7,6 +7,8 @@ import Container1 from "./Containers/Container1/Container1";
 import Container2 from "./Containers/Container2/Container2";
 import Container3 from "./Containers/Container3/Container3";
 import Container4 from "./Containers/Container4/Container4";
+import { useAppDispatch, useAppSelector } from "../../../../utils/redux";
+import { recentEventsFetch } from "../../../../store/slices/recentEvents-slice";
 
 export const variantsFadeIn = {
   initial: {
@@ -36,6 +38,12 @@ export const vatiantsMoveBot = {
 };
 
 const MainContent = () => {
+  const dispatch = useAppDispatch();
+  React.useEffect(() => {
+    dispatch(recentEventsFetch());
+  }, [dispatch]);
+
+  const events = useAppSelector((state) => state.recentEvents.eventsDATA);
   return (
     <>
       <motion.section
@@ -47,10 +55,10 @@ const MainContent = () => {
         <Heading />
       </motion.section>
       <section className={styles["content"]}>
-        <Container1 />
-        <Container2 />
-        <Container3 />
-        <Container4 />
+        <Container1 eventDATA={events[0]} />
+        <Container2 eventDATA={events[5]} />
+        <Container3 eventDATA={events[7]} />
+        <Container4 eventDATA={events[3]} />
       </section>
     </>
   );

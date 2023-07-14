@@ -31,7 +31,6 @@ const variants: Variants = {
 };
 
 const Navigation: React.FC<props> = ({ white }) => {
-  console.log(white);
   const navControls = useAnimationControls();
   const [showNav, setShowNav] = React.useState(true);
 
