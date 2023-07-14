@@ -16,6 +16,7 @@ import { NavigateFunction } from "react-router-dom";
 import { get, getDatabase, ref, remove, set } from "firebase/database";
 import { RootState } from "..";
 import { memberDATAI } from "./chat-slice";
+import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
 
 interface initialStateI {
   name: string;
@@ -168,13 +169,14 @@ export const userSignIn = createAsyncThunk<
 export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
   "user/userAutoLogIn",
   async (_, { dispatch }) => {
-    console.log("user");
+    dispatch(pendingUpdateQueueUp());
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const db = getDatabase();
         const dbRef = ref(db, `users/${user.uid}/userDATA/photo`);
-        await get(dbRef).then((snapshot) => {
+        try {
+          const snapshot = await get(dbRef);
           if (user.email && user.displayName) {
             dispatch(
               setUser({
@@ -186,13 +188,13 @@ export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
               })
             );
           }
-        });
-      } else {
-        // User is signed out
-        // ...
+        } catch (error) {
+          // ! Handle the error here if needed
+        } finally {
+          dispatch(pendingUpdateQueueDown());
+        }
       }
     });
-
     return undefined;
   }
 );
@@ -203,17 +205,17 @@ export const userSignOut = createAsyncThunk<
   {}
 >("user/userSignOut", async ({ navigate }, { dispatch }) => {
   const auth = getAuth();
-  await signOut(auth)
-    .then(() => {
-      console.log("2");
-
-      dispatch(removeUser());
-      navigate("/");
-    })
-    .catch((error) => {
-      // An error happened.
-    });
-
+  dispatch(pendingUpdateQueueUp());
+  try {
+    await signOut(auth);
+    console.log("2");
+    dispatch(removeUser());
+    navigate("/");
+  } catch (error) {
+    // ! Handle the error here if needed
+  } finally {
+    dispatch(pendingUpdateQueueDown());
+  }
   return undefined;
 });
 
@@ -222,16 +224,20 @@ export const userUpdateName = createAsyncThunk<
   { name: string },
   {}
 >("user/userChangeName", async ({ name }, { dispatch, getState }) => {
-  const auth = getAuth();
-  if (auth.currentUser) {
-    await updateProfile(auth.currentUser, { displayName: name }).then(
-      async () => {
-        const db = getDatabase();
-        const state = getState() as RootState;
-        const dbRef = ref(db, `users/${state.user.ID}/userDATA/name`);
-        set(dbRef, name);
-      }
-    );
+  dispatch(pendingUpdateQueueUp());
+  try {
+    const auth = getAuth();
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, { displayName: name });
+      const db = getDatabase();
+      const state = getState() as RootState;
+      const dbRef = ref(db, `users/${state.user.ID}/userDATA/name`);
+      await set(dbRef, name);
+    }
+  } catch (error) {
+    // ! Handle the error here if needed
+  } finally {
+    dispatch(pendingUpdateQueueDown());
   }
 
   return { name: name };
@@ -242,14 +248,20 @@ export const userUpdateEmail = createAsyncThunk<
   { email: string },
   {}
 >("user/userUpdateEmail", async ({ email }, { dispatch, getState }) => {
-  const auth = getAuth();
-  if (auth.currentUser) {
-    updateEmail(auth.currentUser, email).then(async () => {
+  dispatch(pendingUpdateQueueUp());
+  try {
+    const auth = getAuth();
+    if (auth.currentUser) {
+      await updateEmail(auth.currentUser, email);
       const db = getDatabase();
       const state = getState() as RootState;
       const dbRef = ref(db, `users/${state.user.ID}/userDATA/email`);
-      set(dbRef, email);
-    });
+      await set(dbRef, email);
+    }
+  } catch (error) {
+    // ! Handle the error here if needed
+  } finally {
+    dispatch(pendingUpdateQueueDown());
   }
 
   return { email: email };
@@ -262,26 +274,34 @@ export const userUpdatePassword = createAsyncThunk<
 >(
   "user/userUpdatePassword",
   async ({ passwordCurrent, passwordNew }, { dispatch }) => {
-    const auth = getAuth();
-    if (auth.currentUser) {
-      if (auth.currentUser.email) {
-        console.log(passwordCurrent);
-        const credentials = EmailAuthProvider.credential(
-          auth.currentUser.email,
-          passwordCurrent
-        );
+    dispatch(pendingUpdateQueueUp());
+    try {
+      const auth = getAuth();
+      if (auth.currentUser) {
+        if (auth.currentUser.email) {
+          console.log(passwordCurrent);
+          const credentials = EmailAuthProvider.credential(
+            auth.currentUser.email,
+            passwordCurrent
+          );
 
-        await reauthenticateWithCredential(auth.currentUser, credentials)
-          .then((s) => {
-            if (auth.currentUser) {
-              updatePassword(auth.currentUser, passwordNew);
-              console.log("success");
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+          await reauthenticateWithCredential(auth.currentUser, credentials)
+            .then(() => {
+              if (auth.currentUser) {
+                updatePassword(auth.currentUser, passwordNew);
+                console.log("success");
+              }
+            })
+            .catch((error) => {
+              // Handle the error here if needed
+              console.log(error);
+            });
+        }
       }
+    } catch (error) {
+      // ! Handle the error here if needed
+    } finally {
+      dispatch(pendingUpdateQueueDown());
     }
 
     return undefined;
@@ -292,42 +312,56 @@ export const userUpdatePhoto = createAsyncThunk<
   { photo: string },
   { photo: string },
   {}
->("user/userUpdatePhoto", async ({ photo }, { dispatch, getState }) => {
-  const auth = getAuth();
-  const db = getDatabase();
-  if (auth.currentUser?.uid) {
-    const dbRef = ref(db, `/users/${auth.currentUser.uid}/userDATA/photo`);
-    await set(dbRef, photo)
-      .catch((e) => {
-        console.log(e);
-      })
-      .then(async () => {
-        const dbRef = ref(db, `/users/${auth.currentUser?.uid}/chats`);
-        await get(dbRef).then(async (snapshot) => {
-          if (snapshot.exists()) {
-            for (const i of Object.keys(snapshot.val())) {
-              const dbRef = ref(
-                db,
-                `/users/${i}/chats/${auth.currentUser?.uid}/photo`
-              );
-              set(dbRef, photo);
-            }
-          }
-        });
-      });
+>("user/userUpdatePhoto", async ({ photo }, { dispatch }) => {
+  try {
+    dispatch(pendingUpdateQueueUp());
+    const auth = getAuth();
+    const db = getDatabase();
+    if (auth.currentUser?.uid) {
+      const dbRef = ref(db, `/users/${auth.currentUser.uid}/userDATA/photo`);
+      await set(dbRef, photo);
+
+      const dbRefChats = ref(db, `/users/${auth.currentUser?.uid}/chats`);
+      const snapshotChats = await get(dbRefChats);
+
+      if (snapshotChats.exists()) {
+        for (const i of Object.keys(snapshotChats.val())) {
+          const dbRefChatPhoto = ref(
+            db,
+            `/users/${i}/chats/${auth.currentUser?.uid}/photo`
+          );
+          await set(dbRefChatPhoto, photo);
+        }
+      }
+    }
+  } catch (error) {
+    // ! Handle the error here if needed
+    console.log(error);
+  } finally {
+    dispatch(pendingUpdateQueueDown());
   }
+
   return { photo: photo };
 });
 
 export const userRemovePhoto = createAsyncThunk<undefined, undefined, {}>(
   "user/userRemovePhoto",
   async (_, { dispatch }) => {
-    const auth = getAuth();
-    const db = getDatabase();
-    if (auth.currentUser?.uid) {
-      const dbRef = ref(db, `/users/${auth.currentUser.uid}/userDATA/photo`);
-      remove(dbRef);
+    dispatch(pendingUpdateQueueUp());
+    try {
+      const auth = getAuth();
+      const db = getDatabase();
+      if (auth.currentUser?.uid) {
+        const dbRef = ref(db, `/users/${auth.currentUser.uid}/userDATA/photo`);
+        await remove(dbRef);
+      }
+    } catch (error) {
+      // ! Handle the error here if needed
+      console.log(error);
+    } finally {
+      dispatch(pendingUpdateQueueDown());
     }
+
     return undefined;
   }
 );
@@ -339,11 +373,19 @@ export const userFindUser = createAsyncThunk<
   { ID: string },
   {}
 >("user/userFindUser", async ({ ID }, { dispatch }) => {
+  dispatch(pendingUpdateQueueUp());
   const db = getDatabase();
   const dbRef = ref(db, `/users/${ID}/userDATA`);
   let userDATA: foundUserData | null = null;
-  await get(dbRef).then((snapshot) => {
-    userDATA = snapshot.val();
-  });
+
+  try {
+    await get(dbRef).then((snapshot) => {
+      userDATA = snapshot.val();
+    });
+  } catch (error) {
+    // ! Handle the error here if needed
+  } finally {
+    dispatch(pendingUpdateQueueDown());
+  }
   return userDATA;
 });

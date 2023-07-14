@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Navigation from "../../components/Navigation/Navigation";
 import SmoothScroll from "../../components/SmoothScroll/SmoothScroll";
 import AlbumPage from "../AlbumPage";
+import PendingBar from "../../components/PendingBar/PendingBar";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const RootLayout = () => {
 
   return (
     <>
+      <PendingBar />
       {pathname.length > 1 ? (
         <Navigation />
       ) : (

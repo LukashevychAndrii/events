@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { get, getDatabase, ref } from "firebase/database";
+import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
 
 export interface eventDATAI {
   date: string;
@@ -29,13 +30,20 @@ export const { setEventsDATA } = recentEventsSlice.actions;
 export const recentEventsFetch = createAsyncThunk<undefined, undefined, {}>(
   "recentEvents/recentEventsFetch",
   async (_, { dispatch }) => {
-    const db = getDatabase();
-    const dbRef = ref(db, `recentEVENTS/eventsDATA`);
-    await get(dbRef).then((snapshot) => {
+    dispatch(pendingUpdateQueueUp());
+
+    try {
+      const db = getDatabase();
+      const dbRef = ref(db, `recentEVENTS/eventsDATA`);
+      const snapshot = await get(dbRef);
       if (snapshot.exists()) {
         dispatch(setEventsDATA(Object.values(snapshot.val())));
       }
-    });
+    } catch (error) {
+      // Handle the error here if needed
+    } finally {
+      dispatch(pendingUpdateQueueDown());
+    }
     return undefined;
   }
 );

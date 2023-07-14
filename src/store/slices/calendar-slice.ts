@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { get, getDatabase, ref, set } from "firebase/database";
+import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
 
 export interface eventI {
   name: string;
@@ -32,16 +33,23 @@ export const calendarFetchEvents = createAsyncThunk<
   { month: string; day: string },
   {}
 >("calendar/calendarFetchWeek", async ({ month, day }, { dispatch }) => {
-  const db = getDatabase();
-  const dbRef = ref(db, `calendar/${month}/${day}`);
+  dispatch(pendingUpdateQueueUp());
+  try {
+    const db = getDatabase();
+    const dbRef = ref(db, `calendar/${month}/${day}`);
 
-  await get(dbRef).then((snapshot) => {
+    const snapshot = await get(dbRef);
     if (snapshot.exists()) {
       dispatch(setEvents(Object.values(snapshot.val())));
     } else {
       dispatch(setEvents([]));
     }
-  });
+  } catch (error) {
+    // ! Handle the error here if needed
+    console.log(error);
+  } finally {
+    dispatch(pendingUpdateQueueDown());
+  }
 
   return undefined;
 });

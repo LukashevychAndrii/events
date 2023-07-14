@@ -3,6 +3,7 @@ import userSlice from "./slices/user-slice";
 import chatSlice from "./slices/chat-slice";
 import calendarSlice from "./slices/calendar-slice";
 import recentEventsSlice from "./slices/recentEvents-slice";
+import pendingSlice from "./slices/pending-slice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     chat: chatSlice,
     calendar: calendarSlice,
     recentEvents: recentEventsSlice,
+    pending: pendingSlice,
   },
 });
 
