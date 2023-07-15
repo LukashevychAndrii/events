@@ -51,18 +51,19 @@ const Event: React.FC<props> = ({ event }) => {
     <>
       <li className={styles["calendar__events__event"]}>
         <motion.figure
-          initial="hiddenTEXT"
           onHoverStart={handleHoverStart}
           onHoverEnd={handleHoverEnd}
           className={styles["calendar__events__event__img__wrapper"]}
         >
           <motion.div
+            initial="initialIMG"
             variants={variantsIMAGE}
             animate={controlsIMG}
             style={{ backgroundImage: `url(${event.photo})` }}
             className={styles["calendar__events__event__img"]}
           ></motion.div>
           <motion.figcaption
+            initial="hiddenTEXT"
             animate={controlsTEXT}
             variants={variantsTEXT}
             className={`${styles["calendar__events__event__img__text"]} subtitle u-text-center`}
