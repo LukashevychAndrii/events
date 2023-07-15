@@ -6,12 +6,25 @@
   display: flex;
   justify-content: center;
   gap: 10rem;
+  @media screen and (max-width: 950px) {
+    gap: 5rem;
+  }
+  @media screen and (max-width: 750px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   &__events {
     list-style: none;
-    width: 40rem;
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+
+    width: 40rem;
+    @media screen and (max-width: 950px) {
+      width: 35rem;
+      height: 31rem;
+    }
 
     &__event {
       height: 31rem;
@@ -51,12 +64,42 @@
     }
     &__empty {
       width: 40rem;
+      height: 31rem;
       text-align: center;
       font-size: 3rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+
+      @media screen and (max-width: 500px) {
+        width: 33rem;
+        height: 31rem;
+      }
+      &__gif {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  &__date-picker {
+    width: 40rem;
+
+    @media screen and (max-width: 1100px) {
+      width: 35rem;
+      height: 31rem;
+    }
+    @media screen and (max-width: 500px) {
+      width: 33rem !important;
+      height: 31rem;
+    }
+  }
+  &__scroll-bar {
+    width: 40rem;
+    height: 31rem;
+    @media screen and (max-width: 950px) {
+      width: 35rem;
+      height: 31rem;
     }
   }
 }

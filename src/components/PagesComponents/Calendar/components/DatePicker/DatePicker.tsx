@@ -1,4 +1,5 @@
-import React, { useCallback } from "react";
+import React from "react";
+import styles from "../../Calendar.module.scss";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Value } from "react-calendar/dist/cjs/shared/types";
@@ -35,8 +36,8 @@ const DatePicker = () => {
   return (
     <div>
       <Calendar
+        className={styles["calendar__date-picker"]}
         minDate={minDate}
-        showWeekNumbers={true}
         showNeighboringMonth={false}
         maxDate={maxDate}
         locale="en"
