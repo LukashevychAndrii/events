@@ -25,23 +25,25 @@ const Intro = () => {
   }, [controls]);
 
   return (
-    <motion.div
-      className={styles["intro"]}
-      initial={{ height: 0, width: ".4rem" }}
-      animate={controls}
-    >
-      <motion.img
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.25 }}
-        className={styles["intro__logo"]}
-        src={logo}
-        alt="logo"
-      />
-      <TypeWriter />
-      <LeftContent />
-      <RightContent />
-    </motion.div>
+    <div style={{ minHeight: "100vh" }}>
+      <motion.div
+        className={styles["intro"]}
+        initial={{ height: 0, width: ".4rem" }}
+        animate={controls}
+      >
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.25 }}
+          className={styles["intro__logo"]}
+          src={logo}
+          alt="logo"
+        />
+        <TypeWriter />
+        <LeftContent />
+        <RightContent />
+      </motion.div>
+    </div>
   );
 };
 

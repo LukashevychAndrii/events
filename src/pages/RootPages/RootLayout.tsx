@@ -49,7 +49,6 @@ const RootLayout = () => {
             >
               <AnimatePresence mode="wait">
                 <motion.main
-                  style={{ minHeight: "100vh" }}
                   key={location.pathname}
                   initial={{ opacity: 0, filter: "blur(50px)" }}
                   animate={{ opacity: 1, filter: "blur(0)" }}
