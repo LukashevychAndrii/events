@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Chats.module.scss";
 import { ReactComponent as DefaultAvatar } from "../../img/SVG/default-avatar.svg";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../utils/redux";
 import {
   chatFetchChatsPartial,
@@ -10,6 +10,9 @@ import {
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import TopBar from "./Chat/ChatComponents/TopBar/TopBar";
+
+import logo from "../../img/logo.png";
+
 interface props {
   outlet: JSX.Element;
 }
@@ -81,6 +84,13 @@ const Chats: React.FC<props> = ({ outlet }) => {
         style={{ width: sidebarWidth }}
         // onMouseDown={(e) => e.preventDefault()}
       >
+        <Link className={styles["app-container__link"]} to="/">
+          <img
+            className={styles["app-container__logo"]}
+            src={logo}
+            alt="logo"
+          />
+        </Link>
         <TopBar />
 
         <SimpleBar style={{ height: "100%", width: "100%" }}>

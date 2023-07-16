@@ -6,6 +6,17 @@
   flex-direction: row;
   height: 100vh;
   padding: 1.5rem;
+
+  &__logo {
+    width: 10.5rem;
+    height: 6.7rem;
+    cursor: pointer;
+  }
+  &__link {
+    width: 10.5rem;
+    height: 6.7rem;
+    margin-bottom: -1rem;
+  }
 }
 
 .app-sidebar {
