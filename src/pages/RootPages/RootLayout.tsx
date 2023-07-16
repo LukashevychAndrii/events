@@ -1,6 +1,11 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
-import { useLocation, useOutlet } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useOutlet,
+  useSearchParams,
+} from "react-router-dom";
 import { motion } from "framer-motion";
 import Navigation from "../../components/Navigation/Navigation";
 import SmoothScroll from "../../components/SmoothScroll/SmoothScroll";
@@ -18,6 +23,19 @@ const RootLayout = () => {
   };
 
   const { pathname } = useLocation();
+
+  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  React.useEffect(() => {
+    if (!pathname.includes("calendar")) {
+      if (searchParams.get("month") && searchParams.get("day")) {
+        searchParams.delete("month");
+        searchParams.delete("day");
+        setSearchParams(searchParams);
+      }
+    }
+  }, [pathname, navigate, searchParams, setSearchParams]);
 
   return (
     <>
