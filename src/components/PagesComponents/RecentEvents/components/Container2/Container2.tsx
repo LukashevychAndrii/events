@@ -21,7 +21,7 @@ interface props {
 }
 
 const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLAnchorElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -34,18 +34,44 @@ const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
   let y = useTransform(temporaryY, [0, 1], ["-40%", "-60%"]);
   const [isHovered, setIsHovered] = React.useState(false);
 
-  const AnimatedLink = motion(Link);
+  const [less768, setLess768] = React.useState(false);
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setLess768(true);
+      } else {
+        setLess768(false);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener to handle window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <div ref={ref} className={styles["recent__gallery__container--2"]}>
-      <span></span>
-      <div className={styles["recent__gallery__img__wrapper"]}>
+    <Link
+      to={`/album/${event1DATA.name}`}
+      ref={ref}
+      className={styles["recent__gallery__container--2"]}
+    >
+      {!less768 && <span></span>}
+      <div>
         <motion.div
           onPointerEnter={() => {
-            setIsHovered(true);
-            getHoveredImage(event1DATA.photo);
+            if (!less768) {
+              setIsHovered(true);
+              getHoveredImage(event1DATA.photo);
+            }
           }}
-          className={styles["recent__gallery__img__wrapper"]}
+          className={`${styles["recent__gallery__img__wrapper"]} ${styles["recent__gallery__img__wrapper--2"]}`}
         >
           <motion.div
             style={{
@@ -94,8 +120,8 @@ const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
           </AnimatePresence>
         </motion.div>
       </div>
-      <span></span>
-    </div>
+      {!less768 && <span></span>}
+    </Link>
   );
 };
 export default Container2;

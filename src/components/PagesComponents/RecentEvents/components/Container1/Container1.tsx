@@ -27,7 +27,7 @@ const Container1: React.FC<props> = ({
   event1DATA,
   event2DATA,
 }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLAnchorElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -42,16 +42,46 @@ const Container1: React.FC<props> = ({
   const [isHovered, setIsHovered] = React.useState(false);
   const [isHovered2, setIsHovered2] = React.useState(false);
 
+  const [less768, setLess768] = React.useState(false);
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setLess768(true);
+      } else {
+        setLess768(false);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener to handle window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div ref={ref} className={styles["recent__gallery__container--1"]}>
+    <Link
+      to={`/album/${event2DATA.name}`}
+      ref={ref}
+      className={styles["recent__gallery__container--1"]}
+    >
       <motion.div
         onHoverStart={() => {
-          getHoveredImage(event1DATA.photo);
-          setIsHovered(true);
+          if (!less768) {
+            getHoveredImage(event1DATA.photo);
+            setIsHovered(true);
+          }
         }}
         onHoverEnd={() => {
-          getHoveredImage("");
-          setIsHovered(false);
+          if (!less768) {
+            getHoveredImage("");
+            setIsHovered(false);
+          }
         }}
         className={styles["recent__gallery__img__wrapper"]}
       >
@@ -98,11 +128,13 @@ const Container1: React.FC<props> = ({
         </AnimatePresence>
       </motion.div>
 
-      <span></span>
+      {!less768 && <span></span>}
       <motion.div
         onPointerEnter={() => {
-          setIsHovered2(true);
-          getHoveredImage(event2DATA.photo);
+          if (!less768) {
+            setIsHovered2(true);
+            getHoveredImage(event2DATA.photo);
+          }
         }}
         className={styles["recent__gallery__img__wrapper"]}
       >
@@ -152,7 +184,7 @@ const Container1: React.FC<props> = ({
           )}
         </AnimatePresence>
       </motion.div>
-    </div>
+    </Link>
   );
 };
 export default Container1;

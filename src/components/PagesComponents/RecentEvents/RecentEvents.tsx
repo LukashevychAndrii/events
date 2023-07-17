@@ -4,6 +4,8 @@ import styles from "./RecentEvents.module.scss";
 import Container1 from "./components/Container1/Container1";
 import Container2 from "./components/Container2/Container2";
 
+import { Textfit } from "react-textfit";
+
 import {
   AnimatePresence,
   Variants,
@@ -146,13 +148,17 @@ const RecentEvents = () => {
             style={{ y: y1 }}
             className={`${styles["recent__heading--1"]} heading-1`}
           >
-            Recent
+            <Textfit mode="single" min={1} max={200}>
+              Recent
+            </Textfit>
           </motion.h2>
           <motion.h2
             style={{ y: y2 }}
             className={`${styles["recent__heading--2"]} heading-2`}
           >
-            Events
+            <Textfit mode="single" min={1} max={200}>
+              Events
+            </Textfit>
           </motion.h2>
         </div>
       </div>
