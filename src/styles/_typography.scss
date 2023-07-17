@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&display=swap");
 .heading-1 {
   font-family: "Anton", sans-serif;
-  font-size: clamp(8rem, 7vw + 4rem, 30rem);
+  // font-size: clamp(8rem, 7vw + 4rem, 30rem);
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 1.5rem;
@@ -10,7 +10,7 @@
 }
 .heading-2 {
   font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(8rem, 7vw + 8rem, 30rem);
+  // font-size: clamp(8rem, 7vw + 8rem, 30rem);
   text-transform: uppercase;
   letter-spacing: 1rem;
 }
