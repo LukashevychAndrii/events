@@ -22,7 +22,7 @@
 .app-sidebar {
   flex-grow: 0;
   flex-shrink: 0;
-  min-width: 8rem;
+  min-width: 8.2rem;
   max-width: 50vw;
   display: flex;
   border-right: var(--color-gray-100) 1px solid;
@@ -213,6 +213,8 @@
       list-style: none;
       border-top-left-radius: 1rem;
       &__chat {
+        position: relative;
+
         &__link,
         &__link--active {
           color: #000;
@@ -248,6 +250,11 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          &__time {
+            position: absolute;
+            top: 0rem;
+            right: 0.475rem;
+          }
         }
       }
     }

@@ -18,10 +18,12 @@ const Input = () => {
     e.preventDefault();
     setEnteredMsg("");
     if (enteredMsg.trim().length > 0 && chatID) {
+      const today = new Date();
+      const time = today.getHours() + ":" + today.getMinutes();
       const messageDATA: messageI = {
         messageType: "default",
         text: enteredMsg,
-        time: "",
+        time: time,
         userID: userDATA.ID,
         userNAME: userDATA.name,
         userPHOTO: userDATA.photo,

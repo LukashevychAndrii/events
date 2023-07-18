@@ -21,6 +21,8 @@ const Message: React.FC<props> = ({ msg, getUserDATA }) => {
     };
     getUserDATA(userDATA);
   };
+
+  const ref = React.useRef<HTMLDivElement>(null);
   return (
     <li
       className={`${
@@ -32,17 +34,25 @@ const Message: React.FC<props> = ({ msg, getUserDATA }) => {
           ? styles["chat__message-box__message--announcement"]
           : userID === msg.userID &&
             styles["chat__message-box__message--current-user"]
-      } `}
+      }  ${
+        ref.current?.clientHeight &&
+        ref.current.clientHeight > 35 &&
+        styles["chat__message-box__message__big"]
+      }`}
     >
       <div
         className={`${
           userID === msg.userID
             ? styles["chat__message-box__message--current-user__text"]
             : styles["chat__message-box__message__text"]
+        }  ${
+          ref.current?.clientHeight &&
+          ref.current.clientHeight > 35 &&
+          styles["chat__message-box__message__big"]
         }`}
       >
         {msg.messageType === "announcement" ? (
-          <p>
+          <p style={{ marginRight: "-3.5rem" }}>
             <span
               onClick={handleUserClick}
               className={`${styles["chat__message-box__message--announcement__name"]} underline`}
@@ -52,7 +62,12 @@ const Message: React.FC<props> = ({ msg, getUserDATA }) => {
             {msg.text}
           </p>
         ) : (
-          <p> {msg.text}</p>
+          <div ref={ref}>
+            <p>{msg.text}</p>
+            <span className={styles["chat__message-box__message__time"]}>
+              {msg.time}
+            </span>
+          </div>
         )}
       </div>
       {msg.messageType === "default" && (

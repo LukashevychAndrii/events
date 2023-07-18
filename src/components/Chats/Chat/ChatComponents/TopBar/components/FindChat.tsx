@@ -1,10 +1,23 @@
 import React from "react";
 import styles from "../../../../Chats.module.scss";
+import { useAppDispatch, useAppSelector } from "../../../../../../utils/redux";
 
-const FindChat = () => {
+interface props {
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const FindChat: React.FC<props> = ({ setFilter }) => {
   const [value, setValue] = React.useState<string>("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFilter(value);
+  };
   return (
-    <form className={styles["app-sidebar__bar-top__chat-find"]}>
+    <form
+      onSubmit={handleSubmit}
+      className={styles["app-sidebar__bar-top__chat-find"]}
+    >
       <input
         placeholder="Search"
         type="text"
@@ -12,7 +25,6 @@ const FindChat = () => {
         id="fint-chat"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onFocus={(e) => console.log("qwe")}
       />
       <label htmlFor="find-chat"></label>
     </form>

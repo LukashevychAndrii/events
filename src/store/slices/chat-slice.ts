@@ -45,16 +45,25 @@ export interface currentChatI {
   messages: messageI[];
   type: "public" | "private";
 }
+
+interface lastMessageDATA {
+  text: string;
+  time: string;
+}
 export interface chatsListPartialT
-  extends Pick<currentChatI, "name" | "lastMessage" | "photo" | "type"> {}
+  extends Pick<currentChatI, "name" | "photo" | "type"> {
+  lastMessageDATA?: lastMessageDATA;
+}
 export interface initialStateI {
   chatsList: { [chatID: string]: chatsListPartialT };
   currentChat: currentChatI | null;
+  userChats: { [chatID: string]: chatsListPartialT };
 }
 
 const initialState: initialStateI = {
   chatsList: {},
   currentChat: null,
+  userChats: {},
 };
 
 //FIX
@@ -74,13 +83,16 @@ const chatSlice = createSlice({
     },
     chatSetUserChat(state, action) {
       console.log(action.payload);
+      state.userChats = action.payload;
       state.chatsList = { ...state.chatsList, ...action.payload };
+    },
+    chatSetPartial(state, action) {
+      if (action.payload) {
+        state.chatsList = { ...action.payload, ...state.userChats };
+      }
     },
   },
   extraReducers(builder) {
-    builder.addCase(chatFetchChatsPartial.fulfilled, (state, action) => {
-      state.chatsList = action.payload.chats;
-    });
     builder.addCase(chatFetchChat.fulfilled, (state, action) => {
       if (action.payload.chatDATA) {
         state.currentChat = action.payload.chatDATA;
@@ -90,23 +102,27 @@ const chatSlice = createSlice({
 });
 
 export default chatSlice.reducer;
-export const { chatSetMembers, chatSetMessages, chatSetUserChat } =
-  chatSlice.actions;
+export const {
+  chatSetMembers,
+  chatSetMessages,
+  chatSetUserChat,
+  chatSetPartial,
+} = chatSlice.actions;
 
-export const chatFetchChatsPartial = createAsyncThunk<any, undefined, {}>(
+export const chatFetchChatsPartial = createAsyncThunk<undefined, undefined, {}>(
   "chat/chatFetchChatsPartial",
   async (_, { dispatch }) => {
     dispatch(pendingUpdateQueueUp());
     try {
       const db = getDatabase();
       const dbRef = ref(db, `chats/chatsPartialInfo`);
-      let chats: chatsListPartialT[] = [];
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        chats = snapshot.val();
-      }
-
-      return { chats };
+      onValue(dbRef, (snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+          dispatch(chatSetPartial(snapshot.val()));
+        }
+      });
+      return undefined;
     } catch (error) {
       dispatch(
         addAlert({
@@ -115,8 +131,6 @@ export const chatFetchChatsPartial = createAsyncThunk<any, undefined, {}>(
           alertType: "error",
         })
       );
-
-      return null;
     } finally {
       dispatch(pendingUpdateQueueDown());
     }
@@ -180,7 +194,17 @@ export const chatSendMessage = createAsyncThunk<
       const state = getState() as RootState;
       if (chatType === "public") {
         const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
-        await push(dbRef, messageDATA);
+        await push(dbRef, messageDATA).then(async () => {
+          const dbRef = ref(
+            db,
+            `chats/chatsPartialInfo/${chatID}/lastMessageDATA`
+          );
+          const lastMessageDATA: lastMessageDATA = {
+            text: messageDATA.text,
+            time: messageDATA.time,
+          };
+          await set(dbRef, lastMessageDATA);
+        });
       } else if (chatType === "private") {
         const dbRefUser = ref(
           db,
@@ -190,9 +214,19 @@ export const chatSendMessage = createAsyncThunk<
           db,
           `users/${chatID}/chats/${state.user.ID}/messages`
         );
+        const dbRefLastMessage1 = ref(
+          db,
+          `users/${state.user.ID}/chats/${chatID}/lastMessage`
+        );
+        const dbRefLastMessage2 = ref(
+          db,
+          `users/${chatID}/chats/${state.user.ID}/lastMessage`
+        );
         await Promise.all([
           push(dbRefUser, messageDATA),
           push(dbRefChat, messageDATA),
+          set(dbRefLastMessage1, messageDATA.text),
+          set(dbRefLastMessage2, messageDATA.text),
         ]);
       }
     } catch (error) {

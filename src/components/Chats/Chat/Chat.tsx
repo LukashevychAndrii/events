@@ -20,9 +20,7 @@ const Chat = () => {
   const dispatch = useAppDispatch();
   const chatDATA = useAppSelector((state) => state.chat.currentChat);
   const chatLIST = useAppSelector((state) => state.chat.chatsList);
-  React.useEffect(() => {
-    console.log(chatDATA);
-  }, [chatDATA]);
+
   React.useEffect(() => {
     if (chatID && Object.keys(chatLIST).length && chatLIST[chatID]) {
       dispatch(
