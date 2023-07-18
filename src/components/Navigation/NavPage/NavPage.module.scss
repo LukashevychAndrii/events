@@ -1,0 +1,53 @@
+@use "../../../styles/mixins" as m;
+
+.nav-page {
+  @include m.absolute-center();
+  text-align: center;
+
+  &__wrapper {
+    position: fixed;
+    background-color: #000;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+  }
+  &__heading {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    display: block !important;
+    width: 100vw !important ;
+    &--1 {
+      width: 100%;
+      line-height: calc(14vw + 5rem);
+    }
+    &--2 {
+      line-height: calc(13vw + 5rem);
+      width: 50% !important;
+      margin: auto;
+      margin-top: -5vw;
+    }
+    &--3 {
+      width: 70% !important;
+      line-height: calc(14vw + 5rem);
+      margin: auto;
+      margin-top: -5vw;
+    }
+    &--4 {
+      line-height: calc(13vw + 5rem);
+      width: 50% !important;
+      margin: auto;
+      margin-top: -5vw;
+    }
+  }
+  &__btn-close {
+    color: #fff;
+    font-size: calc(var(--font-default) + 3rem);
+    height: max-content !important;
+    position: absolute;
+    right: 1.3rem;
+    top: -0.3rem;
+    display: inline-block !important;
+    cursor: pointer;
+  }
+}

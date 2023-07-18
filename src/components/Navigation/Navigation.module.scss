@@ -11,11 +11,22 @@
     list-style: none;
     display: flex;
     gap: 1.8rem;
+    &:first-of-type {
+      @media screen and (max-width: 1100px) {
+        position: absolute;
+        top: 1.935rem;
+        left: -18rem;
+      }
+    }
     &:last-of-type {
       writing-mode: tb-rl;
       position: absolute;
       top: 5.5rem;
-      right: 0.75rem;
+      right: 0.9rem;
+      @media screen and (max-width: 1100px) {
+        right: 1.3rem;
+        top: 6.35rem;
+      }
     }
   }
 

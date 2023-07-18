@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../utils/redux";
 import { userUpdateName } from "../../../store/slices/user-slice";
 
 import { ReactComponent as EditIcon } from "../../../img/SVG/edit.svg";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 const Name = () => {
   const userDATA = useAppSelector((state) => state.user);
@@ -25,7 +26,7 @@ const Name = () => {
         //alert
       }
     } else {
-      //alert
+      console.log("boris");
     }
   };
   const handleCloseNameClick = () => {
@@ -33,12 +34,21 @@ const Name = () => {
     setNewName(userDATA.name);
   };
 
+  const ref = React.useRef<HTMLInputElement>(null);
+
+  const outside = useClickOutside({ ref });
+
+  React.useEffect(() => {
+    console.log(outside);
+  }, [outside]);
+
   return (
     <div className={styles["acc-details__element"]}>
       <div>Name:</div>
       {updateName ? (
         <form className={styles["acc-details__edit__form"]}>
           <input
+            ref={ref}
             className={styles["acc-details__edit__input"]}
             name="editName"
             id="editName"

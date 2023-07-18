@@ -12,6 +12,10 @@
   & > svg {
     width: 5.5rem;
     height: 5.5rem;
+    @media screen and (max-width: 768px) {
+      width: 4rem;
+      height: 4rem;
+    }
   }
   & > span {
     color: #000;
@@ -19,6 +23,10 @@
   &__photo {
     width: 5.5rem;
     height: 5.5rem;
+    @media screen and (max-width: 768px) {
+      width: 4rem;
+      height: 4rem;
+    }
   }
 }
 .user__white {

@@ -3,7 +3,6 @@ import styles from "./Navigation.module.scss";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { useLocation } from "react-router-dom";
 import {
-  AnimatePresence,
   Variants,
   useAnimationControls,
   useScroll,
@@ -17,6 +16,8 @@ import Links2 from "./Links/Links2";
 
 interface props {
   white?: boolean;
+  setShowNavPage: React.Dispatch<React.SetStateAction<boolean>>;
+  showNavPage: boolean;
 }
 
 const variants: Variants = {
@@ -30,7 +31,11 @@ const variants: Variants = {
   },
 };
 
-const Navigation: React.FC<props> = ({ white }) => {
+const Navigation: React.FC<props> = ({
+  white,
+  setShowNavPage,
+  showNavPage,
+}) => {
   const navControls = useAnimationControls();
   const [showNav, setShowNav] = React.useState(true);
 
@@ -113,6 +118,28 @@ const Navigation: React.FC<props> = ({ white }) => {
     }
   }, [location]);
 
+  const [less768, setLess768] = React.useState(false);
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setLess768(true);
+      } else {
+        setLess768(false);
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Add event listener to handle window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <motion.nav
       key={animationKey}
@@ -124,20 +151,29 @@ const Navigation: React.FC<props> = ({ white }) => {
     >
       <User white={white} />
       <Logo white={white} />
-      <Links1 showNav={showNav} white={white} />
-      <div
-        onMouseEnter={() => {
-          setHover(true);
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        <ProgressBar
-          white={white}
-          scrollYPersentage={scrollYPersentage}
-          hide={!showNav}
-        />
-      </div>
-      <Links2 showNav={showNav} white={white} />
+      {!showNavPage && !less768 && <Links1 showNav={showNav} white={white} />}
+      {!showNavPage && (
+        <div
+          onMouseEnter={() => {
+            if (!less768) {
+              setHover(true);
+            }
+          }}
+          onClick={() => {
+            if (less768) {
+              setShowNavPage(true);
+            }
+          }}
+          style={{ cursor: "pointer" }}
+        >
+          <ProgressBar
+            white={white}
+            scrollYPersentage={scrollYPersentage}
+            hide={!showNav}
+          />
+        </div>
+      )}
+      {!showNavPage && !less768 && <Links2 showNav={showNav} white={white} />}
     </motion.nav>
   );
 };

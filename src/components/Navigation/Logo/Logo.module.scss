@@ -1,11 +1,16 @@
-@use "../../../styles/mixins" as m;
-
 .logo {
   width: 17.5rem;
-  @include m.absolute-center();
   position: fixed;
-  top: 5.5%;
+  top: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1000;
+  @media screen and (max-width: 1440px) {
+    width: 15rem;
+  }
+  @media screen and (max-width: 768px) {
+    width: 13rem;
+  }
   &__white {
     filter: brightness(0) invert(1);
   }
