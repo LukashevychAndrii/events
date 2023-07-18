@@ -19,6 +19,7 @@ import { memberDATAI } from "./chat-slice";
 import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
 import { addAlert } from "./alert-slice";
 import getErrorDetails from "../../utils/getErrorDetails";
+import { FirebaseError } from "firebase/app";
 
 interface initialStateI {
   name: string;
@@ -54,13 +55,13 @@ const userSlice = createSlice({
       state.token = "";
       state.ID = "";
     },
+    setNewEmail(state, action: { payload: string }) {
+      state.email = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(userUpdateName.fulfilled, (state, action) => {
       state.name = action.payload.name;
-    });
-    builder.addCase(userUpdateEmail.fulfilled, (state, action) => {
-      state.email = action.payload.email;
     });
     builder.addCase(userUpdatePhoto.fulfilled, (state, action) => {
       console.log(action.payload.photo);
@@ -74,7 +75,7 @@ const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { setUser, removeUser } = userSlice.actions;
+export const { setUser, removeUser, setNewEmail } = userSlice.actions;
 
 export const userCreate = createAsyncThunk<
   undefined,
@@ -244,16 +245,29 @@ export const userUpdateName = createAsyncThunk<
       const db = getDatabase();
       const state = getState() as RootState;
       const dbRef = ref(db, `users/${state.user.ID}/userDATA/name`);
-      await set(dbRef, name);
+      await set(dbRef, name).then(() => {
+        dispatch(
+          addAlert({
+            alertTitle: "Success!",
+            alertText: "Successfully updated name",
+            alertType: "success",
+          })
+        );
+      });
     }
   } catch (error) {
-    dispatch(
-      addAlert({
-        alertText: "Updating name failed!",
-        alertTitle: "Error!",
-        alertType: "error",
-      })
-    );
+    if (error instanceof FirebaseError) {
+      const errorCode: string = error.code;
+      dispatch(addAlert(getErrorDetails(errorCode)));
+    } else {
+      dispatch(
+        addAlert({
+          alertText: "Updating name failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
+    }
   } finally {
     dispatch(pendingUpdateQueueDown());
   }
@@ -262,34 +276,61 @@ export const userUpdateName = createAsyncThunk<
 });
 
 export const userUpdateEmail = createAsyncThunk<
-  { email: string },
-  { email: string },
+  undefined,
+  { email: string; password: string },
   {}
->("user/userUpdateEmail", async ({ email }, { dispatch, getState }) => {
-  dispatch(pendingUpdateQueueUp());
-  try {
-    const auth = getAuth();
-    if (auth.currentUser) {
-      await updateEmail(auth.currentUser, email);
-      const db = getDatabase();
-      const state = getState() as RootState;
-      const dbRef = ref(db, `users/${state.user.ID}/userDATA/email`);
-      await set(dbRef, email);
+>(
+  "user/userUpdateEmail",
+  async ({ email, password }, { dispatch, getState }) => {
+    dispatch(pendingUpdateQueueUp());
+    try {
+      const auth = getAuth();
+      if (auth.currentUser && auth.currentUser.email) {
+        const credentials = EmailAuthProvider.credential(
+          auth.currentUser.email,
+          password
+        );
+        await reauthenticateWithCredential(auth.currentUser, credentials).then(
+          async () => {
+            if (auth.currentUser) {
+              await updateEmail(auth.currentUser, email);
+              const db = getDatabase();
+              const state = getState() as RootState;
+              const dbRef = ref(db, `users/${state.user.ID}/userDATA/email`);
+              await set(dbRef, email).then(() => {
+                dispatch(setNewEmail(email));
+                dispatch(
+                  addAlert({
+                    alertText: "Successfully updated email!",
+                    alertTitle: "Success!",
+                    alertType: "success",
+                  })
+                );
+              });
+            }
+          }
+        );
+      }
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        const errorCode: string = error.code;
+        dispatch(addAlert(getErrorDetails(errorCode)));
+      } else {
+        dispatch(
+          addAlert({
+            alertText: "Updating email failed!",
+            alertTitle: "Error!",
+            alertType: "error",
+          })
+        );
+      }
+    } finally {
+      dispatch(pendingUpdateQueueDown());
     }
-  } catch (error) {
-    dispatch(
-      addAlert({
-        alertText: "Updating email failed!",
-        alertTitle: "Error!",
-        alertType: "error",
-      })
-    );
-  } finally {
-    dispatch(pendingUpdateQueueDown());
-  }
 
-  return { email: email };
-});
+    return undefined;
+  }
+);
 
 export const userUpdatePassword = createAsyncThunk<
   undefined,
@@ -314,20 +355,32 @@ export const userUpdatePassword = createAsyncThunk<
             credentials
           ).then(() => {
             if (auth.currentUser) {
-              updatePassword(auth.currentUser, passwordNew);
-              console.log("success");
+              updatePassword(auth.currentUser, passwordNew).then(() => {
+                dispatch(
+                  addAlert({
+                    alertText: "Successfully updated password!",
+                    alertTitle: "Success!",
+                    alertType: "success",
+                  })
+                );
+              });
             }
           });
         }
       }
     } catch (error) {
-      dispatch(
-        addAlert({
-          alertText: "Updating password failed!",
-          alertTitle: "Error!",
-          alertType: "error",
-        })
-      );
+      if (error instanceof FirebaseError) {
+        const errorCode: string = error.code;
+        dispatch(addAlert(getErrorDetails(errorCode)));
+      } else {
+        dispatch(
+          addAlert({
+            alertText: "Updating password failed!",
+            alertTitle: "Error!",
+            alertType: "error",
+          })
+        );
+      }
     } finally {
       dispatch(pendingUpdateQueueDown());
     }

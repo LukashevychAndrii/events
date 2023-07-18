@@ -4,6 +4,8 @@ import { useAppDispatch } from "../../../utils/redux";
 
 import { ReactComponent as EditIcon } from "../../../img/SVG/edit.svg";
 import { userUpdatePassword } from "../../../store/slices/user-slice";
+import useClickOutside from "../../../hooks/useClickOutside";
+import { addAlert } from "../../../store/slices/alert-slice";
 
 const Password = () => {
   const dispatch = useAppDispatch();
@@ -14,12 +16,24 @@ const Password = () => {
 
   const handleEditPasswordClick = () => {
     if (newPassword.trim().length < 6 || currentPassword.trim().length < 6) {
-      //alert
+      dispatch(
+        addAlert({
+          alertTitle: "Error!",
+          alertText: "Min length of password is 6",
+          alertType: "error",
+        })
+      );
     } else if (
       newPassword.trim().length > 20 ||
       currentPassword.trim().length > 20
     ) {
-      //alert
+      dispatch(
+        addAlert({
+          alertTitle: "Error!",
+          alertText: "Max length of password is 20",
+          alertType: "error",
+        })
+      );
     } else {
       dispatch(
         userUpdatePassword({
@@ -37,9 +51,29 @@ const Password = () => {
     setNewPassword("");
     setCurrentPassword("");
   };
+
+  const ref1 = React.useRef<HTMLDivElement>(null);
+  const ref2 = React.useRef<HTMLInputElement>(null);
+
+  const outside1 = useClickOutside({ ref: ref1 });
+  const outside2 = useClickOutside({ ref: ref2 });
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (outside1 && outside2) {
+        setUpdatePassword(false);
+        setCurrentPassword("");
+        setNewPassword("");
+      }
+    }, 0);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [outside1, outside2]);
+
   return (
     <>
-      <div className={styles["acc-details__element"]}>
+      <div ref={ref1} className={styles["acc-details__element"]}>
         <div>Password:</div>
         {updatePassword ? (
           <form className={styles["acc-details__edit__form"]}>
@@ -65,7 +99,12 @@ const Password = () => {
         )}
         {updatePassword ? (
           <span
-            onClick={handleEditPasswordClick}
+            onClick={() => {
+              setUpdatePassword(false);
+              setCurrentPassword("");
+              setNewPassword("");
+              handleEditPasswordClick();
+            }}
             className={styles["acc-details__edit-icon"]}
           >
             &#10003;
@@ -88,7 +127,7 @@ const Password = () => {
         )}
       </div>
       {updatePassword && (
-        <div className={styles["acc-details__element"]}>
+        <div ref={ref2} className={styles["acc-details__element"]}>
           <div></div>
           <form className={styles["acc-details__edit__form"]}>
             <input
