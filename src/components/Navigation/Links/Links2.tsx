@@ -15,11 +15,13 @@ const Links2: React.FC<props> = ({ showNav, white }) => {
       navControls.start({
         opacity: 1,
         transition: { duration: 0.5 },
+        pointerEvents: "all",
       });
     } else {
       navControls.start({
         opacity: 0,
         transition: { duration: 0.5 },
+        pointerEvents: "none",
       });
     }
   }, [showNav, navControls]);
