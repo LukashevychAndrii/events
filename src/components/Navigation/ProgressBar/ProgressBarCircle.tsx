@@ -25,8 +25,8 @@ const ProgressBarCircle: React.FC<props> = ({ colour, pct, hide }) => {
         pct > 1 && hide ? "visible" : pct > 1 && !hide ? "small" : "hidden"
       }
       // r={r}
-      cx={-25}
-      cy={20}
+      cx={-12.5}
+      cy={12.5}
       fill="transparent"
       stroke={strokePct !== circ ? colour : ""}
       transition={{ duration: 0.5 }}

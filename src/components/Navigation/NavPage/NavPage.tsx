@@ -45,6 +45,9 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
         >
           <div className={styles["nav-page"]}>
             <AnimatedLink
+              onClick={() => {
+                setShowNavPage(false);
+              }}
               variants={variantsH}
               initial="hidden"
               animate="visible"
@@ -55,6 +58,9 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               <Textfit mode="singe">Calendar</Textfit>
             </AnimatedLink>
             <AnimatedLink
+              onClick={() => {
+                setShowNavPage(false);
+              }}
               variants={variantsH}
               initial="hidden"
               animate="visible"
@@ -65,6 +71,9 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               <Textfit mode="singe">About</Textfit>
             </AnimatedLink>
             <AnimatedLink
+              onClick={() => {
+                setShowNavPage(false);
+              }}
               variants={variantsH}
               initial="hidden"
               animate="visible"
@@ -75,6 +84,9 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               <Textfit mode="singe">Recent</Textfit>
             </AnimatedLink>
             <AnimatedLink
+              onClick={() => {
+                setShowNavPage(false);
+              }}
               variants={variantsH}
               initial="hidden"
               animate="visible"

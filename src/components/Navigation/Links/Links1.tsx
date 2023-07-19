@@ -28,7 +28,7 @@ const Links1: React.FC<props> = ({ white, showNav }) => {
 
   return (
     <motion.ul animate={navControls}>
-      <li>
+      <li className={styles["nav__li"]}>
         <NavLink
           className={`${
             white ? styles["nav__link__white"] : styles["nav__link"]
@@ -38,7 +38,7 @@ const Links1: React.FC<props> = ({ white, showNav }) => {
           Calendar
         </NavLink>
       </li>
-      <li>
+      <li className={styles["nav__li"]}>
         <NavLink
           className={`${
             white ? styles["nav__link__white"] : styles["nav__link"]

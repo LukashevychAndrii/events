@@ -5,8 +5,8 @@ const ProgressBarStaticCircle = ({ colour }: { colour: string }) => {
   return (
     <circle
       r={r}
-      cx={-25}
-      cy={20}
+      cx={-12.5}
+      cy={12.5}
       fill="transparent"
       stroke={colour} // remove colour as 0% sets full circumference
       strokeWidth={".1rem"}

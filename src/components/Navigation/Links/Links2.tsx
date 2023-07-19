@@ -28,7 +28,7 @@ const Links2: React.FC<props> = ({ showNav, white }) => {
 
   return (
     <motion.ul animate={navControls}>
-      <li>
+      <li className={styles["nav__li"]}>
         <NavLink
           to="/events/recent"
           className={`${
@@ -38,7 +38,7 @@ const Links2: React.FC<props> = ({ showNav, white }) => {
           Recent
         </NavLink>
       </li>
-      <li>
+      <li className={styles["nav__li"]}>
         <NavLink
           to="/events/chats"
           className={`${

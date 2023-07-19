@@ -159,29 +159,32 @@ const Navigation: React.FC<props> = ({
     >
       <User white={white} />
       <Logo white={white} />
-      {!showNavPage && !less768 && <Links1 showNav={showNav} white={white} />}
-      {!showNavPage && (
-        <div
-          onMouseEnter={() => {
-            if (!less768) {
-              setHover(true);
-            }
-          }}
-          onClick={() => {
-            if (less768) {
-              setShowNavPage(true);
-            }
-          }}
-          style={{ cursor: "pointer" }}
-        >
-          <ProgressBar
-            white={white}
-            scrollYPersentage={scrollYPersentage}
-            hide={!showNav}
-          />
-        </div>
-      )}
-      {!showNavPage && !less768 && <Links2 showNav={showNav} white={white} />}
+      <div className={styles["nav__nav-main"]}>
+        {less768 && <span></span>}
+        {!showNavPage && !less768 && <Links1 showNav={showNav} white={white} />}
+        {!showNavPage && (
+          <div
+            onMouseEnter={() => {
+              if (!less768) {
+                setHover(true);
+              }
+            }}
+            onClick={() => {
+              if (less768) {
+                setShowNavPage(true);
+              }
+            }}
+            className={styles["nav__nav-circle"]}
+          >
+            <ProgressBar
+              white={white}
+              scrollYPersentage={scrollYPersentage}
+              hide={!showNav}
+            />
+          </div>
+        )}
+        {!showNavPage && !less768 && <Links2 showNav={showNav} white={white} />}
+      </div>
     </motion.nav>
   );
 };

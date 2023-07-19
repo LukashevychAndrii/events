@@ -13,7 +13,7 @@ const User: React.FC<props> = ({ white }) => {
   const userDATA = useAppSelector((state) => state.user);
   return (
     <Link
-      to={userDATA.ID ? "/acc-details" : "/auth/sign-in"}
+      to={userDATA.ID ? "/events/acc-details" : "/events/auth/sign-in"}
       className={`${white ? styles["user__white"] : styles["user"]}`}
     >
       {userDATA.photo ? (
