@@ -95,8 +95,10 @@
       }
     }
     &__img {
-      height: 140%;
+      height: 120%;
       width: 100%;
+      object-fit: cover;
+      object-position: center;
 
       &__wrapper {
         margin-top: 1110px;
@@ -104,7 +106,6 @@
         height: 750px;
         min-width: 500px;
         overflow: hidden;
-        background-color: orange;
 
         @media screen and (max-width: 1440px) {
           min-width: 34.75vw;
