@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../Intro.module.scss";
-import { Variants, motion, useAnimation } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 
 const TypeWriter = () => {
   const controls = useAnimation();
@@ -29,8 +29,13 @@ const TypeWriter = () => {
   }, [controls]);
 
   return (
-    <motion.h1 animate={controls} className={`${styles["intro__typewriter"]}`}>
-      Events
+    <motion.h1 style={{ width: "100vw", height: "100vh" }}>
+      <motion.span
+        animate={controls}
+        className={`${styles["intro__typewriter"]}`}
+      >
+        Events
+      </motion.span>
     </motion.h1>
   );
 };
