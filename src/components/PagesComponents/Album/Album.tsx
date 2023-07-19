@@ -13,6 +13,8 @@ import Container1 from "./components/Container1/Container1";
 import Container2 from "./components/Container2/Container2";
 import People from "./components/People/People";
 
+import { Textfit } from "react-textfit";
+
 const Album = () => {
   const { albumName } = useParams();
 
@@ -131,14 +133,21 @@ const Album = () => {
           className={styles["album__heading__wrapper"]}
         >
           <div className={styles["album__heading"]}>
-            <motion.h2 style={{ y: y1 }} className="heading-1">
-              It's
+            <motion.h2
+              style={{ y: y1 }}
+              className={`${styles["album__heading--1"]} heading-1`}
+            >
+              <Textfit mode="single" min={40} max={175}>
+                It's
+              </Textfit>
             </motion.h2>
             <motion.h2
               style={{ y: y2 }}
               className={`${styles["album__heading--2"]} heading-2`}
             >
-              {name}
+              <Textfit mode="single" min={20} max={150}>
+                {name}
+              </Textfit>
             </motion.h2>
             <motion.h2 style={{ y: y3 }} className="subtitle">
               loremlorem
@@ -158,9 +167,10 @@ const Album = () => {
               <Container2 photo="https://images.unsplash.com/photo-1603910234616-3b5f4a6be2b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" />
               <Container1 photo="https://images.unsplash.com/photo-1619229725920-ac8b63b0631a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" />
               <Container2 photo="https://images.unsplash.com/photo-1565035010268-a3816f98589a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" />
+              <Container1 photo="https://images.unsplash.com/photo-1569930784237-ea65a2f40a83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=712&q=80" />
 
               <People />
-              <div style={{ width: "39.45vw" }}></div>
+              {/* <div style={{ width: "39.45vw" }}></div> */}
             </motion.div>
           </motion.section>
         </motion.section>

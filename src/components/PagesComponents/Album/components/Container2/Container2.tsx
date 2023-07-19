@@ -25,7 +25,10 @@ const Container2: React.FC<props> = ({ photo }) => {
     console.log("Page scroll: ", latest);
   });
   return (
-    <div ref={refContainer} className={styles["album__content__container"]}>
+    <div
+      ref={refContainer}
+      className={`${styles["album__content__container"]} ${styles["album__content__container--2"]}`}
+    >
       <motion.div className={styles["album__content__img__wrapper--2"]}>
         <motion.img
           style={{ x: yIMG }}

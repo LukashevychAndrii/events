@@ -10,12 +10,25 @@
     @include m.absolute-center();
     left: 52.5%;
     top: 55%;
+    width: 100%;
 
     text-align: center;
     float: right;
+    &--1 {
+      width: 45%;
+      line-height: 200px;
+      @media screen and (max-width: 1440px) {
+        line-height: 13vw;
+      }
+    }
     &--2 {
-      margin-top: -10rem;
-      white-space: nowrap;
+      display: block !important;
+      width: 65%;
+      margin: auto;
+      line-height: 160px;
+      @media screen and (max-width: 1440px) {
+        line-height: 11vw;
+      }
     }
     &__wrapper {
       position: fixed;
@@ -25,6 +38,10 @@
   }
   &__content {
     display: flex;
+    gap: 17.5rem;
+    @media screen and (max-width: 768px) {
+      gap: 13.5rem;
+    }
     &__img {
       height: 100vh;
       width: 120%;
@@ -33,12 +50,10 @@
         width: 120%;
       }
       &__wrapper {
-        background-color: orange;
         overflow: hidden;
         width: 700px;
         &--2 {
           width: 500px;
-          // background-color: red;
           height: 100vh;
           display: flex;
           align-items: center;
@@ -47,9 +62,10 @@
       }
     }
     &__container {
-      width: 55vw;
-
-      background-color: rosybrown;
+      width: max-content;
+      &--2 {
+        margin-right: -5.5rem;
+      }
     }
     &__people {
       @include m.absolute-center();
@@ -57,6 +73,9 @@
       gap: 5rem;
       width: 57.5%;
       justify-content: space-between;
+      &__heading {
+        white-space: nowrap;
+      }
       & > div {
         display: flex;
         flex-direction: column;
