@@ -3,6 +3,7 @@ import styles from "./Navigation.module.scss";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { useLocation } from "react-router-dom";
 import {
+  AnimatePresence,
   Variants,
   useAnimationControls,
   useScroll,
@@ -108,13 +109,20 @@ const Navigation: React.FC<props> = ({
 
   const [animationKey, setAnimationKey] = React.useState(0);
 
-  const triggerAnimation = () => {
-    setAnimationKey((prevKey) => prevKey + 1);
-  };
+  const [delay, setDelay] = React.useState(8.5);
 
   React.useEffect(() => {
-    if (location.pathname.length === 1 && location.pathname.includes("about")) {
-      triggerAnimation();
+    if (location.state) {
+      if (location.state.prevRoute !== "/events/") {
+        setDelay(10);
+      } else {
+        setDelay(8.5);
+      }
+    } else {
+      setDelay(8.5);
+    }
+    if (location.pathname === "/events/") {
+      setAnimationKey((prevKey) => prevKey + 1);
     }
   }, [location]);
 
@@ -146,7 +154,7 @@ const Navigation: React.FC<props> = ({
       variants={variants}
       initial="hidden"
       animate="visible"
-      transition={{ duration: 1, delay: white ? 8.5 : 2 }}
+      transition={{ duration: 1, delay: white ? delay : 0 }}
       className={styles["nav"]}
     >
       <User white={white} />
