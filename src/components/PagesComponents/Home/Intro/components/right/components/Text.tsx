@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "../../../Intro.module.scss";
 import gif from "../../../../../../../img/GIF/text-gif.gif";
-import { ReactComponent as ChevronDownIcon } from "../../../../../../../img/SVG/chevron-down.svg";
 
 import { motion } from "framer-motion";
 import LinkArrow from "./LinkArrow";
@@ -20,9 +19,6 @@ const Text = () => {
         LoremLorem
       </h2>
       <LinkArrow />
-      <Link className={styles["intro__text__link"]} to={"/main"}>
-        <ChevronDownIcon className={styles["intro__text__chevron-down"]} />
-      </Link>
     </motion.div>
   );
 };

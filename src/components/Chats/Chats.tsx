@@ -109,7 +109,7 @@ const Chats: React.FC<props> = ({ outlet }) => {
         style={{ width: sidebarWidth }}
         // onMouseDown={(e) => e.preventDefault()}
       >
-        <Link className={styles["app-container__link"]} to="/">
+        <Link className={styles["app-container__link"]} to="/events">
           <img
             className={styles["app-container__logo"]}
             src={logo}

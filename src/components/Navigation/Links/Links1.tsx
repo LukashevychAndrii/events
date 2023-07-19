@@ -33,7 +33,7 @@ const Links1: React.FC<props> = ({ white, showNav }) => {
           className={`${
             white ? styles["nav__link__white"] : styles["nav__link"]
           } subtitle`}
-          to="calendar"
+          to="/events/calendar"
         >
           Calendar
         </NavLink>
@@ -43,7 +43,7 @@ const Links1: React.FC<props> = ({ white, showNav }) => {
           className={`${
             white ? styles["nav__link__white"] : styles["nav__link"]
           } subtitle`}
-          to="about"
+          to="/events/about"
         >
           About
         </NavLink>

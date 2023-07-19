@@ -94,7 +94,7 @@ const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
               >
                 <Link
                   className={styles["recent__gallery__img__text"]}
-                  to={`/album/${event1DATA.name}`}
+                  to={`/events/album/${event1DATA.name}`}
                 >
                   <motion.h3
                     variants={variantsIMG_TEXT1}

@@ -18,7 +18,7 @@ import HomeMainPage from "./pages/HomeMainPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/events",
     element: <RootLayout />,
     children: [
       { index: true, element: <HomeIntroPage /> },
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/chats",
+    path: "/events/chats",
     element: <RootLayoutChat />,
     children: [
       { index: true, element: <SelectChat /> },

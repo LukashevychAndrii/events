@@ -10,7 +10,7 @@ interface props {
 
 const Logo: React.FC<props> = ({ white }) => {
   return (
-    <Link to="/">
+    <Link to="/events">
       <img
         className={`${styles["logo"]} ${white && styles["logo__white"]}`}
         src={logo}

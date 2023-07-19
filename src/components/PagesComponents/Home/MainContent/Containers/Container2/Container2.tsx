@@ -87,7 +87,7 @@ const Container2: React.FC<props> = ({ eventDATA }) => {
           transition={{ duration: 1, delay: 0.15 }}
           className={`${styles["content__container--2__left-info__title"]} underline`}
           viewport={{ once: true }}
-          to={`/album/${eventDATA?.name}`}
+          to={`/events/album/${eventDATA?.name}`}
         >
           {eventDATA?.name}
         </AnimatedLink>

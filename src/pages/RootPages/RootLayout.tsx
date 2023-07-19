@@ -46,7 +46,7 @@ const RootLayout = () => {
 
       <AlertBox />
       <PendingBar />
-      {pathname.length > 1 ? (
+      {pathname !== "/events" ? (
         <Navigation
           white={showNavPage}
           setShowNavPage={setShowNavPage}

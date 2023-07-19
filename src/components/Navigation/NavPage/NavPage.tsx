@@ -50,7 +50,7 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               animate="visible"
               transition={{ duration: 0.65, delay: 0.25 }}
               className={`${styles["nav-page__heading"]} ${styles["nav-page__heading--1"]} heading-1`}
-              to={"/calendar"}
+              to={"/events/calendar"}
             >
               <Textfit mode="singe">Calendar</Textfit>
             </AnimatedLink>
@@ -60,7 +60,7 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               animate="visible"
               transition={{ duration: 0.65, delay: 0.35 }}
               className={`${styles["nav-page__heading"]} ${styles["nav-page__heading--2"]} heading-2`}
-              to={"/about"}
+              to={"/events/about"}
             >
               <Textfit mode="singe">About</Textfit>
             </AnimatedLink>
@@ -70,7 +70,7 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               animate="visible"
               transition={{ duration: 0.65, delay: 0.45 }}
               className={`${styles["nav-page__heading"]} ${styles["nav-page__heading--3"]} heading-1`}
-              to={"/recent"}
+              to={"/events/recent"}
             >
               <Textfit mode="singe">Recent</Textfit>
             </AnimatedLink>
@@ -80,7 +80,7 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
               animate="visible"
               transition={{ duration: 0.65, delay: 0.55 }}
               className={`${styles["nav-page__heading"]} ${styles["nav-page__heading--4"]} heading-2`}
-              to={"/chats"}
+              to={"/events/chats"}
             >
               <Textfit mode="singe">Chats</Textfit>
             </AnimatedLink>

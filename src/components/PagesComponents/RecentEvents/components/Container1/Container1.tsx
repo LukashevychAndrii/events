@@ -102,7 +102,7 @@ const Container1: React.FC<props> = ({
             >
               <Link
                 className={styles["recent__gallery__img__text"]}
-                to={`/album/${event1DATA.name}`}
+                to={`/events/album/${event1DATA.name}`}
               >
                 <motion.h3
                   variants={variantsIMG_TEXT1}
@@ -158,7 +158,7 @@ const Container1: React.FC<props> = ({
               }}
             >
               <Link
-                to={`/album/${event2DATA.name}`}
+                to={`/events/album/${event2DATA.name}`}
                 className={styles["recent__gallery__img__text"]}
               >
                 <motion.h3
