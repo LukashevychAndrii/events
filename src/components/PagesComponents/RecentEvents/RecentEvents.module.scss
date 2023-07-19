@@ -94,7 +94,9 @@
       &__wrapper {
         position: relative;
         &--2 {
-          height: 100vw;
+          @media screen and (max-width: 768px) {
+            height: 100vw;
+          }
         }
       }
 
