@@ -7,6 +7,8 @@ import { ReactComponent as EyeSlash } from "../../img/SVG/eye-closed.svg";
 
 import logo from "../../img/logo.png";
 
+import { Textfit } from "react-textfit";
+
 interface props {
   current: string;
 
@@ -96,7 +98,7 @@ const Form = ({ current, handleClick }: props) => {
 
   return (
     <div className={styles["form__wrapper"]}>
-      <div className={styles["form__right"]}>
+      <div className={styles["form__left"]}>
         <form
           className={styles["form"]}
           onSubmit={(e: FormEvent) => {
@@ -113,9 +115,11 @@ const Form = ({ current, handleClick }: props) => {
               <h1 className="subtitle">Lorem</h1>
             </div>
             <div className={styles["form__heading__text"]}>
-              {current === "Sign In"
-                ? "Log in to your accout"
-                : "Create an account"}
+              <Textfit mode="single">
+                {current === "Sign In"
+                  ? "Log in to your accout"
+                  : "Create an account"}
+              </Textfit>
             </div>
           </div>
           <div className={styles["form__element"]}>
@@ -210,24 +214,39 @@ const Form = ({ current, handleClick }: props) => {
               : "Already have an account?"}
             <Link
               className={styles["form__link"]}
-              to={current === "Sign In" ? "/auth/sign-up" : "/auth/sign-in"}
+              to={
+                current === "Sign In"
+                  ? "/events/auth/sign-up"
+                  : "/events/auth/sign-in"
+              }
             >
               {current === "Sign In" ? "Sign Up" : "Sign In"}
             </Link>
           </div>
         </form>
       </div>
-      <div className={styles["form__left"]}>
+      <div className={styles["form__right"]}>
         <img
           className={styles["form__img"]}
-          src="https://picsum.photos/700/750"
+          src="https://images.unsplash.com/photo-1507608443039-bfde4fbcd142?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
           alt="event"
         />
         <img className={styles["form__img__logo"]} src={logo} alt="logo" />
         <div className={styles["form__img__text"]}>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente
-            blanditiis sit quia voluptas, officia quidem!
+            <div className={styles["form__img__text--l1"]}>
+              <Textfit mode="single">Lorem ipsum dolor sit amet</Textfit>
+            </div>
+            <div className={styles["form__img__text--l2"]}>
+              <Textfit mode="single">
+                consectetur adipisicing elit. Sapiente
+              </Textfit>
+            </div>
+            <div className={styles["form__img__text--l3"]}>
+              <Textfit mode="single">
+                blanditiis sit quia voluptas, officia quidem!
+              </Textfit>
+            </div>
           </p>
           <div>
             <h4 className="subtitle">Lorem, ipsum.</h4>
