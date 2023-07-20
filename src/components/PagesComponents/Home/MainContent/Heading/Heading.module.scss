@@ -2,7 +2,23 @@
 
 .heading {
   @include m.absolute-center();
-  & > h2 {
-    margin-top: -7.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  &--1 {
+    width: 75%;
+    line-height: 160px;
+    @media screen and (max-width: 1440px) {
+      line-height: 11vw;
+    }
+  }
+  &--2 {
+    width: 60%;
+    justify-self: end;
+    text-align: center;
+    line-height: 170px;
+    @media screen and (max-width: 1440px) {
+      line-height: 13vw;
+    }
   }
 }

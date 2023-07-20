@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Heading.module.scss";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { Textfit } from "react-textfit";
 
 const Heading = () => {
   const { scrollY } = useScroll();
@@ -21,19 +22,23 @@ const Heading = () => {
         initial={{ opacity: 0, y: 35 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 2 }}
-        className="heading-1"
+        className={`${styles["heading--1"]} heading-1`}
         style={{ y: yHeading1 }}
       >
-        Funniest &
+        <Textfit mode="single" min={20} max={200}>
+          LoremLorem &
+        </Textfit>
       </motion.h1>
       <motion.h2
         initial={{ opacity: 0, y: 35 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 2 }}
-        className="heading-2"
+        className={`${styles["heading--2"]} heading-2`}
         style={{ y: yHeading2 }}
       >
-        Greatest
+        <Textfit mode="single" min={20} max={200}>
+          LoremLorem
+        </Textfit>
       </motion.h2>
     </div>
   );

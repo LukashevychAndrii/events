@@ -45,7 +45,7 @@ const MainContent = () => {
 
   const events = useAppSelector((state) => state.recentEvents.eventsDATA);
   return (
-    <>
+    <div className={styles["content"]}>
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -54,13 +54,13 @@ const MainContent = () => {
       >
         <Heading />
       </motion.section>
-      <section className={styles["content"]}>
+      <section className={styles["content__container__wrapper"]}>
         <Container1 eventDATA={events[0]} />
         <Container2 eventDATA={events[5]} />
         <Container3 eventDATA={events[7]} />
         <Container4 eventDATA={events[3]} />
       </section>
-    </>
+    </div>
   );
 };
 
