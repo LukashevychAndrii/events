@@ -22,6 +22,10 @@ body {
 /* Hide the scrollbar for WebKit based browsers */
 body::-webkit-scrollbar {
   display: none;
+  -ms-overflow-style: none;
+}
+html {
+  scrollbar-width: none;
 }
 
 body {
