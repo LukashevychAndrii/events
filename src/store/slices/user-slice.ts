@@ -105,7 +105,7 @@ export const userCreate = createAsyncThunk<
                 token: user.refreshToken,
               })
             );
-            navigate("/");
+            navigate("/events");
             return user;
           })
           .then(async (snapshot) => {
@@ -155,7 +155,7 @@ export const userSignIn = createAsyncThunk<
               token: user.refreshToken,
             })
           );
-          navigate("/");
+          navigate("/events");
         }
         // ...
       })
@@ -200,6 +200,8 @@ export const userAutoSignIn = createAsyncThunk<undefined, undefined, {}>(
         } finally {
           dispatch(pendingUpdateQueueDown());
         }
+      } else {
+        dispatch(pendingUpdateQueueDown());
       }
     });
     return undefined;
@@ -217,7 +219,7 @@ export const userSignOut = createAsyncThunk<
     await signOut(auth);
     console.log("2");
     dispatch(removeUser());
-    navigate("/");
+    navigate("/events");
   } catch (error) {
     dispatch(
       addAlert({
