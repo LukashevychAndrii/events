@@ -40,6 +40,14 @@ const RootLayout = () => {
 
   const [showNavPage, setShowNavPage] = React.useState(false);
 
+  React.useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0 });
+    };
+
+    scrollToTop();
+  }, [pathname]);
+
   return (
     <>
       <NavPage setShowNavPage={setShowNavPage} showNavPage={showNavPage} />
