@@ -105,7 +105,7 @@ export const userCreate = createAsyncThunk<
                 token: user.refreshToken,
               })
             );
-            navigate("/events");
+            navigate("/events/");
             return user;
           })
           .then(async (snapshot) => {
@@ -155,7 +155,7 @@ export const userSignIn = createAsyncThunk<
               token: user.refreshToken,
             })
           );
-          navigate("/events");
+          navigate("/events/");
         }
         // ...
       })
@@ -217,9 +217,8 @@ export const userSignOut = createAsyncThunk<
   dispatch(pendingUpdateQueueUp());
   try {
     await signOut(auth);
-    console.log("2");
     dispatch(removeUser());
-    navigate("/events");
+    navigate("/events/");
   } catch (error) {
     dispatch(
       addAlert({
