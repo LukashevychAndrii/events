@@ -1,10 +1,12 @@
 import React from "react";
 import styles from "./Chats.module.scss";
 import { ReactComponent as DefaultAvatar } from "../../img/SVG/default-avatar.svg";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../utils/redux";
 import {
   chatFetchChatsPartial,
+  chatFetchMembers,
+  chatFetchMessages,
   chatFetchUserChats,
 } from "../../store/slices/chat-slice";
 import SimpleBar from "simplebar-react";
@@ -37,6 +39,14 @@ const Chats: React.FC<props> = ({ outlet }) => {
   const dispatch = useAppDispatch();
   const userID = useAppSelector((state) => state.user.ID);
   const chatsList = useAppSelector((state) => state.chat.chatsList);
+
+  const { chatID } = useParams();
+  React.useEffect(() => {
+    if (chatID) {
+      dispatch(chatFetchMembers({ chatID }));
+      dispatch(chatFetchMessages({ chatID }));
+    }
+  }, [dispatch, chatID]);
 
   React.useEffect(() => {
     dispatch(chatFetchChatsPartial());
@@ -101,110 +111,133 @@ const Chats: React.FC<props> = ({ outlet }) => {
   React.useEffect(() => {
     console.log(Object.values(chatsList));
   }, [chatsList]);
-  return (
-    <div className={styles["app-container"]}>
-      <div
-        ref={sidebarRef}
-        className={styles["app-sidebar"]}
-        style={{ width: sidebarWidth }}
-        // onMouseDown={(e) => e.preventDefault()}
-      >
-        <Link className={styles["app-container__link"]} to="/events">
-          <img
-            className={styles["app-container__logo"]}
-            src={logo}
-            alt="logo"
-          />
-        </Link>
-        <TopBar setFilter={setFilter} small={small} />
 
-        <SimpleBar style={{ height: "100%", width: "100%" }}>
-          <div className={styles["app-sidebar__content"]}>
-            <ul className={styles["app-sidebar__content__chats-list"]}>
-              {Object.values(chatsList)
-                .filter((el) => el.name.includes(filter))
-                .map((el, index) => (
-                  <motion.li
-                    variants={variantsChat}
-                    initial="hidden"
-                    animate="visible"
-                    custom={index}
-                    key={index}
-                    className={styles["app-sidebar__content__chats-list__chat"]}
-                  >
-                    <NavLink
-                      className={({ isActive }) =>
-                        isActive
-                          ? styles[
-                              "app-sidebar__content__chats-list__chat__link--active"
-                            ]
-                          : styles[
-                              "app-sidebar__content__chats-list__chat__link"
-                            ]
+  const prevRoute = useLocation();
+
+  return (
+    <motion.div
+      transition={{ duration: 1 }}
+      initial={{ opacity: 0, filter: "blur(50px)" }}
+      animate={{ opacity: 1, filter: "blur(0)" }}
+      exit={{
+        opacity: 0,
+        filter: "blur(50px)",
+        y: 150,
+        transition: { duration: 1.5 },
+      }}
+    >
+      <div className={styles["app-container"]}>
+        <div
+          ref={sidebarRef}
+          className={styles["app-sidebar"]}
+          style={{ width: sidebarWidth }}
+          // onMouseDown={(e) => e.preventDefault()}
+        >
+          <Link
+            className={styles["app-container__link"]}
+            to="/events/"
+            state={{ prevRoute: prevRoute.pathname }}
+          >
+            <img
+              className={styles["app-container__logo"]}
+              src={logo}
+              alt="logo"
+            />
+          </Link>
+          <TopBar setFilter={setFilter} small={small} />
+
+          <SimpleBar style={{ height: "100%", width: "100%" }}>
+            <div className={styles["app-sidebar__content"]}>
+              <ul className={styles["app-sidebar__content__chats-list"]}>
+                {Object.values(chatsList)
+                  .filter((el) => el.name.includes(filter))
+                  .map((el, index) => (
+                    <motion.li
+                      variants={variantsChat}
+                      initial="hidden"
+                      animate="visible"
+                      custom={index}
+                      key={index}
+                      className={
+                        styles["app-sidebar__content__chats-list__chat"]
                       }
-                      to={`${Object.keys(chatsList)[index]}`}
                     >
-                      {el.photo ? (
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive
+                            ? styles[
+                                "app-sidebar__content__chats-list__chat__link--active"
+                              ]
+                            : styles[
+                                "app-sidebar__content__chats-list__chat__link"
+                              ]
+                        }
+                        to={`${Object.keys(chatsList)[index]}`}
+                      >
+                        {el.photo ? (
+                          <div
+                            className={
+                              styles[
+                                "app-sidebar__content__chats-list__chat__img"
+                              ]
+                            }
+                            style={{ backgroundImage: `url(${el.photo})` }}
+                          ></div>
+                        ) : (
+                          <DefaultAvatar
+                            className={
+                              styles[
+                                "app-sidebar__content__chats-list__chat__img"
+                              ]
+                            }
+                          />
+                        )}
                         <div
                           className={
                             styles[
-                              "app-sidebar__content__chats-list__chat__img"
-                            ]
-                          }
-                          style={{ backgroundImage: `url(${el.photo})` }}
-                        ></div>
-                      ) : (
-                        <DefaultAvatar
-                          className={
-                            styles[
-                              "app-sidebar__content__chats-list__chat__img"
-                            ]
-                          }
-                        />
-                      )}
-                      <div
-                        className={
-                          styles["app-sidebar__content__chats-list__chat__name"]
-                        }
-                      >
-                        {el.name}
-                      </div>
-                      <div
-                        className={
-                          styles[
-                            "app-sidebar__content__chats-list__chat__last-msg"
-                          ]
-                        }
-                      >
-                        {el.lastMessageDATA && el.lastMessageDATA.text
-                          ? el.lastMessageDATA.text
-                          : "..."}
-                      </div>
-
-                      {el.lastMessageDATA && el.lastMessageDATA.time && (
-                        <span
-                          className={
-                            styles[
-                              "app-sidebar__content__chats-list__chat__last-msg__time"
+                              "app-sidebar__content__chats-list__chat__name"
                             ]
                           }
                         >
-                          {el.lastMessageDATA.time}
-                        </span>
-                      )}
-                    </NavLink>
-                  </motion.li>
-                ))}
-            </ul>
-          </div>
-        </SimpleBar>
-        <div
-          className={styles["app-sidebar__resizer"]}
-          onMouseDown={(e) => startResizing(e)}
-        />
+                          {el.name}
+                        </div>
+                        <div
+                          className={
+                            styles[
+                              "app-sidebar__content__chats-list__chat__last-msg"
+                            ]
+                          }
+                        >
+                          {el.lastMessageDATA && el.lastMessageDATA.text
+                            ? el.lastMessageDATA.text
+                            : "..."}
+                        </div>
+
+                        {el.lastMessageDATA && el.lastMessageDATA.time && (
+                          <span
+                            className={
+                              styles[
+                                "app-sidebar__content__chats-list__chat__last-msg__time"
+                              ]
+                            }
+                          >
+                            {el.lastMessageDATA.time}
+                          </span>
+                        )}
+                      </NavLink>
+                    </motion.li>
+                  ))}
+              </ul>
+            </div>
+          </SimpleBar>
+          <div
+            className={styles["app-sidebar__resizer"]}
+            onMouseDown={(e) => startResizing(e)}
+          />
+        </div>
+        <div className={styles["app-frame"]}>{outlet}</div>
       </div>
-      <div className={styles["app-frame"]}>{outlet}</div>
-    </div>
+    </motion.div>
   );
 };
 export default Chats;

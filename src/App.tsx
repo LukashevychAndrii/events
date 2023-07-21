@@ -10,7 +10,6 @@ import { useAppDispatch } from "./utils/redux";
 import { userAutoSignIn } from "./store/slices/user-slice";
 import AccDetailsPage from "./pages/AccDetailsPage";
 import ChatPage from "./pages/ChatPage";
-import RootLayoutChat from "./pages/RootPages/RootLayoutChat";
 import CalendarPage from "./pages/CalendarPage";
 import SelectChat from "./components/Chats/Chat/ChatComponents/SelectChat/SelectChat";
 import HomeIntroPage from "./pages/HomeIntroPage";
@@ -38,14 +37,14 @@ const router = createBrowserRouter([
         path: "calendar",
         element: <CalendarPage />,
       },
-    ],
-  },
-  {
-    path: "/events/chats",
-    element: <RootLayoutChat />,
-    children: [
-      { index: true, element: <SelectChat /> },
-      { path: ":chatID", element: <ChatPage /> },
+      {
+        path: "chats",
+
+        children: [
+          { index: true, element: <SelectChat /> },
+          { path: ":chatID", element: <ChatPage /> },
+        ],
+      },
     ],
   },
 ]);

@@ -1,6 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
 import {
+  Outlet,
   useLocation,
   useNavigate,
   useOutlet,
@@ -13,6 +14,7 @@ import AlbumPage from "../AlbumPage";
 import PendingBar from "../../components/PendingBar/PendingBar";
 import AlertBox from "../../components/AlertBox/AlertBox";
 import NavPage from "../../components/Navigation/NavPage/NavPage";
+import Chats from "../../components/Chats/Chats";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -53,25 +55,34 @@ const RootLayout = () => {
       <NavPage setShowNavPage={setShowNavPage} showNavPage={showNavPage} />
 
       {pathname !== "/events/" && <AlertBox />}
+
       <PendingBar />
-      {pathname !== "/events/" ? (
-        <Navigation
-          white={showNavPage}
-          setShowNavPage={setShowNavPage}
-          showNavPage={showNavPage}
-        />
-      ) : (
-        <AnimatePresence>
-          <Navigation
-            white={true}
-            setShowNavPage={setShowNavPage}
-            showNavPage={showNavPage}
-          />
-        </AnimatePresence>
+
+      {!pathname.includes("chats") && (
+        <>
+          {pathname !== "/events/" ? (
+            <Navigation
+              white={showNavPage}
+              setShowNavPage={setShowNavPage}
+              showNavPage={showNavPage}
+            />
+          ) : (
+            <AnimatePresence>
+              <Navigation
+                white={true}
+                setShowNavPage={setShowNavPage}
+                showNavPage={showNavPage}
+              />
+            </AnimatePresence>
+          )}
+        </>
       )}
+
       <AnimatePresence mode="wait">
         {pathname.includes("album") ? (
           <AlbumPage key="album" />
+        ) : pathname.includes("chats") ? (
+          <Chats key="chats" outlet={<AnimatedOutlet />} />
         ) : (
           <SmoothScroll>
             <motion.div
