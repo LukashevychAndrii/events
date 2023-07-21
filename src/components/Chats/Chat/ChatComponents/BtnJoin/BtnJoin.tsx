@@ -6,6 +6,7 @@ import {
   memberDATAI,
 } from "../../../../../store/slices/chat-slice";
 import { useNavigate, useParams } from "react-router-dom";
+import { addAlert } from "../../../../../store/slices/alert-slice";
 
 const BtnJoin = () => {
   const dispatch = useAppDispatch();
@@ -14,9 +15,15 @@ const BtnJoin = () => {
   const navigate = useNavigate();
   const handleJoinGroupClick = () => {
     if (!userDATA.ID) {
-      navigate("/auth/sign-in");
-    }
-    if (chatID) {
+      navigate("/events/auth/sign-in");
+      dispatch(
+        addAlert({
+          alertTitle: "Error!",
+          alertText: "U must have an account to join group",
+          alertType: "error",
+        })
+      );
+    } else if (chatID) {
       const memberDATA: memberDATAI = {
         memberID: userDATA.ID,
         memberPHOTO: userDATA.photo,

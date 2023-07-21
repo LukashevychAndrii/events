@@ -5,12 +5,18 @@ import { ReactComponent as InfoIcon } from "../../../../../../img/SVG/info.svg";
 
 interface props {
   setShowGroupInfo: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const GroupInfo: React.FC<props> = ({ setShowGroupInfo }) => {
+const GroupInfo: React.FC<props> = ({ setShowGroupInfo, setShowMenu }) => {
+  const handleClick = () => {
+    setShowGroupInfo(true);
+    setShowMenu(false);
+  };
+
   return (
     <div
-      onClick={() => setShowGroupInfo(true)}
+      onClick={handleClick}
       className={`${styles["chat__group-info"]} subtitle`}
     >
       <div>Group Info</div>

@@ -172,7 +172,7 @@ const Chats: React.FC<props> = ({ outlet }) => {
                                 "app-sidebar__content__chats-list__chat__link"
                               ]
                         }
-                        to={`${Object.keys(chatsList)[index]}`}
+                        to={`/events/chats/${Object.keys(chatsList)[index]}`}
                       >
                         {el.photo ? (
                           <div

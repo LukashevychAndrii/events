@@ -6,7 +6,6 @@ import useClickOutside from "../../../../../hooks/useClickOutside";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import GroupInfo from "./components/GroupInfo";
 import { useAppSelector } from "../../../../../utils/redux";
-import GroupInfoBox from "./components/GoupInfoBox";
 
 const variantsShowMenu: Variants = {
   visible: {
@@ -48,14 +47,15 @@ const KebabMenu: React.FC<props> = ({ setShowGroupInfo }) => {
   }, [outside]);
 
   return (
-    <div
-      ref={ref}
-      onClick={() => setShowMenu(!showMenu)}
-      className={`${styles["chat__kebab-menu__wrapper"]} ${
-        showMenu && styles["chat__kebab-menu__wrapper--active"]
-      }`}
-    >
-      <div className={styles["chat__kebab-menu"]}></div>
+    <div ref={ref}>
+      <div
+        onClick={() => setShowMenu(!showMenu)}
+        className={`${styles["chat__kebab-menu__wrapper"]} ${
+          showMenu && styles["chat__kebab-menu__wrapper--active"]
+        }`}
+      >
+        <div className={styles["chat__kebab-menu"]}></div>
+      </div>
       <AnimatePresence>
         {showMenu && (
           <motion.div
@@ -67,10 +67,13 @@ const KebabMenu: React.FC<props> = ({ setShowGroupInfo }) => {
             className={styles["chat__kebab-menu__choices"]}
           >
             {chatTYPE === "public" && (
-              <GroupInfo setShowGroupInfo={setShowGroupInfo} />
+              <GroupInfo
+                setShowMenu={setShowMenu}
+                setShowGroupInfo={setShowGroupInfo}
+              />
             )}
-            <BtnClearChat />
-            <BtnLeave />
+            <BtnClearChat setShowMenu={setShowMenu} />
+            <BtnLeave setShowMenu={setShowMenu} />
           </motion.div>
         )}
       </AnimatePresence>

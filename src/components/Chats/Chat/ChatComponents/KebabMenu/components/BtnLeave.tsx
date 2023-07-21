@@ -6,7 +6,11 @@ import { useParams } from "react-router-dom";
 
 import { ReactComponent as LeaveIcon } from "../../../../../../img/SVG/leave.svg";
 
-const BtnLeave = () => {
+interface props {
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const BtnLeave: React.FC<props> = ({ setShowMenu }) => {
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
   const userID = useAppSelector((state) => state.user.ID);
@@ -16,13 +20,16 @@ const BtnLeave = () => {
 
   const handleBtnLeaveClick = () => {
     if (chatID) {
-      if (
-        currentChatMembers &&
-        Object.values(currentChatMembers).find((el) => el.memberID === userID)
-      ) {
-        dispatch(chatLeaveGroup({ chatID: chatID, userID: userID }));
-      } else {
-        console.log("NOT A MEMBER");
+      if (userID) {
+        setShowMenu(false);
+        if (
+          currentChatMembers &&
+          Object.values(currentChatMembers).find((el) => el.memberID === userID)
+        ) {
+          dispatch(chatLeaveGroup({ chatID: chatID, userID: userID }));
+        } else {
+          console.log("NOT A MEMBER");
+        }
       }
     }
   };
@@ -30,7 +37,9 @@ const BtnLeave = () => {
   return (
     <div
       onClick={handleBtnLeaveClick}
-      className={`${styles["chat__btn-leave"]} subtitle`}
+      className={`${styles["chat__btn-leave"]} ${
+        !userID && styles["chat__btn-leave__disabled"]
+      } subtitle`}
     >
       <div>Leave</div>
       <LeaveIcon className={styles["chat__btn-clear-chat__icon"]} />

@@ -7,27 +7,36 @@ import { messageI } from "../../../../../../store/slices/chat-slice";
 
 import { ReactComponent as ClearIcon } from "../../../../../../img/SVG/delete.svg";
 
-const BtnClearChat = () => {
+interface props {
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const BtnClearChat: React.FC<props> = ({ setShowMenu }) => {
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
   const userDATA = useAppSelector((state) => state.user);
   const handleClearClick = () => {
     if (chatID) {
-      const message: messageI = {
-        messageType: "announcement",
-        text: "cleared chat",
-        time: "",
-        userID: userDATA.ID,
-        userNAME: userDATA.name,
-        userPHOTO: userDATA.photo,
-      };
-      dispatch(chatClearMessages({ chatID, message }));
+      if (userDATA.ID) {
+        setShowMenu(false);
+        const message: messageI = {
+          messageType: "announcement",
+          text: "cleared chat",
+          time: "",
+          userID: userDATA.ID,
+          userNAME: userDATA.name,
+          userPHOTO: userDATA.photo,
+        };
+        dispatch(chatClearMessages({ chatID, message }));
+      }
     }
   };
   return (
     <div
       onClick={handleClearClick}
-      className={`${styles["chat__btn-clear-chat"]} subtitle`}
+      className={`${styles["chat__btn-clear-chat"]} ${
+        !userDATA.ID && styles["chat__btn-clear-chat__disabled"]
+      } subtitle`}
     >
       <div>CLEAR</div>
       <ClearIcon className={styles["chat__btn-clear-chat__icon"]} />

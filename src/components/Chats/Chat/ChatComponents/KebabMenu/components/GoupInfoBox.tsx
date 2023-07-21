@@ -49,6 +49,10 @@ const GroupInfoBox: React.FC<props> = ({ setShowGroupInfo, showGroupInfo }) => {
     console.log(outside);
   }, [outside, setShowGroupInfo]);
 
+  const handleCloseClick = () => {
+    setShowGroupInfo(false);
+  };
+
   return (
     <AnimatePresence>
       {showGroupInfo && (
@@ -84,7 +88,7 @@ const GroupInfoBox: React.FC<props> = ({ setShowGroupInfo, showGroupInfo }) => {
                 <div>{currentCHAT?.date}</div>
               </div>
             </div>
-            {currentCHAT?.members && (
+            {currentCHAT?.members ? (
               <ul className={styles["chat__group-info-box__content__members"]}>
                 <SimpleBar style={{ height: "25rem", width: "35rem" }}>
                   {Object.values(currentCHAT?.members).map((el, index) => (
@@ -124,7 +128,19 @@ const GroupInfoBox: React.FC<props> = ({ setShowGroupInfo, showGroupInfo }) => {
                   ))}
                 </SimpleBar>
               </ul>
+            ) : (
+              <span
+                className={`${styles["chat__group-info-box__no-members-text"]} subtitle`}
+              >
+                No members!
+              </span>
             )}
+            <span
+              onClick={handleCloseClick}
+              className={styles["chat__group-info-box__btn-close"]}
+            >
+              &#10005;
+            </span>
           </motion.div>
         </motion.div>
       )}
