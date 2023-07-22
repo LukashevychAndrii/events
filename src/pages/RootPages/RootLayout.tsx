@@ -15,6 +15,7 @@ import PendingBar from "../../components/PendingBar/PendingBar";
 import AlertBox from "../../components/AlertBox/AlertBox";
 import NavPage from "../../components/Navigation/NavPage/NavPage";
 import Chats from "../../components/Chats/Chats";
+import Footer from "../../components/PagesComponents/Footer/Footer";
 
 const RootLayout = () => {
   const location = useLocation();
@@ -113,6 +114,7 @@ const RootLayout = () => {
                   <AnimatedOutlet />
                 </motion.main>
               </AnimatePresence>
+              <Footer />
             </motion.div>
           </SmoothScroll>
         )}
