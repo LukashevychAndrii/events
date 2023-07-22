@@ -54,7 +54,9 @@ const CurrentUserDetails: React.FC<props> = ({
               alt="current user"
             />
           ) : (
-            <DefaultAvatar />
+            <DefaultAvatar
+              className={styles["app-sidebar__content__current-user__img"]}
+            />
           )}
           <div>{userDATA.name}</div>
           <div>{userDATA.ID}</div>

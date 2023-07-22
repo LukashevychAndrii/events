@@ -12,6 +12,7 @@ import {
 import { RootState } from "..";
 import { pendingUpdateQueueDown, pendingUpdateQueueUp } from "./pending-slice";
 import { addAlert } from "./alert-slice";
+import { NavigateFunction } from "react-router-dom";
 
 interface memberI {
   [chatID: string]: {
@@ -38,32 +39,28 @@ export interface messageI {
 
 export interface currentChatI {
   name: string;
-  lastMessage: string;
   photo: string;
   date: string;
   members: memberI;
   messages: messageI[];
   type: "public" | "private";
 }
-
-interface lastMessageDATA {
-  text: string;
-  time: string;
-}
 export interface chatsListPartialT
   extends Pick<currentChatI, "name" | "photo" | "type"> {
-  lastMessageDATA?: lastMessageDATA;
+  lastMessageDATA?: messageI;
 }
 export interface initialStateI {
-  chatsList: { [chatID: string]: chatsListPartialT };
   currentChat: currentChatI | null;
-  userChats: { [chatID: string]: chatsListPartialT };
+  publicChats: { [chatID: string]: chatsListPartialT };
+  privateChats: { [chatID: string]: currentChatI };
+  allChats: { [chatID: string]: chatsListPartialT };
 }
 
 const initialState: initialStateI = {
-  chatsList: {},
   currentChat: null,
-  userChats: {},
+  publicChats: {},
+  privateChats: {},
+  allChats: {},
 };
 
 //FIX
@@ -81,15 +78,17 @@ const chatSlice = createSlice({
         state.currentChat.messages = action.payload;
       }
     },
-    chatSetUserChat(state, action) {
-      console.log(action.payload);
-      state.userChats = action.payload;
-      state.chatsList = { ...state.chatsList, ...action.payload };
-    },
-    chatSetPartial(state, action) {
+    chatSetUserChats(state, action) {
+      state.privateChats = action.payload;
       if (action.payload) {
-        state.chatsList = { ...action.payload, ...state.userChats };
+        state.allChats = { ...state.publicChats, ...action.payload };
+      } else {
+        state.allChats = state.publicChats;
       }
+    },
+    chatSetPartialChats(state, action) {
+      state.publicChats = action.payload;
+      state.allChats = { ...action.payload, ...state.privateChats };
     },
   },
   extraReducers(builder) {
@@ -105,8 +104,8 @@ export default chatSlice.reducer;
 export const {
   chatSetMembers,
   chatSetMessages,
-  chatSetUserChat,
-  chatSetPartial,
+  chatSetUserChats,
+  chatSetPartialChats,
 } = chatSlice.actions;
 
 export const chatFetchChatsPartial = createAsyncThunk<undefined, undefined, {}>(
@@ -119,7 +118,7 @@ export const chatFetchChatsPartial = createAsyncThunk<undefined, undefined, {}>(
       onValue(dbRef, (snapshot) => {
         if (snapshot.exists()) {
           console.log(snapshot.val());
-          dispatch(chatSetPartial(snapshot.val()));
+          dispatch(chatSetPartialChats(snapshot.val()));
         }
       });
       return undefined;
@@ -199,11 +198,8 @@ export const chatSendMessage = createAsyncThunk<
             db,
             `chats/chatsPartialInfo/${chatID}/lastMessageDATA`
           );
-          const lastMessageDATA: lastMessageDATA = {
-            text: messageDATA.text,
-            time: messageDATA.time,
-          };
-          await set(dbRef, lastMessageDATA);
+
+          await set(dbRef, messageDATA);
         });
       } else if (chatType === "private") {
         const dbRefUser = ref(
@@ -214,19 +210,20 @@ export const chatSendMessage = createAsyncThunk<
           db,
           `users/${chatID}/chats/${state.user.ID}/messages`
         );
+
         const dbRefLastMessage1 = ref(
           db,
-          `users/${state.user.ID}/chats/${chatID}/lastMessage`
+          `users/${state.user.ID}/chats/${chatID}/lastMessageDATA`
         );
         const dbRefLastMessage2 = ref(
           db,
-          `users/${chatID}/chats/${state.user.ID}/lastMessage`
+          `users/${chatID}/chats/${state.user.ID}/lastMessageDATA`
         );
         await Promise.all([
           push(dbRefUser, messageDATA),
           push(dbRefChat, messageDATA),
-          set(dbRefLastMessage1, messageDATA.text),
-          set(dbRefLastMessage2, messageDATA.text),
+          set(dbRefLastMessage1, messageDATA),
+          set(dbRefLastMessage2, messageDATA),
         ]);
       }
     } catch (error) {
@@ -283,45 +280,54 @@ export const chatJoinGroup = createAsyncThunk<
   return undefined;
 });
 
-export const chatLeaveGroup = createAsyncThunk<
+export const chatLeave = createAsyncThunk<
   undefined,
-  { chatID: string; userID: string },
+  { chatID: string; userID: string; chatTYPE: "private" | "public" },
   {}
->("chat/chatLeaveGroup", async ({ chatID, userID }, { dispatch, getState }) => {
-  dispatch(pendingUpdateQueueUp());
-  try {
-    const db = getDatabase();
-    const dbRefMembers = ref(
-      db,
-      `chats/chatsFullInfo/${chatID}/members/${userID}`
-    );
-    const dbRefMessages = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
-    const state = getState() as RootState;
-    await Promise.all([
-      remove(dbRefMembers),
-      push(dbRefMessages, {
-        messageType: "announcement",
-        text: `left the group`,
-        time: "",
-        userID: state.user.ID,
-        userNAME: state.user.name,
-        userPHOTO: state.user.photo,
-      }),
-    ]);
-  } catch (error) {
-    dispatch(
-      addAlert({
-        alertText: "Leaving chats failed!",
-        alertTitle: "Error!",
-        alertType: "error",
-      })
-    );
-  } finally {
-    dispatch(pendingUpdateQueueDown());
-  }
+>(
+  "chat/chatLeave",
+  async ({ chatID, userID, chatTYPE }, { dispatch, getState }) => {
+    dispatch(pendingUpdateQueueUp());
+    try {
+      const db = getDatabase();
+      const state = getState() as RootState;
+      if (chatTYPE === "public") {
+        const dbRefMembers = ref(
+          db,
+          `chats/chatsFullInfo/${chatID}/members/${userID}`
+        );
+        const dbRefMessages = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
+        await Promise.all([
+          remove(dbRefMembers),
+          push(dbRefMessages, {
+            messageType: "announcement",
+            text: `left the group`,
+            time: "",
+            userID: state.user.ID,
+            userNAME: state.user.name,
+            userPHOTO: state.user.photo,
+          }),
+        ]);
+      } else if (chatTYPE === "private") {
+        const dbRef1 = ref(db, `users/${state.user.ID}/chats/${chatID}`);
+        const dbRef2 = ref(db, `users/${chatID}/chats/${state.user.ID}`);
+        await Promise.all([remove(dbRef1), remove(dbRef2)]);
+      }
+    } catch (error) {
+      dispatch(
+        addAlert({
+          alertText: "Leaving chats failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
+    } finally {
+      dispatch(pendingUpdateQueueDown());
+    }
 
-  return undefined;
-});
+    return undefined;
+  }
+);
 
 export const chatFetchMembers = createAsyncThunk<
   undefined,
@@ -333,12 +339,7 @@ export const chatFetchMembers = createAsyncThunk<
     const db = getDatabase();
     const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/members`);
     onValue(dbRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const members: memberI[] = Object.values(snapshot.val());
-        dispatch(chatSetMembers(members));
-      } else {
-        dispatch(chatSetMembers([]));
-      }
+      dispatch(chatSetMembers(snapshot.val()));
     });
   } catch (error) {
     dispatch(
@@ -389,30 +390,73 @@ export const chatFetchMessages = createAsyncThunk<
 
 export const chatClearMessages = createAsyncThunk<
   undefined,
-  { chatID: string; message: messageI },
+  { chatID: string; message: messageI; chatTYPE: "private" | "public" },
   {}
->("chat/chatClearMessages", async ({ chatID, message }, { dispatch }) => {
-  dispatch(pendingUpdateQueueUp());
-  try {
-    const db = getDatabase();
-    const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
-    await remove(dbRef).then(() => {
-      push(dbRef, message);
-    });
-  } catch (error) {
-    dispatch(
-      addAlert({
-        alertText: "Clearing messages failed!",
-        alertTitle: "Error!",
-        alertType: "error",
-      })
-    );
-  } finally {
-    dispatch(pendingUpdateQueueDown());
-  }
+>(
+  "chat/chatClearMessages",
+  async ({ chatID, message, chatTYPE }, { dispatch, getState }) => {
+    dispatch(pendingUpdateQueueUp());
+    try {
+      if (chatTYPE === "public") {
+        const db = getDatabase();
+        const dbRef = ref(db, `chats/chatsFullInfo/${chatID}/messages`);
+        await remove(dbRef).then(() => {
+          push(dbRef, message);
+        });
+      } else if (chatTYPE === "private") {
+        const state = getState() as RootState;
+        const db = getDatabase();
+        const dbRef1 = ref(
+          db,
+          `users/${state.user.ID}/chats/${chatID}/lastMessageDATA`
+        );
+        const dbRef2 = ref(
+          db,
+          `users/${state.user.ID}/chats/${chatID}/messages`
+        );
 
-  return undefined;
-});
+        const dbRef3 = ref(
+          db,
+          `users/${chatID}/chats/${state.user.ID}/lastMessageDATA`
+        );
+        const dbRef4 = ref(
+          db,
+          `users/${chatID}/chats/${state.user.ID}/messages`
+        );
+
+        await Promise.all([
+          remove(dbRef1),
+          remove(dbRef2),
+          remove(dbRef3),
+          remove(dbRef4),
+        ]).then(async () => {
+          const dbRef1 = ref(
+            db,
+            `users/${state.user.ID}/chats/${chatID}/messages`
+          );
+          const dbRef2 = ref(
+            db,
+            `users/${chatID}/chats/${state.user.ID}/messages`
+          );
+
+          await Promise.all([push(dbRef1, message), push(dbRef2, message)]);
+        });
+      }
+    } catch (error) {
+      dispatch(
+        addAlert({
+          alertText: "Clearing messages failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
+    } finally {
+      dispatch(pendingUpdateQueueDown());
+    }
+
+    return undefined;
+  }
+);
 
 interface currentUserChatI extends Omit<currentChatI, "members"> {
   members: string[];
@@ -423,59 +467,62 @@ export interface userDATA
 
 export const chatAddUserChat = createAsyncThunk<
   undefined,
-  { userDATA: userDATA },
+  { userDATA: userDATA; navigate: NavigateFunction },
   {}
->("chat/chatAddUserChat", async ({ userDATA }, { dispatch, getState }) => {
-  dispatch(pendingUpdateQueueUp());
-  try {
-    const db = getDatabase();
-    const state = getState() as RootState;
+>(
+  "chat/chatAddUserChat",
+  async ({ userDATA, navigate }, { dispatch, getState }) => {
+    dispatch(pendingUpdateQueueUp());
+    try {
+      const db = getDatabase();
+      const state = getState() as RootState;
 
-    const userChatRef = ref(
-      db,
-      `users/${state.user.ID}/chats/${userDATA.userID}`
-    );
-    const currentUserChat: currentUserChatI = {
-      date: "",
-      lastMessage: "",
-      members: [userDATA.userID, state.user.ID],
-      messages: [],
-      name: userDATA.userNAME,
-      photo: userDATA.userPHOTO,
-      type: "private",
-    };
+      const userChatRef = ref(
+        db,
+        `users/${state.user.ID}/chats/${userDATA.userID}`
+      );
+      const currentUserChat: currentUserChatI = {
+        date: "",
+        members: [userDATA.userID, state.user.ID],
+        messages: [],
+        name: userDATA.userNAME,
+        photo: userDATA.userPHOTO,
+        type: "private",
+      };
 
-    await set(userChatRef, currentUserChat);
+      await set(userChatRef, currentUserChat);
 
-    const otherUserChatRef = ref(
-      db,
-      `users/${userDATA.userID}/chats/${state.user.ID}`
-    );
-    const otherUserChat: currentUserChatI = {
-      date: "",
-      lastMessage: "",
-      members: [userDATA.userID, state.user.ID],
-      messages: [],
-      name: state.user.name,
-      photo: state.user.photo,
-      type: "private",
-    };
+      const otherUserChatRef = ref(
+        db,
+        `users/${userDATA.userID}/chats/${state.user.ID}`
+      );
+      const otherUserChat: currentUserChatI = {
+        date: "",
+        members: [userDATA.userID, state.user.ID],
+        messages: [],
+        name: state.user.name,
+        photo: state.user.photo,
+        type: "private",
+      };
 
-    await set(otherUserChatRef, otherUserChat);
-  } catch (error) {
-    dispatch(
-      addAlert({
-        alertText: "Adding user failed!",
-        alertTitle: "Error!",
-        alertType: "error",
-      })
-    );
-  } finally {
-    dispatch(pendingUpdateQueueDown());
+      await set(otherUserChatRef, otherUserChat);
+
+      navigate(`/events/chats/${userDATA.userID}`);
+    } catch (error) {
+      dispatch(
+        addAlert({
+          alertText: "Adding user failed!",
+          alertTitle: "Error!",
+          alertType: "error",
+        })
+      );
+    } finally {
+      dispatch(pendingUpdateQueueDown());
+    }
+
+    return undefined;
   }
-
-  return undefined;
-});
+);
 
 export const chatFetchUserChats = createAsyncThunk<undefined, undefined, {}>(
   "chat/chatFetchUserChats",
@@ -488,12 +535,7 @@ export const chatFetchUserChats = createAsyncThunk<undefined, undefined, {}>(
       if (state.user.ID) {
         const dbRef = ref(db, `users/${state.user.ID}/chats`);
         onValue(dbRef, (snapshot) => {
-          if (snapshot.exists()) {
-            console.log("qe");
-            dispatch(chatSetUserChat(snapshot.val()));
-          } else {
-            console.log("no data");
-          }
+          dispatch(chatSetUserChats(snapshot.val()));
         });
       }
     } catch (error) {

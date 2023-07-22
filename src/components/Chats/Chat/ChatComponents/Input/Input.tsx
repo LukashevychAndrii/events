@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 const Input = () => {
   const [enteredMsg, setEnteredMsg] = React.useState<string>("");
   const userDATA = useAppSelector((state) => state.user);
-  const chatLIST = useAppSelector((state) => state.chat.chatsList);
+  const chatLIST = useAppSelector((state) => state.chat.allChats);
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
 

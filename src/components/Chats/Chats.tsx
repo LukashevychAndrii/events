@@ -1,7 +1,13 @@
 import React from "react";
 import styles from "./Chats.module.scss";
 import { ReactComponent as DefaultAvatar } from "../../img/SVG/default-avatar.svg";
-import { Link, NavLink, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../utils/redux";
 import {
   chatFetchChatsPartial,
@@ -37,8 +43,9 @@ let FIRST_RENDER = true;
 
 const Chats: React.FC<props> = ({ outlet }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const userID = useAppSelector((state) => state.user.ID);
-  const chatsList = useAppSelector((state) => state.chat.chatsList);
+  const chatsList = useAppSelector((state) => state.chat.allChats);
 
   const { chatID } = useParams();
   React.useEffect(() => {
@@ -49,6 +56,14 @@ const Chats: React.FC<props> = ({ outlet }) => {
   }, [dispatch, chatID]);
 
   React.useEffect(() => {
+    if (chatID) {
+      if (!Object.keys(chatsList).includes(chatID)) {
+        navigate("/events/chats");
+      }
+    }
+  }, [chatID, chatsList, navigate]);
+
+  React.useEffect(() => {
     dispatch(chatFetchChatsPartial());
   }, [dispatch, userID]);
   React.useEffect(() => {
@@ -56,7 +71,6 @@ const Chats: React.FC<props> = ({ outlet }) => {
       FIRST_RENDER = false;
       dispatch(chatFetchUserChats());
     }
-    console.log(Object.keys(chatsList).length);
   }, [userID, chatsList, dispatch]);
 
   const sidebarRef = React.useRef<HTMLDivElement>(null);

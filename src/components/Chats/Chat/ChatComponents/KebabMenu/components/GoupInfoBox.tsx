@@ -49,6 +49,10 @@ const GroupInfoBox: React.FC<props> = ({ setShowGroupInfo, showGroupInfo }) => {
     console.log(outside);
   }, [outside, setShowGroupInfo]);
 
+  React.useEffect(() => {
+    console.log(currentCHAT);
+  }, [currentCHAT]);
+
   const handleCloseClick = () => {
     setShowGroupInfo(false);
   };
@@ -90,7 +94,10 @@ const GroupInfoBox: React.FC<props> = ({ setShowGroupInfo, showGroupInfo }) => {
             </div>
             {currentCHAT?.members ? (
               <ul className={styles["chat__group-info-box__content__members"]}>
-                <SimpleBar style={{ height: "25rem", width: "35rem" }}>
+                <SimpleBar
+                  autoHide={false}
+                  style={{ height: "25rem", width: "35rem" }}
+                >
                   {Object.values(currentCHAT?.members).map((el, index) => (
                     <li
                       className={

@@ -19,7 +19,7 @@ const Chat = () => {
   const { chatID } = useParams();
   const dispatch = useAppDispatch();
   const chatDATA = useAppSelector((state) => state.chat.currentChat);
-  const chatLIST = useAppSelector((state) => state.chat.chatsList);
+  const chatLIST = useAppSelector((state) => state.chat.allChats);
 
   React.useEffect(() => {
     if (chatID && Object.keys(chatLIST).length && chatLIST[chatID]) {

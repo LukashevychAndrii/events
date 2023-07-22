@@ -15,6 +15,8 @@ const BtnClearChat: React.FC<props> = ({ setShowMenu }) => {
   const dispatch = useAppDispatch();
   const { chatID } = useParams();
   const userDATA = useAppSelector((state) => state.user);
+
+  const currentChat = useAppSelector((state) => state.chat.currentChat);
   const handleClearClick = () => {
     if (chatID) {
       if (userDATA.ID) {
@@ -27,7 +29,11 @@ const BtnClearChat: React.FC<props> = ({ setShowMenu }) => {
           userNAME: userDATA.name,
           userPHOTO: userDATA.photo,
         };
-        dispatch(chatClearMessages({ chatID, message }));
+        if (currentChat?.type) {
+          dispatch(
+            chatClearMessages({ chatID, message, chatTYPE: currentChat?.type })
+          );
+        }
       }
     }
   };
