@@ -21,7 +21,7 @@ interface props {
 }
 
 const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
-  const ref = React.useRef<HTMLAnchorElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -57,11 +57,7 @@ const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
   }, []);
 
   return (
-    <Link
-      to={`/album/${event1DATA.name}`}
-      ref={ref}
-      className={styles["recent__gallery__container--2"]}
-    >
+    <div ref={ref} className={styles["recent__gallery__container--2"]}>
       {!less768 && <span></span>}
       <div>
         <motion.div
@@ -121,7 +117,7 @@ const Container2: React.FC<props> = ({ getHoveredImage, event1DATA }) => {
         </motion.div>
       </div>
       {!less768 && <span></span>}
-    </Link>
+    </div>
   );
 };
 export default Container2;

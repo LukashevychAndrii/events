@@ -27,7 +27,7 @@ const Container1: React.FC<props> = ({
   event1DATA,
   event2DATA,
 }) => {
-  const ref = React.useRef<HTMLAnchorElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -65,11 +65,7 @@ const Container1: React.FC<props> = ({
   }, []);
 
   return (
-    <Link
-      to={`/album/${event2DATA.name}`}
-      ref={ref}
-      className={styles["recent__gallery__container--1"]}
-    >
+    <div ref={ref} className={styles["recent__gallery__container--1"]}>
       <motion.div
         onHoverStart={() => {
           if (!less768) {
@@ -184,7 +180,7 @@ const Container1: React.FC<props> = ({
           )}
         </AnimatePresence>
       </motion.div>
-    </Link>
+    </div>
   );
 };
 export default Container1;
