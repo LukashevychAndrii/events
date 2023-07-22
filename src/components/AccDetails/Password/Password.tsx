@@ -76,7 +76,13 @@ const Password = () => {
       <div ref={ref1} className={styles["acc-details__element"]}>
         <div>Password:</div>
         {updatePassword ? (
-          <form className={styles["acc-details__edit__form"]}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEditPasswordClick();
+            }}
+            className={styles["acc-details__edit__form"]}
+          >
             <input
               className={styles["acc-details__edit__input"]}
               name="editName"
@@ -129,7 +135,13 @@ const Password = () => {
       {updatePassword && (
         <div ref={ref2} className={styles["acc-details__element"]}>
           <div></div>
-          <form className={styles["acc-details__edit__form"]}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEditPasswordClick();
+            }}
+            className={styles["acc-details__edit__form"]}
+          >
             <input
               className={styles["acc-details__edit__input"]}
               name="editName"

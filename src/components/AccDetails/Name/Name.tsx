@@ -23,7 +23,6 @@ const Name = () => {
         if (newName.trim().length <= 10) {
           dispatch(userUpdateName({ name: newName }));
           setUpdateName(false);
-          console.log("BORIS");
         } else {
           dispatch(
             addAlert({
@@ -72,7 +71,13 @@ const Name = () => {
     <div ref={ref} className={styles["acc-details__element"]}>
       <div>Name:</div>
       {updateName ? (
-        <form className={styles["acc-details__edit__form"]}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleEditNameClick();
+          }}
+          className={styles["acc-details__edit__form"]}
+        >
           <input
             className={styles["acc-details__edit__input"]}
             name="editName"

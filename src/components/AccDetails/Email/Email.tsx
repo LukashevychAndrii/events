@@ -103,7 +103,13 @@ const Email = () => {
       <div ref={ref1} className={styles["acc-details__element"]}>
         <div>Email:</div>
         {updateEmail ? (
-          <form className={styles["acc-details__edit__form"]}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEditEmailClick();
+            }}
+            className={styles["acc-details__edit__form"]}
+          >
             <input
               className={styles["acc-details__edit__input"]}
               name="editName"
@@ -155,7 +161,13 @@ const Email = () => {
       {updateEmail && (
         <div ref={ref2} className={styles["acc-details__element"]}>
           <div></div>
-          <form className={styles["acc-details__edit__form"]}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEditEmailClick();
+            }}
+            className={styles["acc-details__edit__form"]}
+          >
             <input
               className={styles["acc-details__edit__input"]}
               name="editName"
