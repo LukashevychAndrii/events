@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../Navigation.module.scss";
 import { motion, useAnimationControls } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import RenderLink1Text from "./RenderLink1Text";
 
 interface props {
   white?: boolean;
@@ -26,28 +27,44 @@ const Links1: React.FC<props> = ({ white, showNav }) => {
     }
   }, [showNav, navControls]);
 
+  const [hover1, setHover1] = React.useState(false);
+
+  const [hover2, setHover2] = React.useState(false);
+
   return (
     <motion.ul animate={navControls}>
-      <li className={styles["nav__li"]}>
+      <motion.li
+        onHoverStart={() => {
+          setHover1(true);
+        }}
+        onHoverEnd={() => setHover1(false)}
+        className={styles["nav__li"]}
+      >
         <NavLink
           className={`${
             white ? styles["nav__link__white"] : styles["nav__link"]
           } subtitle`}
           to="/events/calendar"
         >
-          Calendar
+          <RenderLink1Text hover={hover1} text="Calendar" />
         </NavLink>
-      </li>
-      <li className={styles["nav__li"]}>
+      </motion.li>
+      <motion.li
+        onHoverStart={() => {
+          setHover2(true);
+        }}
+        onHoverEnd={() => setHover2(false)}
+        className={styles["nav__li"]}
+      >
         <NavLink
           className={`${
             white ? styles["nav__link__white"] : styles["nav__link"]
           } subtitle`}
           to="/events/about"
         >
-          About
+          <RenderLink1Text hover={hover2} text="About" />
         </NavLink>
-      </li>
+      </motion.li>
     </motion.ul>
   );
 };
