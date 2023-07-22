@@ -14,34 +14,40 @@ import CalendarPage from "./pages/CalendarPage";
 import SelectChat from "./components/Chats/Chat/ChatComponents/SelectChat/SelectChat";
 import HomeIntroPage from "./pages/HomeIntroPage";
 import HomeMainPage from "./pages/HomeMainPage";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
-    path: "/events",
-    element: <RootLayout />,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
-      { index: true, element: <HomeIntroPage /> },
-      { path: "main", element: <HomeMainPage /> },
-      { path: "about", element: <AboutPage /> },
-      { path: "recent", element: <RecentEventsPage /> },
-      { path: "album/:albumName", element: <AlbumPage /> },
       {
-        path: "auth",
+        path: "/events",
+        element: <RootLayout />,
         children: [
-          { path: "sign-in", element: <SignInPage /> },
-          { path: "sign-up", element: <SignUpPage /> },
-        ],
-      },
-      { path: "acc-details", element: <AccDetailsPage /> },
-      {
-        path: "calendar",
-        element: <CalendarPage />,
-      },
-      {
-        path: "chats",
-        children: [
-          { index: true, element: <SelectChat /> },
-          { path: ":chatID", element: <ChatPage /> },
+          { index: true, element: <HomeIntroPage /> },
+          { path: "main", element: <HomeMainPage /> },
+          { path: "about", element: <AboutPage /> },
+          { path: "recent", element: <RecentEventsPage /> },
+          { path: "album/:albumName", element: <AlbumPage /> },
+          {
+            path: "auth",
+            children: [
+              { path: "sign-in", element: <SignInPage /> },
+              { path: "sign-up", element: <SignUpPage /> },
+            ],
+          },
+          { path: "acc-details", element: <AccDetailsPage /> },
+          {
+            path: "calendar",
+            element: <CalendarPage />,
+          },
+          {
+            path: "chats",
+            children: [
+              { index: true, element: <SelectChat /> },
+              { path: ":chatID", element: <ChatPage /> },
+            ],
+          },
         ],
       },
     ],
