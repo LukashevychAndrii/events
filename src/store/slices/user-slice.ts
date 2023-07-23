@@ -105,7 +105,7 @@ export const userCreate = createAsyncThunk<
                 token: user.refreshToken,
               })
             );
-            navigate("/events/");
+            navigate("/events/acc-details");
             return user;
           })
           .then(async (snapshot) => {
@@ -155,7 +155,7 @@ export const userSignIn = createAsyncThunk<
               token: user.refreshToken,
             })
           );
-          navigate("/events/");
+          navigate("/events/acc-details");
         }
         // ...
       })

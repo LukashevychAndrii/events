@@ -1,12 +1,6 @@
 import React from "react";
 import styles from "./About.module.scss";
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Textfit } from "react-textfit";
 
 const variants = {
@@ -294,7 +288,6 @@ const About = () => {
           </ul>
         </div>
       </div>
-      <div style={{ height: "100vh" }}></div>
     </motion.section>
   );
 };

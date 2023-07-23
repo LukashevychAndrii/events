@@ -3,7 +3,6 @@ import styles from "./Navigation.module.scss";
 import ProgressBar from "./ProgressBar/ProgressBar";
 import { useLocation } from "react-router-dom";
 import {
-  AnimatePresence,
   Variants,
   useAnimationControls,
   useScroll,
@@ -136,13 +135,10 @@ const Navigation: React.FC<props> = ({
       }
     };
 
-    // Initial check
     handleResize();
 
-    // Add event listener to handle window resize
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };

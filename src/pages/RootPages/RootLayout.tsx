@@ -114,7 +114,7 @@ const RootLayout = () => {
                   <AnimatedOutlet />
                 </motion.main>
               </AnimatePresence>
-              <Footer />
+              {pathname !== "/events/" && <Footer />}
             </motion.div>
           </SmoothScroll>
         )}

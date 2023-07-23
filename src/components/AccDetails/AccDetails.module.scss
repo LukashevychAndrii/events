@@ -22,6 +22,7 @@
     grid-template-columns: 1fr 1fr min-content min-content;
     gap: 1.5rem;
     align-items: center;
+    height: 2.6rem;
   }
   &__edit-icon {
     cursor: pointer;
@@ -47,12 +48,13 @@
     &__input {
       font-size: inherit;
       font-family: inherit;
-      background-color: inherit;
       border: none;
       padding: 0.5rem;
       border-radius: 0.3rem;
       background-color: var(--color-gray-300);
       width: 30rem;
+      height: 2.6rem;
+
       @media screen and (max-width: 768px) {
         width: 30vw;
       }
@@ -62,12 +64,15 @@
     }
   }
   &__name {
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
     padding: 0.5rem;
-    padding-top: 0.8rem;
+    border-radius: 0.3rem;
     width: 30rem;
+    height: 2.6rem;
     display: flex;
     align-items: center;
-    height: 2.8rem;
     @media screen and (max-width: 768px) {
       width: 30vw;
     }
