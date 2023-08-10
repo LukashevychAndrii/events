@@ -8,10 +8,9 @@ import AddUser from "./components/AddUser";
 
 interface props {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  small: boolean;
 }
 
-const TopBar: React.FC<props> = ({ setFilter, small }) => {
+const TopBar: React.FC<props> = ({ setFilter }) => {
   const [showCurrentUserD, setShowCurrentUserD] =
     React.useState<boolean>(false);
 
@@ -24,14 +23,14 @@ const TopBar: React.FC<props> = ({ setFilter, small }) => {
         showCurrentUserD={showCurrentUserD}
         setShowCurrentUserD={setShowCurrentUserD}
       />
-      {!small && <FindChat setFilter={setFilter} />}
-      {!small && <AddUserIcon setShowNewContact={setShowNewContact} />}
-      {!small && (
+      <FindChat setFilter={setFilter} />
+       <AddUserIcon setShowNewContact={setShowNewContact} />
+  
         <AddUser
           showNewContact={showNewContact}
           setShowNewContact={setShowNewContact}
         />
-      )}
+      
     </div>
   );
 };

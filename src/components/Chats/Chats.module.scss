@@ -22,7 +22,7 @@
 .app-sidebar {
   flex-grow: 0;
   flex-shrink: 0;
-  min-width: 8.2rem;
+  min-width: 250px;
   max-width: 50vw;
   display: flex;
   border-right: var(--color-gray-100) 1px solid;
@@ -32,6 +32,9 @@
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
   position: relative;
+  @media screen and (max-width: 750px) {
+    min-width: 100%;
+  }
 
   &__bar-top {
     padding: 1rem 1.5rem;
@@ -271,6 +274,9 @@
     height: 100%;
     width: 1rem;
     right: 0;
+    @media screen and (max-width: 750px) {
+      display: none;
+    }
 
     // &:hover {
     //   width: 3px;
