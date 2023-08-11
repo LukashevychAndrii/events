@@ -168,9 +168,8 @@ const Album = () => {
               <Container1 photo="https://images.unsplash.com/photo-1619229725920-ac8b63b0631a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" />
               <Container2 photo="https://images.unsplash.com/photo-1565035010268-a3816f98589a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" />
               <Container1 photo="https://images.unsplash.com/photo-1569930784237-ea65a2f40a83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=712&q=80" />
-
               <People />
-              {/* <div style={{ width: "39.45vw" }}></div> */}
+              <div style={{ width: "30.18vw" }}></div>
             </motion.div>
           </motion.section>
         </motion.section>
