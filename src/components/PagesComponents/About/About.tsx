@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./About.module.scss";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Textfit } from "react-textfit";
+import { useAppSelector } from "../../../utils/redux";
 
 const variants = {
   initial: {
@@ -184,7 +185,7 @@ const About = () => {
               style={{ y: yIMG }}
               transition={{ duration: 1 }}
               className={styles["about__content__img"]}
-              src="https://picsum.photos/500/750"
+              src={`https://images.unsplash.com/photo-1595037935521-15ce2282a03e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80`}
               alt="event"
             />
           </motion.div>
