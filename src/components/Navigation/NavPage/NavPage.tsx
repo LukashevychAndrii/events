@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./NavPage.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Textfit } from "react-textfit";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 
@@ -33,6 +33,9 @@ const variantsH: Variants = {
 
 const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
   const AnimatedLink = motion(Link);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   return (
     <AnimatePresence>
       {showNavPage && (
@@ -100,6 +103,7 @@ const NavPage: React.FC<props> = ({ showNavPage, setShowNavPage }) => {
           <span
             onClick={() => {
               setShowNavPage(false);
+              if (pathname === "/events/") navigate("/events/main");
             }}
             className={styles["nav-page__btn-close"]}
           >

@@ -9,19 +9,27 @@ import RightContent from "./components/right/RightContent";
 
 const Intro = () => {
   const controls = useAnimation();
-  React.useEffect(() => {
-    const sequence = async () => {
-      await controls.start({
-        transition: { delay: 0.75, duration: 1.5 },
-        height: "100vh",
-      });
-      await controls.start({
-        width: "100%",
-        transition: { duration: 1.5, ease: [0.85, -0.03, 0, 1.09] },
-      });
-    };
+  React.useLayoutEffect(() => {
+    try {
+      const sequence = async () => {
+        await controls.start({
+          transition: { delay: 0.75, duration: 1.5 },
+          height: "100vh",
+        });
+        await controls.start({
+          width: "100%",
+          transition: { duration: 1.5, ease: [0.85, -0.03, 0, 1.09] },
+        });
+      };
 
-    sequence();
+      sequence();
+    } catch (error) {
+      controls.stop();
+    }
+
+    return () => {
+      controls.stop();
+    };
   }, [controls]);
 
   return (

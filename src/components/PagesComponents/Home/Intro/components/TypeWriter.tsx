@@ -5,27 +5,35 @@ import { motion, useAnimation } from "framer-motion";
 const TypeWriter = () => {
   const controls = useAnimation();
 
-  React.useEffect(() => {
-    const sequence = async () => {
-      await controls.start({
-        transition: { duration: 3.5 },
-        opacity: 0,
-        display: "none",
-      });
-      await controls.start({
-        transition: { duration: 1 },
+  React.useLayoutEffect(() => {
+    try {
+      const sequence = async () => {
+        await controls.start({
+          transition: { duration: 3.5 },
+          opacity: 0,
+          display: "none",
+        });
+        await controls.start({
+          transition: { duration: 1 },
 
-        display: "block",
-        opacity: 1,
-      });
-      await controls.start({
-        transition: { duration: 0.5, delay: 3.5 },
-        opacity: 0,
-        filter: "blur(50px)",
-      });
+          display: "block",
+          opacity: 1,
+        });
+        await controls.start({
+          transition: { duration: 0.5, delay: 3.5 },
+          opacity: 0,
+          filter: "blur(50px)",
+        });
+      };
+
+      sequence();
+    } catch (error) {
+      controls.stop();
+    }
+
+    return () => {
+      controls.stop();
     };
-
-    sequence();
   }, [controls]);
 
   return (
