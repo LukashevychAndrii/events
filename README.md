@@ -19,3 +19,4 @@ In this project i've used react, sass and typescript. I also used react-router-d
 [images](https://unsplash.com/)
 [icons](https://icomoon.io/)
 [fonts](https://fonts.google.com/)
+[gif](https://sarahanndesign.co/)
