@@ -127,6 +127,10 @@ const Chats: React.FC<props> = ({ outlet }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (window.innerWidth <= 750) setSmall(true);
+  }, []);
+
   return (
     <motion.div
       transition={{ duration: 1 }}
