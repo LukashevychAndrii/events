@@ -19,7 +19,8 @@ In this project i've used react, sass and typescript. I have also used react-rou
 
 ### Additional Resources
 
-- [logo](https://lovebeautyandbloom.com/events)
+- [logo1](https://www.hiclipart.com/free-transparent-background-png-clipart-dyotb)
+- [logo2](https://lovebeautyandbloom.com/events)
 - [images](https://unsplash.com/)
 - [icons](https://icomoon.io/)
 - [fonts](https://fonts.google.com/)
