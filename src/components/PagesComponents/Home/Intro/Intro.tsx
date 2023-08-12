@@ -9,7 +9,7 @@ import RightContent from "./components/right/RightContent";
 
 const Intro = () => {
   const controls = useAnimation();
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     try {
       const sequence = async () => {
         await controls.start({

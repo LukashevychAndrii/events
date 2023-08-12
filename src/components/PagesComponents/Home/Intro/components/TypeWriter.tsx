@@ -5,7 +5,7 @@ import { motion, useAnimation } from "framer-motion";
 const TypeWriter = () => {
   const controls = useAnimation();
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     try {
       const sequence = async () => {
         await controls.start({
